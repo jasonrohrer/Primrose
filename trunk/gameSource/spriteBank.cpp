@@ -1,0 +1,104 @@
+#include "spriteBank.h"
+
+#include "common.h"
+
+
+#include "minorGems/util/SimpleVector.h"
+#include "minorGems/util/stringUtils.h"
+
+#include "minorGems/graphics/openGL/SingleTextureGL.h"
+
+
+const char *spriteNames[ numSprites ] = 
+{ "gridSpace",
+  "gridSpace2" };
+
+
+
+SingleTextureGL *spriteTextures[ numSprites ];
+
+
+void initSpriteBank() {
+    for( int i=0; i<numSprites; i++ ) {
+        
+        char *fileName = autoSprintf( "%s.tga", spriteNames[ i ] );
+        
+        Image *image = readTGA( fileName );
+        
+        
+        delete [] fileName;
+        
+        if( image != NULL ) {
+            spriteTextures[ i ] = new SingleTextureGL( image, false );
+            
+            delete image;
+            }
+        else {
+            spriteTextures[i] = NULL;
+            }
+        }
+    }
+
+
+
+void freeSpriteBank() {
+    for( int i=0; i<numSprites; i++ ) {
+        if( spriteTextures[i] != NULL ) {
+            delete spriteTextures[i];
+            }
+        }
+    }
+
+
+
+
+void drawSprite( SpriteHandle inSpriteHandle,
+                 float inCenterX, float inCenterY, 
+                 float inXRadius, float inYRadius,
+                 Color *inColor, double inAlpha ) {
+    
+    SingleTextureGL *texture = spriteTextures[ inSpriteHandle ];
+
+    if( texture == NULL ) {
+        return;
+        }
+    
+    
+    
+    
+    
+    
+    if( inColor != NULL  ) {
+        glColor4f( inColor->r, inColor->g, inColor->b, inAlpha );
+        }
+    else {
+        glColor4f( 1, 1, 1, inAlpha );
+        }
+
+    glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    
+
+    texture->enable();    
+    glBegin( GL_QUADS ); {
+    
+        glTexCoord2f( 0, 0 );
+        glVertex2f( inCenterX - inXRadius, inCenterY - inYRadius );
+        
+        glTexCoord2f( 1, 0 );
+        glVertex2f( inCenterX + inXRadius, inCenterY - inYRadius );
+        
+        glTexCoord2f( 1, 1 );
+        glVertex2f( inCenterX + inXRadius, inCenterY + inYRadius );
+        
+        glTexCoord2f( 0, 1 );
+        glVertex2f( inCenterX - inXRadius, inCenterY + inYRadius );        
+        }
+    glEnd();
+
+    texture->disable();
+
+    glDisable( GL_BLEND );
+    
+    }
+

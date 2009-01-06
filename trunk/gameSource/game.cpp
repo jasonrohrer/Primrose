@@ -1,19 +1,28 @@
 #include "game.h"
+#include "spriteBank.h"
+
+#include "GridSpace.h"
+
 
 #include <stdio.h>
 
 #include <GL/gl.h>
 
 
-int pointerX, pointerY;
+float pointerX, pointerY;
 
 
 void initFrameDrawer( int inWidth, int inHeight ) {
     pointerX = -100;
     pointerY = -100;
+
+    initSpriteBank();
+    
     }
 
-void freeFrameDrawer() {}
+void freeFrameDrawer() {
+    freeSpriteBank();
+    }
 
 
 
@@ -25,6 +34,11 @@ void drawFrame() {
         glVertex2d( pointerX, pointerY );
         }
     glEnd();
+    
+
+    GridSpace g( pointerX, pointerY );
+    
+    g.draw();
     
 
 
@@ -41,7 +55,7 @@ void pointerDown( float inX, float inY ) {
 void pointerMove( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
-    printf( "Pointer %d,%d\n", pointerX, pointerY );
+    printf( "Pointer %f,%f\n", pointerX, pointerY );
     
     }
 
