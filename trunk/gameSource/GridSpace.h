@@ -14,6 +14,14 @@ class GridSpace {
         
 
         int mX, mY;
+
+
+        enum NeighborDirections { top=0, right, bottom, left 
+            };
+        
+        
+        GridSpace *mNeighbors[4];
+        
     };
 
         

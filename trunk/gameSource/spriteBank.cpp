@@ -10,7 +10,12 @@
 
 
 const char *spriteNames[ numSprites ] = 
-{ "gridSpace" };
+{ 
+    "gridLineTop",
+    "gridLineBottom",
+    "gridLineLeft",
+    "gridLineRight"
+    };
 
 
 
@@ -77,8 +82,7 @@ void drawSprite( SpriteHandle inSpriteHandle,
         glColor4f( 0/*1*/, 1, 1, inAlpha );
         }
 
-    glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    
     
 
     texture->enable();    
@@ -100,7 +104,5 @@ void drawSprite( SpriteHandle inSpriteHandle,
 
     texture->disable();
 
-    glDisable( GL_BLEND );
-    
     }
 
