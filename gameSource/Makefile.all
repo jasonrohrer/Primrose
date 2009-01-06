@@ -31,7 +31,10 @@ LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
 
 
 GAME_GRAPHICS = \
-graphics/gridSpace.tga \
+graphics/gridLineTop.tga \
+graphics/gridLineBottom.tga \
+graphics/gridLineLeft.tga \
+graphics/gridLineRight.tga \
 
 
 
