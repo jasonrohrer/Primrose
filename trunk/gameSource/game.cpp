@@ -9,6 +9,13 @@
 #include <GL/gl.h>
 
 
+#include "minorGems/util/random/StdRandomSource.h"
+
+
+StdRandomSource randSource;
+
+
+
 float pointerX, pointerY;
 
 
@@ -30,36 +37,42 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     int x;
     int y;
     
-    for( x=0; x<gridW; x++ ) {
-        for( y=0; y<gridH; y++ ) {
+    for( y=0; y<gridH; y++ ) {
+        for( x=0; x<gridW; x++ ) {
             
             allSpaces[i] = 
-            spaces[x][y] =
-                new GridSpace( x * 40 + 13 + 21, y * 40 + 13 + 21 );
+            spaces[y][x] =
+                new GridSpace( x * 40 + 19 + 21, y * 40 + 19 + 21 );
             
             i++;
             }
         }
     
     // set neighbor relationships
-    for( x=0; x<gridW; x++ ) {
-        for( y=0; y<gridH; y++ ) {
+    for( y=0; y<gridH; y++ ) {
+        for( x=0; x<gridW; x++ ) {
+        
             
             if( y > 0 ) {
-                spaces[x][y]->mNeighbors[ GridSpace::top ] = spaces[x][y-1];
+                spaces[y][x]->mNeighbors[ GridSpace::top ] = spaces[x][y-1];
                 }
             if( y < gridH-1 ) {
-                spaces[x][y]->mNeighbors[ GridSpace::bottom ] = spaces[x][y+1];
+                spaces[y][x]->mNeighbors[ GridSpace::bottom ] = spaces[x][y+1];
                 }
             if( x > 0 ) {
-                spaces[x][y]->mNeighbors[ GridSpace::left ] = spaces[x-1][y];
+                spaces[y][x]->mNeighbors[ GridSpace::left ] = spaces[x-1][y];
                 }
             if( x < gridW-1 ) {
-                spaces[x][y]->mNeighbors[ GridSpace::right ] = spaces[x+1][y];
+                spaces[y][x]->mNeighbors[ GridSpace::right ] = spaces[x+1][y];
                 }
             }
         }
+
+        
     }
+
+
+
 
 void freeFrameDrawer() {
     freeSpriteBank();
@@ -68,6 +81,8 @@ void freeFrameDrawer() {
         delete allSpaces[i];
         }
     }
+
+
 
 
 
@@ -81,10 +96,17 @@ void drawFrame() {
     glEnd();
     
 
-    for( int i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->draw();
+    int i;
+    
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->drawGrid();
+        }
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->drawPiece();
         }
     }
+
+
 
 
 
@@ -104,4 +126,20 @@ void pointerMove( float inX, float inY ) {
 void pointerUp( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
+
+
+    for( int i=0; i<numGridSpaces; i++ ) {
+        
+        if( allSpaces[i]->isInside( (int)pointerX, (int)pointerY )
+            &&
+            allSpaces[i]->mPieceColor == NULL ) {
+            
+            allSpaces[i]->mPieceColor = new Color( randSource.getRandomFloat(),
+                                                   randSource.getRandomFloat(),
+                                                   randSource.getRandomFloat(),
+                                                   1.0 );
+            }
+        
+        }
+    
     }
