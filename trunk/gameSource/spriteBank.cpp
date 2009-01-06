@@ -10,8 +10,7 @@
 
 
 const char *spriteNames[ numSprites ] = 
-{ "gridSpace",
-  "gridSpace2" };
+{ "gridSpace" };
 
 
 
@@ -26,16 +25,19 @@ void initSpriteBank() {
         Image *image = readTGA( fileName );
         
         
-        delete [] fileName;
         
         if( image != NULL ) {
-            spriteTextures[ i ] = new SingleTextureGL( image, false );
+                
+            spriteTextures[ i ] = new SingleTextureGL( image, true );
             
             delete image;
             }
         else {
             spriteTextures[i] = NULL;
             }
+
+        delete [] fileName;
+
         }
     }
 
@@ -69,10 +71,10 @@ void drawSprite( SpriteHandle inSpriteHandle,
     
     
     if( inColor != NULL  ) {
-        glColor4f( inColor->r, inColor->g, inColor->b, inAlpha );
+        glColor4f( 0/*inColor->r*/, inColor->g, inColor->b, inAlpha );
         }
     else {
-        glColor4f( 1, 1, 1, inAlpha );
+        glColor4f( 0/*1*/, 1, 1, inAlpha );
         }
 
     glEnable( GL_BLEND );

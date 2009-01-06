@@ -12,7 +12,7 @@ GridSpace::GridSpace( int inX, int inY )
 
 void GridSpace::draw() {
     
-    drawSprite( gridSpace2, mX, mY, 32, 32 );
+    drawSprite( gridSpace, mX, mY, 32, 32 );
         
     }
 
