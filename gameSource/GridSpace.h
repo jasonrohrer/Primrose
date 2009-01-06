@@ -1,5 +1,7 @@
 
 
+#include "minorGems/graphics/Color.h"
+
 
 class GridSpace {
         
@@ -9,8 +11,13 @@ class GridSpace {
         GridSpace( int inX, int inY );
         
 
-        // draws onto screen and steps animations
-        void draw();
+        // draws onto screen
+        void drawGrid();
+        void drawPiece();
+        
+
+        char isInside( int inX, int inY );
+        
         
 
         int mX, mY;
@@ -21,6 +28,9 @@ class GridSpace {
         
         
         GridSpace *mNeighbors[4];
+
+        Color *mPieceColor;
+        
         
     };
 

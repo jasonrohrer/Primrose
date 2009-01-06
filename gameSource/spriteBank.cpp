@@ -14,7 +14,8 @@ const char *spriteNames[ numSprites ] =
     "gridLineTop",
     "gridLineBottom",
     "gridLineLeft",
-    "gridLineRight"
+    "gridLineRight",
+    "piece"
     };
 
 
@@ -76,16 +77,23 @@ void drawSprite( SpriteHandle inSpriteHandle,
     
     
     if( inColor != NULL  ) {
-        glColor4f( 0/*inColor->r*/, inColor->g, inColor->b, inAlpha );
+        glColor4f( inColor->r, inColor->g, inColor->b, inAlpha );
         }
     else {
-        glColor4f( 0/*1*/, 1, 1, inAlpha );
+        glColor4f( 1, 1, 1, inAlpha );
         }
 
     
     
 
-    texture->enable();    
+    texture->enable(); 
+
+
+    // NOTE:  this won't look good if we do the zoom-to-clear effect
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ); 
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+
     glBegin( GL_QUADS ); {
     
         glTexCoord2f( 0, 0 );
