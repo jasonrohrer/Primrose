@@ -21,6 +21,9 @@ ROOT_PATH = ../../..
 LAYER_SOURCE = \
 gameGLUT.cpp \
 game.cpp \
+common.cpp \
+spriteBank.cpp \
+GridSpace.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
@@ -28,7 +31,8 @@ LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
 
 
 GAME_GRAPHICS = \
-# graphics/test.tga \
+graphics/gridSpace.tga \
+graphics/gridSpace2.tga \
 
 
 
