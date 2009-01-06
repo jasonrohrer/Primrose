@@ -7,87 +7,33 @@
 
 
 ##
-# The portion of game7 Makefiles common to all platforms.
+# The portion of game1 Makefiles common to all platforms.
 #
-# Should not be made manually---used by game7/configure to build Makefiles.
+# Should not be made manually---used by game1/configure to build Makefiles.
 ##
 
 
 
 
-ROOT_PATH = ../..
-
-
-MUSIC_PLAYER_SOURCE = musicPlayer.cpp \
-Timbre.cpp \
-Envelope.cpp \
-common.cpp \
-playMusic.cpp
+ROOT_PATH = ../../..
 
 
 LAYER_SOURCE = \
+gameGLUT.cpp \
 game.cpp \
-common.cpp \
-Sprite.cpp \
-GameObject.cpp \
-World.cpp \
-Block.cpp \
-BlockGrid.cpp \
-TargetBlock.cpp \
-BuilderTargetBlock.cpp \
-WebRequest.cpp \
-Client.cpp \
-BlendedBlock.cpp \
-GridTransition.cpp \
-NightBackground.cpp \
-Player.cpp \
-Star.cpp \
-Cloud.cpp \
-musicPlayer.cpp \
-Timbre.cpp \
-Envelope.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
-MUSIC_PLAYER_OBJECTS = ${MUSIC_PLAYER_SOURCE:.cpp=.o} 
 
 
 
 GAME_GRAPHICS = \
-graphics/tile.tga \
-graphics/player.tga \
-graphics/blockBase.tga \
-graphics/blockNoise.tga \
-graphics/selector.tga \
-graphics/blockBuilder.tga \
-graphics/blockBuilderTarget.tga \
-graphics/builderHint.tga \
-graphics/target.tga \
-graphics/font.tga \
-graphics/nightTile.tga \
-graphics/nightTileVertical.tga \
-graphics/nightTileCorner.tga \
-graphics/bed.tga \
-graphics/nightWindow.tga \
-graphics/star.tga \
-graphics/morningTile.tga \
-graphics/morningTileVertical.tga \
-graphics/morningTileCorner.tga \
-graphics/alarmStand.tga \
-graphics/morningWindow.tga \
-graphics/backHint.tga \
-graphics/nextHint.tga \
-graphics/insertHint.tga \
-graphics/upHint.tga \
-graphics/downHint.tga \
-graphics/clouds.tga \
-music/music.tga \
+# graphics/test.tga \
 
 
 
 
 NEEDED_MINOR_GEMS_OBJECTS = \
- ${SCREEN_GL_SDL_O} \
  ${SINGLE_TEXTURE_GL_O} \
  ${TYPE_IO_O} \
  ${STRING_UTILS_O} \
@@ -96,7 +42,6 @@ NEEDED_MINOR_GEMS_OBJECTS = \
  ${TIME_O} \
  ${THREAD_O} \
  ${MUTEX_LOCK_O} \
- ${PNG_IMAGE_CONVERTER_O} \
  ${TRANSLATION_MANAGER_O} \
  ${SOCKET_O} \
  ${HOST_ADDRESS_O} \
@@ -118,21 +63,15 @@ DEPENDENCY_FILE = Makefile.dependencies
 
 # targets
 
-all: Between ${GAME_GRAPHICS}
+all: gameApp ${GAME_GRAPHICS}
 clean:
-	rm -f ${DEPENDENCY_FILE} ${LAYER_OBJECTS} ${TEST_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} Between ${GAME_GRAPHICS}
+	rm -f ${DEPENDENCY_FILE} ${LAYER_OBJECTS} ${TEST_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} gameApp ${GAME_GRAPHICS}
 
 
 
 
-Between: ${LAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS}
-	${EXE_LINK} -o Between ${LAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} ${PLATFORM_LINK_FLAGS} 
-
-# add this on Unix to support JPEG video frame output
-# -ljpeg ${ROOT_PATH}/minorGems/graphics/converters/unix/JPEGImageConverterUnix.cpp
-
-playMusic: ${MUSIC_PLAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} music/music.tga
-	${EXE_LINK} -o playMusic ${MUSIC_PLAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} ${PLATFORM_LINK_FLAGS} 
+gameApp: ${LAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS}
+	${EXE_LINK} -o gameApp ${LAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} ${PLATFORM_LINK_FLAGS} 
 
 
 
@@ -144,7 +83,7 @@ playMusic: ${MUSIC_PLAYER_OBJECTS} ${NEEDED_MINOR_GEMS_OBJECTS} music/music.tga
 # This should be compatible with g++ 3.0, since we only replace .o names
 # that occur at the beginning of a line (using the "^" modifier)
 
-GAME_7_SED_FIX_COMMAND = sed ' \
+GAME_1_SED_FIX_COMMAND = sed ' \
 '
 
 
@@ -155,7 +94,7 @@ GAME_7_SED_FIX_COMMAND = sed ' \
 ${DEPENDENCY_FILE}: ${LAYER_SOURCE} ${TEST_SOURCE}
 	rm -f ${DEPENDENCY_FILE}
 	${COMPILE} -MM ${LAYER_SOURCE} ${TEST_SOURCE} >> ${DEPENDENCY_FILE}.temp
-	cat ${DEPENDENCY_FILE}.temp | ${GAME_7_SED_FIX_COMMAND} >> ${DEPENDENCY_FILE}
+	cat ${DEPENDENCY_FILE}.temp | ${GAME_1_SED_FIX_COMMAND} >> ${DEPENDENCY_FILE}
 	rm -f ${DEPENDENCY_FILE}.temp
 
 include ${DEPENDENCY_FILE}
@@ -172,8 +111,6 @@ include ${DEPENDENCY_FILE}
 # $<   represents the name.png file
 #
 graphics/%.tga: %.png
-	convert $< $@
-music/%.tga: %.png
 	convert $< $@
 
 

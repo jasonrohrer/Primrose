@@ -46,8 +46,8 @@ done
 
 
 # use partial makefiles from minorGems project
-makefileMinorGems="../minorGems/build/Makefile.minorGems"
-makefileMinorGemsTargets="../minorGems/build/Makefile.minorGems_targets"
+makefileMinorGems="../../minorGems/build/Makefile.minorGems"
+makefileMinorGemsTargets="../../minorGems/build/Makefile.minorGems_targets"
 
 
 
