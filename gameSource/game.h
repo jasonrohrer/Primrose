@@ -13,13 +13,13 @@ void drawFrame();
 
 
 // start of pointer press
-void pointerDownPoint( float inX, float inY );
+void pointerDown( float inX, float inY );
 
 // movement with pointer pressed
-void pointerMovePoint( float inX, float inY );
+void pointerMove( float inX, float inY );
 
 // end of pointer press
-void pointerUpPoint( float inX, float inY );
+void pointerUp( float inX, float inY );
 
 
 
