@@ -35,7 +35,6 @@ int main( int inNumArgs, char **inArgs ) {
     int w = 320;
     int h = 480;
     
-    initFrameDrawer( w, h );
     
     atexit( cleanUpAtExit );
 
@@ -53,6 +52,10 @@ int main( int inNumArgs, char **inArgs ) {
 	glutIdleFunc( callbackIdle );
 
     glutKeyboardFunc( callbackKeyboard );
+
+
+
+    initFrameDrawer( w, h );
 
 
     glutMainLoop();
@@ -75,6 +78,9 @@ void callbackDisplay() {
     
     glMatrixMode(GL_MODELVIEW);
 
+    glDisable( GL_TEXTURE_2D );
+	glDisable( GL_CULL_FACE );
+    glDisable( GL_DEPTH_TEST );
     
     drawFrame();
     

@@ -5,11 +5,10 @@
 #include "minorGems/graphics/Color.h"
 
 
-#define numSprites 2
+#define numSprites 1
 
 enum SpriteHandle {
-    gridSpace = 0,
-    gridSpace2
+    gridSpace = 0 
     };
 
 

@@ -32,7 +32,6 @@ LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
 
 GAME_GRAPHICS = \
 graphics/gridSpace.tga \
-graphics/gridSpace2.tga \
 
 
 
