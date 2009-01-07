@@ -15,7 +15,9 @@ const char *spriteNames[ numSprites ] =
     "gridLineBottom",
     "gridLineLeft",
     "gridLineRight",
-    "piece"
+    "piece",
+    "pieceHalo",
+    "pieceCenter"
     };
 
 

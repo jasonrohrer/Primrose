@@ -14,7 +14,7 @@ void callbackMotion( int inX, int inY );
 // void callbackPassiveMotion( int inX, int inY );
 void callbackMouse( int inButton, int inState, int inX, int inY );
 void callbackDisplay();
-void callbackIdle();
+void callbackTimer( int inValue );
 
 // keyboard to catch quit keys (don't pass to game)
 void callbackKeyboard( unsigned char inKey, int inX, int inY );
@@ -26,6 +26,10 @@ void cleanUpAtExit() {
     
     freeFrameDrawer();    
     }
+
+
+// 25 fps
+int frameMS = 40;
 
 
 int main( int inNumArgs, char **inArgs ) {
@@ -49,7 +53,12 @@ int main( int inNumArgs, char **inArgs ) {
 	glutMouseFunc( callbackMouse );
 	//glutPassiveMotionFunc( callbackPassiveMotion );
 	glutDisplayFunc( callbackDisplay );
-	glutIdleFunc( callbackIdle );
+	//glutIdleFunc( callbackIdle );
+
+    // 25 fps
+    glutTimerFunc( frameMS, callbackTimer, 0 );
+    
+
 
     glutKeyboardFunc( callbackKeyboard );
 
@@ -89,9 +98,16 @@ void callbackDisplay() {
 	}
 
 
-
+/*
 void callbackIdle() {
 	glutPostRedisplay();
+	}
+*/
+
+void callbackTimer( int inValue ) {
+    glutTimerFunc( frameMS, callbackTimer, 0 );
+    
+    glutPostRedisplay();
 	}
 
 
