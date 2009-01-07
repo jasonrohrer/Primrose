@@ -87,22 +87,23 @@ void freeFrameDrawer() {
 
 
 void drawFrame() {
-    glColor4d( 1.0, 1.0, 1.0, 1.0 );
-    glBegin( GL_LINES ); {
-        
-        glVertex2d( 0, 0 );
-        glVertex2d( pointerX, pointerY );
-        }
-    glEnd();
     
 
     int i;
+
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->step();
+        }
+
     
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->drawGrid();
         }
     for( i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->drawPiece();
+        allSpaces[i]->drawPieceCenter();
+        }
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->drawPieceHalo();
         }
     }
 
@@ -132,12 +133,12 @@ void pointerUp( float inX, float inY ) {
         
         if( allSpaces[i]->isInside( (int)pointerX, (int)pointerY )
             &&
-            allSpaces[i]->mPieceColor == NULL ) {
+            true /*allSpaces[i]->isEmpty()*/ ) {
             
-            allSpaces[i]->mPieceColor = new Color( randSource.getRandomFloat(),
+            allSpaces[i]->placePiece( new Color( randSource.getRandomFloat(),
                                                    randSource.getRandomFloat(),
                                                    randSource.getRandomFloat(),
-                                                   1.0 );
+                                                   1.0 ) );
             }
         
         }
