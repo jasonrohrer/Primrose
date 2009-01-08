@@ -50,7 +50,7 @@ char GridSpace::isInside( int inX, int inY ) {
 
 
 
-void GridSpace::placePiece( Color *inColor ) {
+void GridSpace::setColor( Color *inColor ) {
     
     if( mLastColor != NULL ) {
         delete mLastColor;
@@ -175,3 +175,16 @@ void GridSpace::step() {
     }
 
 
+
+char GridSpace::isAnimationDone() { 
+
+    if( mDrawColor == NULL ) {
+        return true;
+        }
+    
+    else if( mColorShiftProgress == 1 ) {
+        return true;
+        }
+
+    return false;
+    }

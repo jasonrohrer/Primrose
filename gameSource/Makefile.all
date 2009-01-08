@@ -24,6 +24,7 @@ game.cpp \
 common.cpp \
 spriteBank.cpp \
 GridSpace.cpp \
+NextPieceDisplay.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
