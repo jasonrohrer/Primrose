@@ -23,6 +23,10 @@ class NextPieceDisplay {
         void update();
         
 
+        // true if getNextPiece will return the second piece from a pair
+        char isSecondPiece();
+        
+
 
         // steps animations
         void step();

@@ -36,6 +36,7 @@ graphics/gridLineTop.tga \
 graphics/gridLineBottom.tga \
 graphics/gridLineLeft.tga \
 graphics/gridLineRight.tga \
+graphics/plus.tga \
 graphics/piece.tga \
 graphics/pieceCenter.tga \
 graphics/pieceHalo.tga \

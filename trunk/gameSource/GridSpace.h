@@ -58,7 +58,9 @@ class GridSpace {
         
 
         int mX, mY;
-
+        
+        int mActive;
+        
 
         enum NeighborDirections { top=0, right, bottom, left 
             };
