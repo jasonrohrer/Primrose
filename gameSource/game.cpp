@@ -124,6 +124,23 @@ void pointerMove( float inX, float inY ) {
     
     }
 
+
+Color pieceColors[8] = { 
+    Color( 255/255.0, 128/255.0, 0/255.0 ),
+    Color( 128/255.0, 255/255.0, 0/255.0 ),
+    Color( 96/255.0,  0/255.0,   128/255.0 ),
+    Color( 192/255.0, 0/255.0,   0/255.0 ),
+    Color( 0/255.0,   128/255.0, 96/255.0 ),
+    Color( 255/255.0, 96/255.0,  255/255.0 ),
+    Color( 255/255.0, 255/255.0, 160/255.0 ),
+    Color( 128/255.0, 96/255.0,  0/255.0 )    
+    };
+
+
+int nextColor = 0;
+
+
+
 void pointerUp( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
@@ -135,10 +152,17 @@ void pointerUp( float inX, float inY ) {
             &&
             true /*allSpaces[i]->isEmpty()*/ ) {
             
-            allSpaces[i]->placePiece( new Color( randSource.getRandomFloat(),
-                                                   randSource.getRandomFloat(),
-                                                   randSource.getRandomFloat(),
-                                                   1.0 ) );
+                        
+            Color *c =
+                //pieceColors[ randSource.getRandomBoundedInt( 0, 7 ) ].copy();
+                pieceColors[ nextColor ].copy();
+            
+            allSpaces[i]->placePiece( c );
+            
+            nextColor++;
+            
+            nextColor %= 8;
+            
             }
         
         }
