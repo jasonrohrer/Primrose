@@ -179,7 +179,15 @@ void GridSpace::step() {
         delete blendA;
         delete blendB;
         
-        mColorShiftProgress += 0.2;
+        if( mLastColor != NULL && mPieceColor != NULL ) {
+            // slow shift between colors
+            mColorShiftProgress += 0.1;
+            }
+        else {
+            // faster shift to on or off
+            mColorShiftProgress += 0.2;
+            }
+        
         
         if( mColorShiftProgress > 1 ) {
             mColorShiftProgress = 1;
@@ -187,13 +195,19 @@ void GridSpace::step() {
         
         }
     
+
     if( mBrightHalo ) {
 
         if( mBrightHaloProgress == 1 ) {
             
             if( mPieceColor != NULL ) {
                 
+                
+
+
                 setColor( NULL );
+
+                
                 }
             else if( mColorShiftProgress == 1 ) {
                 // completely faded out
@@ -203,7 +217,8 @@ void GridSpace::step() {
                 }
             }
         else {
-            mBrightHaloProgress += 0.2;
+            // slower than color switch time
+            mBrightHaloProgress += 0.1;
             
             if( mBrightHaloProgress > 1 ) {
                 mBrightHaloProgress = 1;
@@ -364,6 +379,22 @@ void GridSpace::flipToClear() {
     mBrightHaloProgress = 0;
     mBrightHalo = true;
     
+
+    // flip any other-colored neighbors
+
+    for( int n=0; n<4; n++ ) {
+        GridSpace *space = mNeighbors[n];
+        
+        if( space != NULL ) {
+            if( ! space->isEmpty() 
+                && 
+                ! space->colorMatches( mPieceColor ) ) {
+                
+                space->setColor( mPieceColor->copy() );
+                
+                }                        
+            }
+        }
     }
 
 
