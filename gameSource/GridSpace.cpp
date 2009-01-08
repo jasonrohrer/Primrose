@@ -12,7 +12,8 @@
 
 
 GridSpace::GridSpace( int inX, int inY )
-        :mX( inX ), mY( inY ), mPieceColor( NULL ), mLastColor( NULL ),
+        :mX( inX ), mY( inY ), mActive( false ),
+         mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
          mDrawColor( NULL ) {
 
@@ -85,6 +86,9 @@ void GridSpace::drawGrid() {
         drawSprite( gridLineRight, mX, mY, 32, 32 );
         }
     
+    if( mActive ) {
+        drawSprite( plus, mX, mY, 16, 16 );
+        }
     
 
     glDisable( GL_BLEND );

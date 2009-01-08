@@ -80,6 +80,19 @@ void NextPieceDisplay::update() {
         }
     }
 
+
+
+char NextPieceDisplay::isSecondPiece() {
+    
+    Color *c = mSpaces[1]->getColor();
+    
+    char returnVal = ( c == NULL );
+    
+    delete c;
+    
+    return returnVal;
+    }
+
         
 
 void NextPieceDisplay::draw() {

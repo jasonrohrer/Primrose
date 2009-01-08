@@ -35,6 +35,11 @@ NextPieceDisplay *nextPiece;
 char piecePlaced = false;
 
 
+// grid spot where last piece placed
+int lastGridX = -1;
+int lastGridY = -1;
+
+
 
 void initFrameDrawer( int inWidth, int inHeight ) {
     pointerX = -100;
@@ -124,6 +129,56 @@ void drawFrame() {
         nextPiece->update();
         
         piecePlaced = false;
+
+        
+        int i;
+        
+        // all to non-active
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->mActive = false;
+            }
+
+
+        if( nextPiece->isSecondPiece() ) {
+            
+            // set grid spaces in same row/column to active
+            int x;
+            int y;
+            
+            
+            char anyActive = false;
+            
+            for( y=0; y<gridH; y++ ) {
+                GridSpace *space = spaces[y][lastGridX];
+                
+                if( space->isEmpty() ) {
+                    space->mActive = true;
+                    anyActive = true;
+                    }
+                }
+            
+            for( x=0; x<gridW; x++ ) {
+                GridSpace *space = spaces[lastGridY][x];
+                
+                if( space->isEmpty() ) {
+                    space->mActive = true;
+                    anyActive = true;
+                    }
+                }
+
+            
+            if( !anyActive ) {
+                // all empty active
+                for( i=0; i<numGridSpaces; i++ ) {
+                    if( allSpaces[i]->isEmpty() ) {
+                        allSpaces[i]->mActive = true;
+                        }
+                    }
+                }
+            
+
+            }
+        
         }
     
 
@@ -178,22 +233,40 @@ void pointerUp( float inX, float inY ) {
         return;
         }
     
+    char considerNonActive = true;
+    if( nextPiece->isSecondPiece() ) {
+        considerNonActive = false;
+        }
+    
 
-    for( int i=0; i<numGridSpaces; i++ ) {
+    int x;
+    int y;
+    
+    for( y=0; y<gridH; y++ ) {
+        for( x=0; x<gridW; x++ ) {
         
-        if( allSpaces[i]->isInside( (int)pointerX, (int)pointerY )
-            &&
-            allSpaces[i]->isEmpty() ) {
+
+            GridSpace *space = spaces[y][x];
             
-                        
-            allSpaces[i]->setColor( nextPiece->getNextPiece() );
-            piecePlaced = true;
-            
-            nextColor++;
-            
-            nextColor %= 8;
-            
+            if( space->isInside( (int)pointerX, (int)pointerY )
+                &&
+                space->isEmpty()
+                && 
+                ( considerNonActive || space->mActive ) ) {
+                
+                
+                space->setColor( nextPiece->getNextPiece() );
+                piecePlaced = true;
+                
+                nextColor++;
+                
+                nextColor %= 8;
+                
+                lastGridY = y;
+                lastGridX = x;
+                }
             }
+        
         
         }
     
