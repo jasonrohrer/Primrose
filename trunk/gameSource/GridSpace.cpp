@@ -13,6 +13,8 @@
 
 GridSpace::GridSpace( int inX, int inY )
         :mX( inX ), mY( inY ), mActive( false ), mVisited( false ),
+         mChecked( false ),
+         mMarkedForClearing( false ),
          mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
          mDrawColor( NULL ) {
@@ -215,6 +217,9 @@ char GridSpace::colorMatches( Color *inColor ) {
 
 
 Color *GridSpace::checkSurrounded() {
+    mVisited = true;
+    mChecked = true;
+    
     
     if( isEmpty() ) {
         return NULL;
@@ -264,7 +269,7 @@ Color *GridSpace::checkSurrounded() {
 
     // no neighbors are empty
 
-    // check each like-colored, unmarked neighbor, and mark it
+    // check each like-colored, unvisited neighbor
         
     for( n=0; n<4; n++ ) {
         GridSpace *space = mNeighbors[n];
@@ -275,9 +280,6 @@ Color *GridSpace::checkSurrounded() {
                 
                 if( space->colorMatches( mPieceColor ) ) {
                     
-                    space->mVisited = true;
-                    
-
                     Color *c = space->checkSurrounded();
                     
                     if( c == NULL ) {

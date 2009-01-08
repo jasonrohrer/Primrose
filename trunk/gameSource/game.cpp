@@ -68,16 +68,16 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         
             
             if( y > 0 ) {
-                spaces[y][x]->mNeighbors[ GridSpace::top ] = spaces[x][y-1];
+                spaces[y][x]->mNeighbors[ GridSpace::top ] = spaces[y-1][x];
                 }
             if( y < gridH-1 ) {
-                spaces[y][x]->mNeighbors[ GridSpace::bottom ] = spaces[x][y+1];
+                spaces[y][x]->mNeighbors[ GridSpace::bottom ] = spaces[y+1][x];
                 }
             if( x > 0 ) {
-                spaces[y][x]->mNeighbors[ GridSpace::left ] = spaces[x-1][y];
+                spaces[y][x]->mNeighbors[ GridSpace::left ] = spaces[y][x-1];
                 }
             if( x < gridW-1 ) {
-                spaces[y][x]->mNeighbors[ GridSpace::right ] = spaces[x+1][y];
+                spaces[y][x]->mNeighbors[ GridSpace::right ] = spaces[y][x+1];
                 }
             }
         }
@@ -106,6 +106,66 @@ void freeFrameDrawer() {
     }
 
 
+// one round of non-chained clearing
+// returns true if some pieces cleared
+char checkAndClear() {
+    char someCleared = false;
+    
+    int i;
+    int j;
+
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->mVisited =  false;
+        allSpaces[i]->mChecked =  false;
+        allSpaces[i]->mMarkedForClearing =  false;
+        }
+
+
+    for( j=0; j<numGridSpaces; j++ ) {
+        // clear visited flags so that they only mark one group
+        // at a time
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->mVisited =  false;
+            }
+        
+
+        GridSpace *space = allSpaces[j];
+        
+        if( ! space->mChecked ) {
+            
+            if( j == 0 ) {
+                printf( "hey\n" );
+                }
+            
+            Color *c = space->checkSurrounded();
+        
+            if( c != NULL ) {
+                delete c;
+                
+                // all visited spaces part of group
+                
+                for( i=0; i<numGridSpaces; i++ ) {
+                    if( allSpaces[i]->mVisited ) {
+                        allSpaces[i]->mMarkedForClearing = true;
+                        }
+                    }
+                }            
+            }
+        }
+
+    // clear any that are marked 
+    for( i=0; i<numGridSpaces; i++ ) {
+        if( allSpaces[i]->mMarkedForClearing ) {
+            allSpaces[i]->setColor( NULL );
+            someCleared = true;
+            }
+        }
+
+    return someCleared;
+    }
+
+        
+
 
 
 
@@ -126,56 +186,59 @@ void drawFrame() {
     if( piecePlaced && animDone ) {
         // done with placement, all placement animations done
 
-        nextPiece->update();
+        if( !checkAndClear() ) {
+            
+
+            nextPiece->update();
         
-        piecePlaced = false;
+            piecePlaced = false;
 
         
-        int i;
+            int i;
         
-        // all to non-active
-        for( i=0; i<numGridSpaces; i++ ) {
-            allSpaces[i]->mActive = false;
-            }
-
-
-        if( nextPiece->isSecondPiece() ) {
-            
-            // set grid spaces in same row/column to active
-            int x;
-            int y;
-            
-            
-            char anyActive = false;
-            
-            for( y=0; y<gridH; y++ ) {
-                GridSpace *space = spaces[y][lastGridX];
-                
-                if( space->isEmpty() ) {
-                    space->mActive = true;
-                    anyActive = true;
-                    }
-                }
-            
-            for( x=0; x<gridW; x++ ) {
-                GridSpace *space = spaces[lastGridY][x];
-                
-                if( space->isEmpty() ) {
-                    space->mActive = true;
-                    anyActive = true;
-                    }
+            // all to non-active
+            for( i=0; i<numGridSpaces; i++ ) {
+                allSpaces[i]->mActive = false;
                 }
 
+
+            if( nextPiece->isSecondPiece() ) {
             
-            if( !anyActive ) {
-                // all empty active
-                for( i=0; i<numGridSpaces; i++ ) {
-                    if( allSpaces[i]->isEmpty() ) {
-                        allSpaces[i]->mActive = true;
+                // set grid spaces in same row/column to active
+                int x;
+                int y;
+            
+            
+                char anyActive = false;
+            
+                for( y=0; y<gridH; y++ ) {
+                    GridSpace *space = spaces[y][lastGridX];
+                
+                    if( space->isEmpty() ) {
+                        space->mActive = true;
+                        anyActive = true;
+                        }
+                    }
+            
+                for( x=0; x<gridW; x++ ) {
+                    GridSpace *space = spaces[lastGridY][x];
+                
+                    if( space->isEmpty() ) {
+                        space->mActive = true;
+                        anyActive = true;
+                        }
+                    }
+
+            
+                if( !anyActive ) {
+                    // all empty active
+                    for( i=0; i<numGridSpaces; i++ ) {
+                        if( allSpaces[i]->isEmpty() ) {
+                            allSpaces[i]->mActive = true;
+                            }
                         }
                     }
                 }
-            
 
             }
         

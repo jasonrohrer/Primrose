@@ -32,6 +32,7 @@ class GridSpace {
         Color *checkSurrounded();
         
         
+        
 
         // draws onto screen
         void drawGrid();
@@ -75,6 +76,9 @@ class GridSpace {
         char mActive;
         
         char mVisited;
+        char mChecked;
+        char mMarkedForClearing;
+        
         
 
         enum NeighborDirections { top=0, right, bottom, left 
