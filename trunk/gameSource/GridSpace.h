@@ -23,6 +23,15 @@ class GridSpace {
         char isAnimationDone();
         
 
+        // checks if this space is part of a like-colored group
+        // that is surrounded by a single color
+        // returns NULL if not surrounded
+        // returns color of surrounders if surrounded
+        // returns color of this piece if surrounded by edges
+        // Recursive
+        Color *checkSurrounded();
+        
+        
 
         // draws onto screen
         void drawGrid();
@@ -53,13 +62,19 @@ class GridSpace {
                 }
             }
         
+
+
+        char colorMatches( Color *inColor );
+        
         
         
         
 
         int mX, mY;
         
-        int mActive;
+        char mActive;
+        
+        char mVisited;
         
 
         enum NeighborDirections { top=0, right, bottom, left 
