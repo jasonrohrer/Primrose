@@ -163,7 +163,7 @@ void GridSpace::step() {
         delete blendA;
         delete blendB;
         
-        mColorShiftProgress += 0.1;
+        mColorShiftProgress += 0.2;
         
         if( mColorShiftProgress > 1 ) {
             mColorShiftProgress = 1;
