@@ -1,3 +1,5 @@
+#ifndef GRID_SPACE_INCLUDED
+#define GRID_SPACE_INCLUDED
 
 
 #include "minorGems/graphics/Color.h"
@@ -16,6 +18,11 @@ class GridSpace {
         // steps animations
         void step();
         
+        
+        // true if this space is currently not animating
+        char isAnimationDone();
+        
+
 
         // draws onto screen
         void drawGrid();
@@ -32,9 +39,21 @@ class GridSpace {
         
 
         // color destroyed by this class
-        void placePiece( Color *inColor );
+        void setColor( Color *inColor );
         
             
+        // returns a copy of this space's current color, or NULL
+        // if empty
+        Color *getColor() {
+            if( isEmpty() ) {
+                return NULL;
+                }
+            else {
+                return mPieceColor->copy();
+                }
+            }
+        
+        
         
         
 
@@ -61,5 +80,6 @@ class GridSpace {
         
     };
 
-        
+
+#endif        
         

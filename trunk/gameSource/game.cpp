@@ -2,6 +2,7 @@
 #include "spriteBank.h"
 
 #include "GridSpace.h"
+#include "NextPieceDisplay.h"
 
 
 #include <stdio.h>
@@ -25,6 +26,14 @@ float pointerX, pointerY;
 
 GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
+
+
+NextPieceDisplay *nextPiece;
+
+
+// true if placement in progress
+char piecePlaced = false;
+
 
 
 void initFrameDrawer( int inWidth, int inHeight ) {
@@ -68,7 +77,15 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             }
         }
 
-        
+
+    /*
+      nextPiece = new NextPieceDisplay( 19 + 21,
+                                      inHeight - (19 + 41) );
+    */
+
+    // center below grid
+    nextPiece = new NextPieceDisplay( spaces[6][3]->mX,
+                                      spaces[6][3]->mY + 40 + 20 + 19 );
     }
 
 
@@ -80,6 +97,7 @@ void freeFrameDrawer() {
     for( int i=0; i<numGridSpaces; i++ ) {
         delete allSpaces[i];
         }
+    delete nextPiece;
     }
 
 
@@ -90,10 +108,25 @@ void drawFrame() {
     
 
     int i;
-
+    
+    char animDone = true;
+    
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->step();
+
+        animDone &= allSpaces[i]->isAnimationDone();
         }
+    nextPiece->step();
+    
+    if( piecePlaced && animDone ) {
+        // done with placement, all placement animations done
+
+        nextPiece->update();
+        
+        piecePlaced = false;
+        }
+    
+
 
     
     for( i=0; i<numGridSpaces; i++ ) {
@@ -105,6 +138,9 @@ void drawFrame() {
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->drawPieceHalo();
         }
+
+    nextPiece->draw();
+    
     }
 
 
@@ -125,16 +161,7 @@ void pointerMove( float inX, float inY ) {
     }
 
 
-Color pieceColors[8] = { 
-    Color( 255/255.0, 128/255.0, 0/255.0 ),
-    Color( 128/255.0, 255/255.0, 0/255.0 ),
-    Color( 96/255.0,  0/255.0,   128/255.0 ),
-    Color( 192/255.0, 0/255.0,   0/255.0 ),
-    Color( 0/255.0,   128/255.0, 96/255.0 ),
-    Color( 255/255.0, 96/255.0,  255/255.0 ),
-    Color( 255/255.0, 255/255.0, 160/255.0 ),
-    Color( 128/255.0, 96/255.0,  0/255.0 )    
-    };
+
 
 
 int nextColor = 0;
@@ -144,20 +171,23 @@ int nextColor = 0;
 void pointerUp( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
-
+    
+    if( piecePlaced ) {
+        // last placement still in progress
+        // ignore
+        return;
+        }
+    
 
     for( int i=0; i<numGridSpaces; i++ ) {
         
         if( allSpaces[i]->isInside( (int)pointerX, (int)pointerY )
             &&
-            true /*allSpaces[i]->isEmpty()*/ ) {
+            allSpaces[i]->isEmpty() ) {
             
                         
-            Color *c =
-                //pieceColors[ randSource.getRandomBoundedInt( 0, 7 ) ].copy();
-                pieceColors[ nextColor ].copy();
-            
-            allSpaces[i]->placePiece( c );
+            allSpaces[i]->setColor( nextPiece->getNextPiece() );
+            piecePlaced = true;
             
             nextColor++;
             
