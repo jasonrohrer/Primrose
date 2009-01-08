@@ -32,6 +32,9 @@ class GridSpace {
         Color *checkSurrounded();
         
         
+        // start clearing animation
+        void flipToClear();
+        
         
 
         // draws onto screen
@@ -98,6 +101,11 @@ class GridSpace {
         
         // blend
         Color *mDrawColor;
+
+        char mBrightHalo;
+        
+        float mBrightHaloProgress;
+        
         
     };
 
