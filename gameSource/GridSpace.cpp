@@ -12,7 +12,7 @@
 
 
 GridSpace::GridSpace( int inX, int inY )
-        :mX( inX ), mY( inY ), mActive( false ),
+        :mX( inX ), mY( inY ), mActive( false ), mVisited( false ),
          mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
          mDrawColor( NULL ) {
@@ -192,3 +192,133 @@ char GridSpace::isAnimationDone() {
 
     return false;
     }
+
+
+
+char GridSpace::colorMatches( Color *inColor ) {
+    if( isEmpty() ) {
+        if( inColor == NULL ) {
+            return true;
+            }
+        else {
+            return false;
+            }
+        }
+    else if( inColor != NULL ) {
+        return inColor->equals( mPieceColor );
+        }
+    else {
+        return false;
+        }
+    }
+
+
+
+Color *GridSpace::checkSurrounded() {
+    
+    if( isEmpty() ) {
+        return NULL;
+        }
+    
+
+    int n;
+    
+    // first, make sure all neighbors have our color or a single other color
+    Color *surroundColor = NULL;
+    
+    for( n=0; n<4; n++ ) {
+        GridSpace *space = mNeighbors[n];
+        
+        if( space != NULL ) {
+            
+
+            if( space->isEmpty() ) {
+                // neighbor empty, not surrounded
+
+                if( surroundColor != NULL ) {
+                    delete surroundColor;
+                    }
+                return NULL;
+                }
+                    
+            if( ! space->colorMatches( mPieceColor ) ) {
+                            
+                if( surroundColor == NULL ) {
+                    surroundColor = space->getColor();
+                    }
+                else if( ! space->colorMatches( surroundColor ) ) {
+                    // surrounded by more than one color
+                    
+                    if( surroundColor != NULL ) {
+                        delete surroundColor;
+                        }
+                    return NULL;
+                    }
+                }
+            }
+        }
+    
+
+    // have surround color, or NULL if surrounded by like-colored pieces
+    // and edges
+
+    // no neighbors are empty
+
+    // check each like-colored, unmarked neighbor, and mark it
+        
+    for( n=0; n<4; n++ ) {
+        GridSpace *space = mNeighbors[n];
+        
+        if( space != NULL ) {
+
+            if( ! space->mVisited ) {
+                
+                if( space->colorMatches( mPieceColor ) ) {
+                    
+                    space->mVisited = true;
+                    
+
+                    Color *c = space->checkSurrounded();
+                    
+                    if( c == NULL ) {
+                        if( surroundColor != NULL ) {
+                            delete surroundColor;
+                            }
+                        return NULL;
+                        }
+                    
+
+                    if( ! c->equals( mPieceColor ) ) {
+                        
+                        if( surroundColor == NULL ) {
+                            surroundColor = c;
+                            }
+                        else if( ! surroundColor->equals( c ) ) {
+                            delete surroundColor;
+                            delete c;
+                        
+                            // color mismatch
+                            return NULL;
+                            }
+                        }
+                    }
+                
+                }
+            
+            }
+        
+        }
+
+
+
+    // done checking neighbors... if we got here, we have our surrounding
+    // color... or NULL if surrounded by edges
+
+    if( surroundColor == NULL ) {
+        return mPieceColor->copy();
+        }
+    else {
+        return surroundColor;
+        }
+    }
+

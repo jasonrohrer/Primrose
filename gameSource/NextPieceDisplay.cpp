@@ -70,7 +70,7 @@ void NextPieceDisplay::update() {
         
         for( int i=0; i<2; i++ ) {
             mSpaces[i]->setColor( 
-                pieceColors[ randSource.getRandomBoundedInt( 0, 7) ].copy() );
+                pieceColors[ randSource.getRandomBoundedInt( 0, 2) ].copy() );
             }
         }
     else {
