@@ -156,7 +156,7 @@ char checkAndClear() {
     // clear any that are marked 
     for( i=0; i<numGridSpaces; i++ ) {
         if( allSpaces[i]->mMarkedForClearing ) {
-            allSpaces[i]->setColor( NULL );
+            allSpaces[i]->flipToClear();
             someCleared = true;
             }
         }

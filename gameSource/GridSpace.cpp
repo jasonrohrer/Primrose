@@ -17,7 +17,9 @@ GridSpace::GridSpace( int inX, int inY )
          mMarkedForClearing( false ),
          mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
-         mDrawColor( NULL ) {
+         mDrawColor( NULL ),
+         mBrightHalo( false ), 
+         mBrightHaloProgress( 0 ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -110,6 +112,7 @@ void GridSpace::drawPieceCenter() {
         drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
         }
 
+
     glDisable( GL_BLEND );
     }
 
@@ -124,7 +127,14 @@ void GridSpace::drawPieceHalo() {
 
     if( mDrawColor != NULL ) {
         drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
+    
+        if( mBrightHalo ) {
+            drawSprite( pieceBrightHalo, mX, mY, 32, 32, mDrawColor, 
+                        mBrightHaloProgress * mDrawColor->a );
+            }
         }
+    
+    
 
     glDisable( GL_BLEND );
     }
@@ -177,6 +187,32 @@ void GridSpace::step() {
         
         }
     
+    if( mBrightHalo ) {
+
+        if( mBrightHaloProgress == 1 ) {
+            
+            if( mPieceColor != NULL ) {
+                
+                setColor( NULL );
+                }
+            else if( mColorShiftProgress == 1 ) {
+                // completely faded out
+                
+                mBrightHaloProgress = 0;
+                mBrightHalo = false;
+                }
+            }
+        else {
+            mBrightHaloProgress += 0.2;
+            
+            if( mBrightHaloProgress > 1 ) {
+                mBrightHaloProgress = 1;
+                }
+            }
+        
+        }
+    
+            
             
     }
 
@@ -186,9 +222,8 @@ char GridSpace::isAnimationDone() {
 
     if( mDrawColor == NULL ) {
         return true;
-        }
-    
-    else if( mColorShiftProgress == 1 ) {
+        }    
+    else if( mColorShiftProgress == 1 && ! mBrightHalo ) {
         return true;
         }
 
@@ -323,4 +358,12 @@ Color *GridSpace::checkSurrounded() {
         return surroundColor;
         }
     }
+
+
+void GridSpace::flipToClear() {
+    mBrightHaloProgress = 0;
+    mBrightHalo = true;
+    
+    }
+
 

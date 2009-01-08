@@ -18,7 +18,8 @@ const char *spriteNames[ numSprites ] =
     "plus",
     "piece",
     "pieceHalo",
-    "pieceCenter"
+    "pieceCenter",
+    "pieceBrightHalo"
     };
 
 
