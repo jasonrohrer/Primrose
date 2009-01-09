@@ -192,7 +192,7 @@ void GridSpace::step() {
         
         if( mLastColor != NULL && mPieceColor != NULL ) {
             // slow shift between colors
-            mColorShiftProgress += 0.1;
+            mColorShiftProgress += 0.05;
             }
         else {
             // faster shift to on or off
@@ -229,7 +229,7 @@ void GridSpace::step() {
             }
         else {
             // slower than color switch time
-            mBrightHaloProgress += 0.1;
+            mBrightHaloProgress += 0.05;
             
             if( mBrightHaloProgress > 1 ) {
                 mBrightHaloProgress = 1;
