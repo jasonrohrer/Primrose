@@ -129,8 +129,19 @@ void GridSpace::drawPieceHalo() {
         drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
     
         if( mBrightHalo ) {
-            drawSprite( pieceBrightHalo, mX, mY, 32, 32, mDrawColor, 
-                        mBrightHaloProgress * mDrawColor->a );
+            //for( int i=0; i<4; i++ ) {
+                
+                drawSprite( pieceBrightHalo, mX, mY, 32, 32, mDrawColor, 
+                            mBrightHaloProgress * mDrawColor->a );
+                //}
+                
+                Color white( 1, 1, 1, 1 );
+                
+                glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+                drawSprite( pieceBrightCenter, mX, mY, 32, 32, &white, 
+                            mBrightHaloProgress * mDrawColor->a );
+
+            
             }
         }
     

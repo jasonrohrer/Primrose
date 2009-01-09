@@ -19,7 +19,8 @@ const char *spriteNames[ numSprites ] =
     "piece",
     "pieceHalo",
     "pieceCenter",
-    "pieceBrightHalo"
+    "pieceBrightHalo",
+    "pieceBrightCenter"
     };
 
 
