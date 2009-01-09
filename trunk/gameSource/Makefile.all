@@ -25,6 +25,7 @@ common.cpp \
 spriteBank.cpp \
 GridSpace.cpp \
 NextPieceDisplay.cpp \
+numeral.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
@@ -42,6 +43,8 @@ graphics/pieceCenter.tga \
 graphics/pieceHalo.tga \
 graphics/pieceBrightHalo.tga \
 graphics/pieceBrightCenter.tga \
+graphics/numerals.tga \
+
 
 
 
