@@ -7,6 +7,7 @@
 
 
 #include <stdio.h>
+#include <math.h>
 
 #include <GL/gl.h>
 
@@ -107,6 +108,9 @@ void freeFrameDrawer() {
     }
 
 
+int chainLength = 1;
+
+
 // one round of non-chained clearing
 // returns true if some pieces cleared
 char checkAndClear() {
@@ -134,10 +138,6 @@ char checkAndClear() {
         
         if( ! space->mChecked ) {
             
-            if( j == 0 ) {
-                printf( "hey\n" );
-                }
-            
             Color *c = space->checkSurrounded();
         
             if( c != NULL ) {
@@ -145,11 +145,27 @@ char checkAndClear() {
                 
                 // all visited spaces part of group
                 
+                // tally score
+                int score = 0;
+                
                 for( i=0; i<numGridSpaces; i++ ) {
                     if( allSpaces[i]->mVisited ) {
                         allSpaces[i]->mMarkedForClearing = true;
+                        score ++;
                         }
                     }
+                
+                // set score for them all
+                for( i=0; i<numGridSpaces; i++ ) {
+                    if( allSpaces[i]->mVisited ) {
+                        allSpaces[i]->mScore = 
+                            (int)( pow( score, 2 ) )
+                            *
+                            (int)( pow( chainLength, 3 ) );
+                        }
+                    }
+                
+                
                 }            
             }
         }
@@ -162,6 +178,10 @@ char checkAndClear() {
             }
         }
 
+    if( someCleared ) {
+        chainLength ++;
+        }
+    
     return someCleared;
     }
 
@@ -256,10 +276,10 @@ void drawFrame() {
 
     nextPiece->draw();
     
-
+    /*
     drawScorePip( score, allSpaces[0]->mX, allSpaces[0]->mY );
     score += 2000000;
-    
+    */
     }
 
 
@@ -328,7 +348,11 @@ void pointerUp( float inX, float inY ) {
                 
                 lastGridY = y;
                 lastGridX = x;
-
+                
+                // reset chain length counter
+                chainLength = 1;
+                
+                
                 if( !considerNonActive ) {
                     // just placed in an active spot (second piece)
 
