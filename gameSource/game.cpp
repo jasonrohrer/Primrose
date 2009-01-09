@@ -26,6 +26,9 @@ float pointerX, pointerY;
 #define gridH 7
 #define numGridSpaces 49
 
+Color scoreColor( 255/255.0, 255/255.0, 160/255.0 );
+
+
 GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
@@ -41,13 +44,23 @@ char piecePlaced = false;
 int lastGridX = -1;
 int lastGridY = -1;
 
+int score = 0;
+
+int chainLength = 1;
 
 
-void initFrameDrawer( int inWidth, int inHeight ) {
+
+void newGame() {
+    
+    lastGridX = -1;
+    lastGridY = -1;
+    score = 0;
+    chainLength = 1;
+    
+
     pointerX = -100;
     pointerY = -100;
 
-    initSpriteBank();
 
     int i=0;
     int x;
@@ -93,14 +106,12 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     // center below grid
     nextPiece = new NextPieceDisplay( spaces[6][3]->mX,
                                       spaces[6][3]->mY + 40 + 20 + 19 + 1 );
+    
     }
 
 
-
-
-void freeFrameDrawer() {
-    freeSpriteBank();
-
+void endGame() {
+    
     for( int i=0; i<numGridSpaces; i++ ) {
         delete allSpaces[i];
         }
@@ -108,7 +119,26 @@ void freeFrameDrawer() {
     }
 
 
-int chainLength = 1;
+
+
+
+void initFrameDrawer( int inWidth, int inHeight ) {
+
+    initSpriteBank();
+
+    newGame();
+    }
+
+
+
+
+void freeFrameDrawer() {
+    freeSpriteBank();
+    
+    endGame();
+    }
+
+
 
 
 // one round of non-chained clearing
@@ -187,7 +217,6 @@ char checkAndClear() {
 
         
 
-int score = 0;
 
 
 
@@ -276,10 +305,9 @@ void drawFrame() {
 
     nextPiece->draw();
     
-    /*
-    drawScorePip( score, allSpaces[0]->mX, allSpaces[0]->mY );
-    score += 2000000;
-    */
+    
+    //drawScore( score, 320 - 19, nextPiece->mY );
+    drawScore( 3409384, 320 - 19, nextPiece->mY + 41, &scoreColor );
     }
 
 
@@ -301,9 +329,6 @@ void pointerMove( float inX, float inY ) {
 
 
 
-
-
-int nextColor = 0;
 
 
 
@@ -342,9 +367,6 @@ void pointerUp( float inX, float inY ) {
                 space->setColor( nextPiece->getNextPiece() );
                 piecePlaced = true;
                 
-                nextColor++;
-                
-                nextColor %= 8;
                 
                 lastGridY = y;
                 lastGridX = x;
