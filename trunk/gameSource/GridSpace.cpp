@@ -19,7 +19,8 @@ GridSpace::GridSpace( int inX, int inY )
          mColorShiftProgress( 0 ),
          mDrawColor( NULL ),
          mBrightHalo( false ), 
-         mBrightHaloProgress( 0 ) {
+         mBrightHaloProgress( 0 ),
+         mActiveProgress( 0 ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -90,8 +91,10 @@ void GridSpace::drawGrid() {
         drawSprite( gridLineRight, mX, mY, 32, 32 );
         }
     
-    if( mActive ) {
-        drawSprite( plus, mX, mY, 16, 16 );
+    if( mActiveProgress > 0 ) {
+        Color white( 1, 1, 1, 1 );
+        
+        drawSprite( plus, mX, mY, 16, 16, &white, mActiveProgress );
         }
     
 
@@ -238,7 +241,23 @@ void GridSpace::step() {
         
         }
     
-            
+
+    if( mActive && mActiveProgress < 1 ) {
+        mActiveProgress += 0.2;
+        
+        if( mActiveProgress > 1 ) {
+            mActiveProgress = 1;
+            }
+        }
+    else if( !mActive && mActiveProgress > 0 ) {
+        mActiveProgress -= 0.2;
+        
+        if( mActiveProgress < 0 ) {
+            mActiveProgress = 0;
+            }
+        }
+    
+
             
     }
 
