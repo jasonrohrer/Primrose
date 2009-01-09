@@ -106,6 +106,9 @@ class GridSpace {
         
         float mBrightHaloProgress;
         
+        // active mark fades in too
+        float mActiveProgress;
+        
         
     };
 

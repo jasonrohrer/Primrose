@@ -196,11 +196,6 @@ void drawFrame() {
         
             int i;
         
-            // all to non-active
-            for( i=0; i<numGridSpaces; i++ ) {
-                allSpaces[i]->mActive = false;
-                }
-
 
             if( nextPiece->isSecondPiece() ) {
             
@@ -327,6 +322,18 @@ void pointerUp( float inX, float inY ) {
                 
                 lastGridY = y;
                 lastGridX = x;
+
+                if( !considerNonActive ) {
+                    // just placed in an active spot (second piece)
+
+                    int i;
+        
+                    // all to non-active
+                    for( i=0; i<numGridSpaces; i++ ) {
+                        allSpaces[i]->mActive = false;
+                        }
+                    }
+                
                 }
             }
         
