@@ -391,7 +391,7 @@ void GridSpace::flipToClear() {
     mBrightHalo = true;
     
 
-    // flip any other-colored neighbors
+    // flip any other-colored neighbors (if they are not also clearing)
 
     for( int n=0; n<4; n++ ) {
         GridSpace *space = mNeighbors[n];
@@ -399,6 +399,8 @@ void GridSpace::flipToClear() {
         if( space != NULL ) {
             if( ! space->isEmpty() 
                 && 
+                ! space->mMarkedForClearing
+                &&
                 ! space->colorMatches( mPieceColor ) ) {
                 
                 space->setColor( mPieceColor->copy() );
