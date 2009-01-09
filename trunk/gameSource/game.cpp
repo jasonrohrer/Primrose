@@ -90,7 +90,7 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
     // center below grid
     nextPiece = new NextPieceDisplay( spaces[6][3]->mX,
-                                      spaces[6][3]->mY + 40 + 20 + 19 );
+                                      spaces[6][3]->mY + 40 + 20 + 19 + 1 );
     }
 
 
