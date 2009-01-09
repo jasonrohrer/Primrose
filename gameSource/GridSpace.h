@@ -83,6 +83,9 @@ class GridSpace {
         char mMarkedForClearing;
         
         
+        int mScore;
+        
+        
 
         enum NeighborDirections { top=0, right, bottom, left 
             };
@@ -108,6 +111,9 @@ class GridSpace {
         
         // active mark fades in too
         float mActiveProgress;
+        
+
+        float mScoreFade;
         
         
     };

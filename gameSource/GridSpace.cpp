@@ -3,6 +3,7 @@
 #include "GridSpace.h"
 
 #include "spriteBank.h"
+#include "numeral.h"
 
 
 #include <math.h>
@@ -15,12 +16,14 @@ GridSpace::GridSpace( int inX, int inY )
         :mX( inX ), mY( inY ), mActive( false ), mVisited( false ),
          mChecked( false ),
          mMarkedForClearing( false ),
+         mScore( 0 ),
          mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
          mDrawColor( NULL ),
          mBrightHalo( false ), 
          mBrightHaloProgress( 0 ),
-         mActiveProgress( 0 ) {
+         mActiveProgress( 0 ),
+         mScoreFade( 0 ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -103,6 +106,9 @@ void GridSpace::drawGrid() {
     }
 
 
+Color scorePipColor( 255/255.0, 255/255.0, 160/255.0 );
+
+
 
 void GridSpace::drawPieceCenter() {
     
@@ -115,6 +121,12 @@ void GridSpace::drawPieceCenter() {
         drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
         }
 
+    if( mPieceColor == NULL && mScore > 0 ) {
+        
+        drawScorePip( mScore, mX, mY, &scorePipColor, 
+                      mColorShiftProgress * mScoreFade );
+        }
+    
 
     glDisable( GL_BLEND );
     }
@@ -195,7 +207,7 @@ void GridSpace::step() {
         
         if( mLastColor != NULL && mPieceColor != NULL ) {
             // slow shift between colors
-            mColorShiftProgress += 0.05;
+            mColorShiftProgress += 0.1;
             }
         else {
             // faster shift to on or off
@@ -232,7 +244,7 @@ void GridSpace::step() {
             }
         else {
             // slower than color switch time
-            mBrightHaloProgress += 0.05;
+            mBrightHaloProgress += 0.1;
             
             if( mBrightHaloProgress > 1 ) {
                 mBrightHaloProgress = 1;
@@ -240,6 +252,15 @@ void GridSpace::step() {
             }
         
         }
+
+    if( mScoreFade > 0 && !mBrightHalo && mColorShiftProgress == 1 ) {
+        mScoreFade -= 0.1;
+        
+        if( mScoreFade < 0 ) {
+            mScoreFade = 0;
+            }
+        }
+    
     
 
     if( mActive && mActiveProgress < 1 ) {
@@ -268,7 +289,7 @@ char GridSpace::isAnimationDone() {
     if( mDrawColor == NULL ) {
         return true;
         }    
-    else if( mColorShiftProgress == 1 && ! mBrightHalo ) {
+    else if( mColorShiftProgress == 1 && ! mBrightHalo && mScoreFade == 0 ) {
         return true;
         }
 
@@ -408,6 +429,8 @@ Color *GridSpace::checkSurrounded() {
 void GridSpace::flipToClear() {
     mBrightHaloProgress = 0;
     mBrightHalo = true;
+    
+    mScoreFade = 1;
     
 
     // flip any other-colored neighbors (if they are not also clearing)
