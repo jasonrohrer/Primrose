@@ -3,6 +3,7 @@
 
 #include "GridSpace.h"
 #include "NextPieceDisplay.h"
+#include "numeral.h"
 
 
 #include <stdio.h>
@@ -253,6 +254,9 @@ void drawFrame() {
         }
 
     nextPiece->draw();
+    
+
+    drawNumeral( 6, 100, 100 );
     
     }
 

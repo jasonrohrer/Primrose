@@ -5,7 +5,7 @@
 #include "minorGems/graphics/Color.h"
 
 
-#define numSprites 10
+#define numSprites 11
 
 enum SpriteHandle {
     gridLineTop = 0,
@@ -17,7 +17,8 @@ enum SpriteHandle {
     pieceHalo,
     pieceCenter,
     pieceBrightHalo,
-    pieceBrightCenter
+    pieceBrightCenter,
+    numerals
     };
 
 
@@ -30,10 +31,13 @@ void freeSpriteBank();
 
 
 
+// subsection selects a particular y region of the underlying sprite texture
 void drawSprite( SpriteHandle inSpriteHandle,
                  float inCenterX, float inCenterY, 
                  float inXRadius, float inYRadius,
-                 Color *inColor = NULL, double inAlpha = 1.0 );
+                 Color *inColor = NULL, float inAlpha = 1.0,
+                 float inSubsectionOffset = 0,
+                 float inSubsectionExtent = 1 );
 
 
 

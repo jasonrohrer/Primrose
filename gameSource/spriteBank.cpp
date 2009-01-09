@@ -20,7 +20,8 @@ const char *spriteNames[ numSprites ] =
     "pieceHalo",
     "pieceCenter",
     "pieceBrightHalo",
-    "pieceBrightCenter"
+    "pieceBrightCenter",
+    "numerals"
     };
 
 
@@ -68,8 +69,11 @@ void freeSpriteBank() {
 void drawSprite( SpriteHandle inSpriteHandle,
                  float inCenterX, float inCenterY, 
                  float inXRadius, float inYRadius,
-                 Color *inColor, double inAlpha ) {
+                 Color *inColor, float inAlpha,
+                 float inSubsectionOffset,
+                 float inSubsectionExtent ) {
     
+
     SingleTextureGL *texture = spriteTextures[ inSpriteHandle ];
 
     if( texture == NULL ) {
@@ -101,16 +105,16 @@ void drawSprite( SpriteHandle inSpriteHandle,
 
     glBegin( GL_QUADS ); {
     
-        glTexCoord2f( 0, 0 );
+        glTexCoord2f( 0, inSubsectionOffset );
         glVertex2f( inCenterX - inXRadius, inCenterY - inYRadius );
         
-        glTexCoord2f( 1, 0 );
+        glTexCoord2f( 1, inSubsectionOffset );
         glVertex2f( inCenterX + inXRadius, inCenterY - inYRadius );
         
-        glTexCoord2f( 1, 1 );
+        glTexCoord2f( 1, inSubsectionOffset + inSubsectionExtent );
         glVertex2f( inCenterX + inXRadius, inCenterY + inYRadius );
         
-        glTexCoord2f( 0, 1 );
+        glTexCoord2f( 0, inSubsectionOffset + inSubsectionExtent );
         glVertex2f( inCenterX - inXRadius, inCenterY + inYRadius );        
         }
     glEnd();
