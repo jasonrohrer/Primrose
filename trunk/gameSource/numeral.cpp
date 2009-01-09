@@ -28,11 +28,35 @@ void drawNumeral( int inNumber,
 
 
 
+void drawNumeralBig( int inNumber,
+                     float inCenterX, float inCenterY,
+                     Color *inColor, float inAlpha ) {
+
+
+    glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    drawSprite( numeralsBig,
+                inCenterX, inCenterY,
+                16, 20,
+                inColor, inAlpha,
+                inNumber * 40 / 512.0f,
+                40 / 512.0f );
+
+    glDisable( GL_BLEND );
+    }
+
+
+
 void drawScorePip( int inScore,
                    float inCenterX, float inCenterY,
                    Color *inColor, float inAlpha ) {
     
-    int numDigits = (int)( floor( log10( inScore ) ) ) + 1;
+    int numDigits = 1;
+
+    if( inScore > 0 ) {
+        numDigits = (int)( floor( log10( inScore ) ) ) + 1;
+        }
     
 
     // draw up to 9 digits
@@ -129,4 +153,72 @@ void drawScorePip( int inScore,
     
     }
 
+
+
+
+
+
+
+void drawScore( int inScore,
+                float inRightX, float inBottomY,
+                Color *inColor, float inAlpha ) {
+    
+    
+    int numDigits = 1;
+
+    if( inScore > 0 ) {
+        numDigits = (int)( floor( log10( inScore ) ) ) + 1;
+        }
+    
+    
+    int rowSep = 4;
+    int colSep = 6;
+        
+    
+    
+    // next digit center
+    int startCX = (int)inRightX - 6;
+    int cX = startCX;
+    int cY = (int)inBottomY - 10;
+    
+    int i;
+    
+    for( i=0; i<numDigits; i++ ) {
+        
+        int number = ( inScore / ( (int)( pow( 10, i ) ) ) ) % 10;
+        
+        if( i % 3 == 0 && i != 0 ) {
+            // make room for comma
+            if( i % 6 != 0 ) {
+                // extra space around comma
+                cX -= colSep - 2;
+                }
+            }
+        
+        drawNumeralBig( number,
+                        cX, 
+                        cY,
+                        inColor, inAlpha );
+
+        if( i % 3 == 0 && i != 0 ) {
+            // comma after every 4th digit (between 3 and 4 )
+                    
+            drawNumeralBig( 10,
+                            cX + 6 + colSep,
+                            cY + 2,
+                            inColor, inAlpha );
+            }
+        
+
+        // compute next numeral center, six digits per line
+        if( (i + 1) % 6 != 0 ) {
+            cX -= 12 + colSep;
+            }
+        else {
+            cX = startCX;
+            cY -= 20 + rowSep;
+            }
+        }
+    
+    }
 
