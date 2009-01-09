@@ -167,6 +167,7 @@ char checkAndClear() {
 
         
 
+int score = 0;
 
 
 
@@ -256,7 +257,8 @@ void drawFrame() {
     nextPiece->draw();
     
 
-    drawNumeral( 6, 100, 100 );
+    drawScorePip( score, allSpaces[0]->mX, allSpaces[0]->mY );
+    score += 2000000;
     
     }
 
