@@ -270,7 +270,7 @@ void GridSpace::step() {
             }
         
 
-        mScoreFade -= 0.1;
+        mScoreFade -= 0.075;
         
         if( mScoreFade < 0 ) {
             mScoreFade = 0;
