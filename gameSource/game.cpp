@@ -353,7 +353,7 @@ void drawFrame() {
     
 
     if( scoreTransitionProgress < 1 ) {
-        scoreTransitionProgress += 0.1;
+        scoreTransitionProgress += 0.075;
         if( scoreTransitionProgress > 1 ) {
             scoreTransitionProgress = 1;
             }
