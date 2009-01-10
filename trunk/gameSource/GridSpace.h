@@ -114,6 +114,7 @@ class GridSpace {
         
 
         float mScoreFade;
+        char mScoreSent;
         
         
     };

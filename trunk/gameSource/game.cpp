@@ -46,6 +46,11 @@ int lastGridY = -1;
 
 int score = 0;
 
+// for smooth transition between scores
+int lastScore = 0;
+float scoreTransitionProgress = 1;
+
+
 int chainLength = 1;
 
 
@@ -55,6 +60,10 @@ void newGame() {
     lastGridX = -1;
     lastGridY = -1;
     score = 0;
+
+    lastScore = 0;
+    scoreTransitionProgress = 1;
+    
     chainLength = 1;
     
 
@@ -235,8 +244,29 @@ void drawFrame() {
     nextPiece->step();
     
     if( piecePlaced && animDone ) {
-        // done with placement, all placement animations done
+        // done with placement, all placement (or clearing) animations done
 
+        
+        /*
+        // accumulate any points scored
+        lastScore = score;
+        
+        for( i=0; i<numGridSpaces; i++ ) {
+            if( allSpaces[i]->mScore > 0 ) {
+                score += allSpaces[i]->mScore;
+                
+                allSpaces[i]->mScore = 0;
+                }
+            }
+        
+        if( lastScore != score ) {
+            scoreTransitionProgress = 0;
+            }
+        */
+
+
+
+        // check if any more clear (which will start more animations)
         if( !checkAndClear() ) {
             
 
@@ -306,8 +336,29 @@ void drawFrame() {
     nextPiece->draw();
     
     
-    //drawScore( score, 320 - 19, nextPiece->mY );
-    drawScore( 3409384, 320 - 19, nextPiece->mY + 41, &scoreColor );
+    // additive needed for smooth cross-fade between last score and new score
+    glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+
+    if( scoreTransitionProgress < 1 ) {
+        
+        drawScore( lastScore, 320 - 19, nextPiece->mY + 41, &scoreColor,
+                   1 - scoreTransitionProgress );
+        }
+    
+    drawScore( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
+               scoreTransitionProgress );
+    
+    glDisable( GL_BLEND );
+    
+
+    if( scoreTransitionProgress < 1 ) {
+        scoreTransitionProgress += 0.1;
+        if( scoreTransitionProgress > 1 ) {
+            scoreTransitionProgress = 1;
+            }
+        }
+    
     }
 
 
@@ -371,6 +422,9 @@ void pointerUp( float inX, float inY ) {
                 lastGridY = y;
                 lastGridX = x;
                 
+                lastScore = score;
+                
+
                 // reset chain length counter
                 chainLength = 1;
                 
@@ -392,4 +446,14 @@ void pointerUp( float inX, float inY ) {
         
         }
     
+    }
+
+
+
+
+void addToScore( int inPointsToAdd ) {
+    
+    score += inPointsToAdd;
+    
+    scoreTransitionProgress = 0;
     }

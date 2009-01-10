@@ -13,8 +13,7 @@ void drawNumeral( int inNumber,
                   Color *inColor, float inAlpha ) {
 
 
-    glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    
 
     drawSprite( numerals,
                 inCenterX, inCenterY,
@@ -23,7 +22,6 @@ void drawNumeral( int inNumber,
                 inNumber * 20 / 256.0f,
                 20 / 256.0f );
 
-    glDisable( GL_BLEND );
     }
 
 
@@ -33,9 +31,7 @@ void drawNumeralBig( int inNumber,
                      Color *inColor, float inAlpha ) {
 
 
-    glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
+    
     drawSprite( numeralsBig,
                 inCenterX, inCenterY,
                 16, 20,
@@ -43,7 +39,6 @@ void drawNumeralBig( int inNumber,
                 inNumber * 40 / 512.0f,
                 40 / 512.0f );
 
-    glDisable( GL_BLEND );
     }
 
 

@@ -11,6 +11,11 @@
 #include <GL/gl.h>
 
 
+// interface to adding to global game score
+void addToScore( int inPointsToAdd );
+
+
+
 
 GridSpace::GridSpace( int inX, int inY )
         :mX( inX ), mY( inY ), mActive( false ), mVisited( false ),
@@ -23,7 +28,8 @@ GridSpace::GridSpace( int inX, int inY )
          mBrightHalo( false ), 
          mBrightHaloProgress( 0 ),
          mActiveProgress( 0 ),
-         mScoreFade( 0 ) {
+         mScoreFade( 0 ),
+         mScoreSent( false ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -125,6 +131,7 @@ void GridSpace::drawPieceCenter() {
         
         drawScorePip( mScore, mX, mY, &scorePipColor, 
                       mColorShiftProgress * mScoreFade );
+        
         }
     
 
@@ -254,6 +261,15 @@ void GridSpace::step() {
         }
 
     if( mScoreFade > 0 && !mBrightHalo && mColorShiftProgress == 1 ) {
+        
+        // only add to score once
+        if( !mScoreSent ) {
+            addToScore( mScore );
+            
+            mScoreSent = true;
+            }
+        
+
         mScoreFade -= 0.1;
         
         if( mScoreFade < 0 ) {
@@ -426,11 +442,13 @@ Color *GridSpace::checkSurrounded() {
     }
 
 
+
 void GridSpace::flipToClear() {
     mBrightHaloProgress = 0;
     mBrightHalo = true;
     
     mScoreFade = 1;
+    mScoreSent = false;
     
 
     // flip any other-colored neighbors (if they are not also clearing)
