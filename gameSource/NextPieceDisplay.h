@@ -44,6 +44,9 @@ class NextPieceDisplay {
         
         GridSpace *mSpaces[2];
         
+
+        float mBlinkTime;
+        
                         
     };
 
