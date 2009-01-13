@@ -90,7 +90,7 @@ void drawScorePip( int inScore,
         -( 10 + rowSep ) 
         };
     
-    // find center of mass for all digets together
+    // find center of mass for all digits together
 
     int xSum = 0;
     int ySum = 0;
@@ -213,6 +213,61 @@ void drawScore( int inScore,
             cX = startCX;
             cY -= 20 + rowSep;
             }
+        }
+    
+    }
+
+
+
+
+void drawCounter( int inCount,
+                  float inCenterX, float inCenterY,
+                  Color *inColor, float inAlpha ) {
+    
+    int numDigits = 1;
+
+    if( inCount > 0 ) {
+        numDigits = (int)( floor( log10( inCount ) ) ) + 1;
+        }
+    
+
+    // draw up to 2 digits
+
+    if( numDigits > 2 ) {
+        printf( "Error:  more than 2 digits passed to drawCounter: %d\n",
+                inCount );
+        
+        numDigits = 2;
+        }
+    
+    int colSep = 6;
+    
+    int centerOffsetsX[2] = { 
+        6,
+        -( 6 + colSep ) };
+        
+    // find center of mass for all digits together
+
+    int xSum = 0;
+    
+    int i;
+    
+    for( i=0; i<numDigits; i++ ) {
+        xSum += centerOffsetsX[ i ];
+        }
+    
+    int cX = xSum / numDigits;    
+    
+    
+    for( i=0; i<numDigits; i++ ) {
+        
+        int number = ( inCount / ( (int)( pow( 10, i ) ) ) ) % 10;
+        
+
+        drawNumeralBig( number,
+                     inCenterX - cX + centerOffsetsX[i], 
+                     inCenterY,
+                     inColor, inAlpha );
         }
     
     }

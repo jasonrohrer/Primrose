@@ -1,12 +1,12 @@
 #include "GridSpace.h"
-
+#include "ColorPool.h"
 
 class NextPieceDisplay {
         
     public:
         
         // constructs w/ center location on screen
-        NextPieceDisplay( int inX, int inY );
+        NextPieceDisplay( int inX, int inY, ColorPool *inPool );
         
         ~NextPieceDisplay();
         
@@ -41,6 +41,7 @@ class NextPieceDisplay {
 
 
     private:
+        ColorPool *mPool;
         
         GridSpace *mSpaces[2];
         
