@@ -4,6 +4,7 @@
 #include "GridSpace.h"
 #include "NextPieceDisplay.h"
 #include "numeral.h"
+#include "ColorPool.h"
 
 
 #include <stdio.h>
@@ -17,6 +18,8 @@
 
 StdRandomSource randSource;
 
+
+int screenW, screenH;
 
 
 float pointerX, pointerY;
@@ -32,6 +35,7 @@ Color scoreColor( 255/255.0, 255/255.0, 160/255.0 );
 GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
+ColorPool *colorPool;
 
 NextPieceDisplay *nextPiece;
 
@@ -113,8 +117,13 @@ void newGame() {
     */
 
     // center below grid
+    
+    colorPool = new ColorPool( spaces[6][3]->mX,
+                               screenH - 20 - 19 - 1 );
+    
     nextPiece = new NextPieceDisplay( spaces[6][3]->mX,
-                                      spaces[6][3]->mY + 40 + 20 + 19 + 1 );
+                                      spaces[6][3]->mY + 40 + 20 + 19 + 1,
+                                      colorPool );
     
     }
 
@@ -125,6 +134,7 @@ void endGame() {
         delete allSpaces[i];
         }
     delete nextPiece;
+    delete colorPool;
     }
 
 
@@ -132,7 +142,9 @@ void endGame() {
 
 
 void initFrameDrawer( int inWidth, int inHeight ) {
-
+    screenW = inWidth;
+    screenH = inHeight;
+    
     initSpriteBank();
 
     newGame();
@@ -243,6 +255,9 @@ void drawFrame() {
         }
     nextPiece->step();
     
+    colorPool->step();
+    
+
     if( piecePlaced && animDone ) {
         // done with placement, all placement (or clearing) animations done
 
@@ -271,7 +286,8 @@ void drawFrame() {
             
 
             nextPiece->update();
-        
+            colorPool->registerMove();
+            
             piecePlaced = false;
 
         
@@ -334,6 +350,8 @@ void drawFrame() {
         }
 
     nextPiece->draw();
+    
+    colorPool->draw();
     
     
     // additive needed for smooth cross-fade between last score and new score

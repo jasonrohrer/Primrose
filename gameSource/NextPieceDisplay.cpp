@@ -16,7 +16,7 @@
 extern StdRandomSource randSource;
 
 
-
+/*
 Color pieceColors[8] = { 
     Color( 255/255.0, 128/255.0, 0/255.0 ),
     Color( 128/255.0, 255/255.0, 0/255.0 ),
@@ -27,12 +27,12 @@ Color pieceColors[8] = {
     Color( 255/255.0, 255/255.0, 160/255.0 ),
     Color( 128/255.0, 96/255.0,  0/255.0 )    
     };
+*/
 
 
 
-
-NextPieceDisplay::NextPieceDisplay( int inX, int inY )
-        :mX( inX ), mY( inY ) {
+NextPieceDisplay::NextPieceDisplay( int inX, int inY, ColorPool *inPool )
+        :mX( inX ), mY( inY ), mPool( inPool ) {
 
     mSpaces[0] = new GridSpace( inX, inY - 20 );
     mSpaces[1] = new GridSpace( inX, inY + 20 );
@@ -69,8 +69,7 @@ void NextPieceDisplay::update() {
         // two new colors
         
         for( int i=0; i<2; i++ ) {
-            mSpaces[i]->setColor( 
-                pieceColors[ randSource.getRandomBoundedInt( 0, 2) ].copy() );
+            mSpaces[i]->setColor( mPool->pickColor() );
             }
         }
     else {
