@@ -92,6 +92,10 @@ class GridSpace {
         
         
         GridSpace *mNeighbors[4];
+        
+
+        // current blend of colors displayed
+        Color *mDrawColor;
 
 
     private:
@@ -102,8 +106,6 @@ class GridSpace {
         
         float mColorShiftProgress;
         
-        // blend
-        Color *mDrawColor;
 
         char mBrightHalo;
         

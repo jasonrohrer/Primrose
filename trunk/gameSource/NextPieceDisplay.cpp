@@ -125,6 +125,49 @@ void NextPieceDisplay::draw() {
     for( i=0; i<2; i++ ) {
         mSpaces[i]->drawPieceCenter();
         }
+
+    if( mSpaces[0]->mDrawColor != NULL ) {
+        
+
+        glEnable( GL_BLEND );
+    
+        float glowVal = sin( mBlinkTime - M_PI / 2 ) * 0.5 + 0.5;
+        
+        //printf( "glow val = %f\n", glowVal );
+        
+        glowVal *= mSpaces[0]->mDrawColor->a;
+        
+        glowVal *= 0.5;
+        
+        
+        drawSprite( pieceBrightHalo, 
+                    mSpaces[0]->mX, mSpaces[0]->mY, 
+                    32, 32, mSpaces[0]->mDrawColor, 
+                    glowVal );
+    
+
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+        Color white( 1, 1, 1, 1 );
+        
+        drawSprite( pieceBrightCenter, 
+                    mSpaces[0]->mX, mSpaces[0]->mY, 
+                    32, 32, &white, 
+                    glowVal );
+    
+        glDisable( GL_BLEND );
+
+        if( mSpaces[0]->mDrawColor->a == 0 ) {
+            // start blinking over again
+            mBlinkTime = 0;
+            }
+        }
+    else {
+        // start blinking over again
+        mBlinkTime = 0;
+        }
+    
+    
+
     for( i=0; i<2; i++ ) {
         mSpaces[i]->drawPieceHalo();
         }
@@ -137,6 +180,8 @@ void NextPieceDisplay::step() {
     for( int i=0; i<2; i++ ) {
         mSpaces[i]->step();
         }
+
+    mBlinkTime += 0.2;
     }
 
 
