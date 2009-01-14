@@ -165,12 +165,14 @@ int appFrameCount = 0;
 }
 
 - (void)startAnimation {
-	NSTimeInterval animationInterval = 1 / 15.0;
+	NSTimeInterval animationInterval = 1 / 25.0;
 	
     self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
 
     
-    initFrameDrawer( backingWidth, backingHeight );
+    // these not set yet
+    // initFrameDrawer( backingWidth, backingHeight );
+    initFrameDrawer( 320, 480 );
 }
 
 
@@ -192,6 +194,7 @@ int appFrameCount = 0;
 
 
 - (void)drawFrame {
+    //printf( "draw frame called\n" );
     
     [EAGLContext setCurrentContext:context];
     
@@ -212,6 +215,7 @@ int appFrameCount = 0;
 	glDisable( GL_CULL_FACE );
     glDisable( GL_DEPTH_TEST );
     
+    drawFrame();
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
@@ -220,7 +224,7 @@ int appFrameCount = 0;
     appFrameCount++;
     
     // disable FPS tracking
-    if( false && appFrameCount > 100 ) {
+    if( appFrameCount > 100 ) {
         NSDate *now = [NSDate date];
         
         NSTimeInterval newStartTime = [now timeIntervalSinceReferenceDate]; 
@@ -285,7 +289,7 @@ int appFrameCount = 0;
 	
     //Convert touch point from UIView referential to OpenGL one (upside-down flip)
 	CGPoint	location = [touch locationInView:self];
-	location.y = bounds.size.height - location.y;
+	//location.y = bounds.size.height - location.y;
     
     pointerUp( location.x, location.y );
 }
@@ -300,7 +304,7 @@ int appFrameCount = 0;
 	
     //Convert touch point from UIView referential to OpenGL one (upside-down flip)
 	CGPoint	location = [touch locationInView:self];
-	location.y = bounds.size.height - location.y;
+	//location.y = bounds.size.height - location.y;
     
     pointerMove( location.x, location.y );
 }
@@ -314,7 +318,7 @@ int appFrameCount = 0;
 	
     //Convert touch point from UIView referential to OpenGL one (upside-down flip)
 	CGPoint	location = [touch locationInView:self];
-	location.y = bounds.size.height - location.y;
+	//location.y = bounds.size.height - location.y;
     
     pointerUp( location.x, location.y );
 }
