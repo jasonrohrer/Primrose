@@ -104,6 +104,42 @@ void drawSprite( SpriteHandle inSpriteHandle,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
 
+    const GLfloat squareVertices[] = {
+        inCenterX - inXRadius, inCenterY - inYRadius,
+        inCenterX + inXRadius, inCenterY - inYRadius,
+        inCenterX - inXRadius, inCenterY + inYRadius,
+        inCenterX + inXRadius, inCenterY + inYRadius,
+        };
+    /*
+    const GLubyte squareColors[] = {
+        255, 255,   0, 255,
+        0,   255, 255, 255,
+        255,     0,   0,   0,
+        255,   0, 255, 255,
+    };
+     */
+    const GLfloat squareTextureCoords[] = {
+        0, inSubsectionOffset,
+        1, inSubsectionOffset,
+        0, inSubsectionOffset + inSubsectionExtent,
+        1, inSubsectionOffset + inSubsectionExtent
+    };
+
+    
+
+    glVertexPointer( 2, GL_FLOAT, 0, squareVertices );
+    glEnableClientState( GL_VERTEX_ARRAY );
+    
+    //glColorPointer( 4, GL_FLOAT, 0, squareColors );
+    //glEnableClientState( GL_COLOR_ARRAY );
+    
+    glTexCoordPointer( 2, GL_FLOAT, 0, squareTextureCoords );
+    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    /*
+
     glBegin( GL_QUADS ); {
     
         glTexCoord2f( 0, inSubsectionOffset );
@@ -119,7 +155,7 @@ void drawSprite( SpriteHandle inSpriteHandle,
         glVertex2f( inCenterX - inXRadius, inCenterY + inYRadius );        
         }
     glEnd();
-
+    */
     texture->disable();
 
     }
