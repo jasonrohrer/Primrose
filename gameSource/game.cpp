@@ -16,7 +16,7 @@
 #include "minorGems/util/random/StdRandomSource.h"
 
 
-StdRandomSource randSource;
+StdRandomSource randSource( 10 );
 
 
 int screenW, screenH;
