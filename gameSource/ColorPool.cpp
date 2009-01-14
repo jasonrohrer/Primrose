@@ -31,12 +31,15 @@ Color pieceColors[numColors] = {
     };
 
 
+#define startingSteps 12
 
 
 ColorPool::ColorPool( int inX, int inY )
         : mX( inX ), mY( inY ), mNumActiveColors( 3 ), mColorsToSkip( 0 ),
-          mStepsBetweenUpdates( 24 ),
-          mStepsUntilUpdate( 24 ) {
+          mStepsBetweenUpdates( startingSteps ),
+          mStepsUntilUpdate( startingSteps ),
+          mLastStepCount( startingSteps ),
+          mStepCountTransitionProgress( 1 ) {
 
     int i;
     
@@ -82,6 +85,8 @@ Color *ColorPool::pickColor() {
 void ColorPool::registerMove() {
     mStepsUntilUpdate --;
     
+    mStepCountTransitionProgress = 0;
+    
     if( mStepsUntilUpdate == 0 ) {
         
         mStepsBetweenUpdates /= 2;
@@ -101,6 +106,7 @@ void ColorPool::registerMove() {
             mSpaces[i]->setColor( pieceColors[i].copy() );
             }
         else if( mColorsToSkip < numColors - 1 ) {
+            mSpaces[mColorsToSkip]->setColor( NULL );            
             mColorsToSkip++;
             }        
         }
@@ -135,13 +141,50 @@ void ColorPool::draw() {
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE );
         
-
+        // blend between last count
+        
         drawCounter( mStepsUntilUpdate,
                      mSpaces[i]->mX,  mSpaces[i]->mY,
-                     &( colorAddCountColor ) );
+                     &( colorAddCountColor ),
+                     mStepCountTransitionProgress );
         
+        
+        if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
+            
+            // skip drawing if counter moving to next space (when last count 0)
+            // thus, counter fades in from blank in next space
+            
+            drawCounter( mLastStepCount,
+                         mSpaces[i]->mX,  mSpaces[i]->mY,
+                         &( colorAddCountColor ),
+                         1 - mStepCountTransitionProgress );
+            }
+        
+
+        if( i > 0 && 
+            ( mSpaces[i-1]->mDrawColor == NULL 
+              || 
+              mSpaces[i-1]->mDrawColor->a < 1 ) ) {
+            
+            float alpha = 1;
+            
+            if( mSpaces[i-1]->mDrawColor != NULL ) {
+                alpha = 1 - mSpaces[i-1]->mDrawColor->a;
+                }
+            
+
+            // fade out 1 on last space as color fades in
+            
+            drawCounter( 1,
+                         mSpaces[i-1]->mX,  mSpaces[i-1]->mY,
+                         &( colorAddCountColor ),
+                         alpha );
+            }
+        
+
         glDisable( GL_BLEND );
         }
+    
     
     }
 
@@ -152,6 +195,19 @@ void ColorPool::step() {
     for( int i=0; i<7; i++ ) {
         mSpaces[i]->step();
         }
+
+    if( mStepCountTransitionProgress < 1 ) {
+        
+        mStepCountTransitionProgress += 0.075;
+        
+        if( mStepCountTransitionProgress >= 1 ) {
+            mStepCountTransitionProgress = 1;
+            
+            // done with transition
+            mLastStepCount = mStepsUntilUpdate;
+            }
+        }
+    
     }
 
 

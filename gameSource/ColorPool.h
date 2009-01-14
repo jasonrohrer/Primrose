@@ -47,6 +47,9 @@ class ColorPool {
 
         int mStepsUntilUpdate;
         
+        int mLastStepCount;
+        float mStepCountTransitionProgress;
+        
         
         
                         
