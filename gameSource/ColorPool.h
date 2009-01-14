@@ -22,6 +22,10 @@ class ColorPool {
         void registerMove();
         
         
+        int getLevel() {
+            return mLevel;
+            }
+        
 
 
         // steps animations
@@ -49,6 +53,9 @@ class ColorPool {
         
         int mLastStepCount;
         float mStepCountTransitionProgress;
+        
+
+        int mLevel;
         
         
         

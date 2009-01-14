@@ -42,6 +42,9 @@ NextPieceDisplay *nextPiece;
 
 // true if placement in progress
 char piecePlaced = false;
+// track the level of the piece just place (in case the level increments
+// due to this placement)
+int levelOfPlacement = 1;
 
 
 // grid spot where last piece placed
@@ -212,7 +215,8 @@ char checkAndClear() {
                         allSpaces[i]->mScore = 
                             (int)( pow( score, 2 ) )
                             *
-                            (int)( pow( chainLength, 3 ) );
+                            (int)( pow( chainLength, 3 ) )
+                            * levelOfPlacement;
                         }
                     }
                 
@@ -434,6 +438,7 @@ void pointerUp( float inX, float inY ) {
                 
                 space->setColor( nextPiece->getNextPiece() );
                 piecePlaced = true;
+                levelOfPlacement = colorPool->getLevel();
                 
                 colorPool->registerMove();
                             

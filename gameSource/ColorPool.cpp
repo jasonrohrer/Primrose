@@ -31,15 +31,16 @@ Color pieceColors[numColors] = {
     };
 
 
-#define startingSteps 3
-
+#define startingSteps 12
+#define minSteps 6
 
 ColorPool::ColorPool( int inX, int inY )
         : mX( inX ), mY( inY ), mNumActiveColors( 3 ), mColorsToSkip( 0 ),
           mStepsBetweenUpdates( startingSteps ),
           mStepsUntilUpdate( startingSteps ),
           mLastStepCount( startingSteps ),
-          mStepCountTransitionProgress( 1 ) {
+          mStepCountTransitionProgress( 1 ),
+          mLevel( 1 ) {
 
     int i;
     
@@ -91,8 +92,8 @@ void ColorPool::registerMove() {
         
         mStepsBetweenUpdates /= 2;
         
-        if( mStepsBetweenUpdates < 3 ) {
-            mStepsBetweenUpdates = 3;
+        if( mStepsBetweenUpdates < minSteps ) {
+            mStepsBetweenUpdates = minSteps;
             }
         
         mStepsUntilUpdate = mStepsBetweenUpdates;
@@ -104,10 +105,14 @@ void ColorPool::registerMove() {
             int i = mNumActiveColors - 1;
             
             mSpaces[i]->setColor( pieceColors[i].copy() );
+
+            mLevel++;
             }
         else if( mColorsToSkip < numColors - 1 ) {
             mSpaces[mColorsToSkip]->setColor( NULL );            
             mColorsToSkip++;
+
+            mLevel++;
             }        
         }
     }
