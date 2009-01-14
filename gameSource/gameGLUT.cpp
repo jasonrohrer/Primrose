@@ -20,12 +20,19 @@ void callbackTimer( int inValue );
 void callbackKeyboard( unsigned char inKey, int inX, int inY );
 
 
+void callbackReshape( int inW, int inH );
+
+
 
 void cleanUpAtExit() {
     printf( "Exiting...\n" );
     
     freeFrameDrawer();    
     }
+
+
+int w = 320;
+int h = 480;
 
 
 // 25 fps
@@ -36,8 +43,6 @@ int main( int inNumArgs, char **inArgs ) {
     
     glutInit( &inNumArgs, inArgs );
     
-    int w = 320;
-    int h = 480;
     
     
     atexit( cleanUpAtExit );
@@ -54,6 +59,9 @@ int main( int inNumArgs, char **inArgs ) {
 	//glutPassiveMotionFunc( callbackPassiveMotion );
 	glutDisplayFunc( callbackDisplay );
 	//glutIdleFunc( callbackIdle );
+
+    glutReshapeFunc( callbackReshape );
+    
 
     // 25 fps
     glutTimerFunc( frameMS, callbackTimer, 0 );
@@ -107,6 +115,13 @@ void callbackIdle() {
 void callbackTimer( int inValue ) {
     glutTimerFunc( frameMS, callbackTimer, 0 );
     
+    
+    if( glutGet( GLUT_WINDOW_WIDTH ) != w ||
+        glutGet( GLUT_WINDOW_WIDTH ) != h ) {
+        
+        glutReshapeWindow( w, h );
+        }
+    
     glutPostRedisplay();
 	}
 
@@ -138,3 +153,17 @@ void callbackKeyboard( unsigned char inKey, int inX, int inY ) {
         exit( 0 );
         }
 	}
+
+
+void callbackReshape( int inW, int inH ) {
+    // force original size
+    glutReshapeWindow( w, h );
+
+    // note that we also need to check this in the main loop above
+    // because sometimes callbackReshape isn't getting called (maybe
+    // after releasing the mouse near the end of a resize)
+    }
+
+    
+
+
