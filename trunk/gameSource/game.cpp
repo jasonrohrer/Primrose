@@ -286,7 +286,6 @@ void drawFrame() {
             
 
             nextPiece->update();
-            colorPool->registerMove();
             
             piecePlaced = false;
 
@@ -436,6 +435,8 @@ void pointerUp( float inX, float inY ) {
                 space->setColor( nextPiece->getNextPiece() );
                 piecePlaced = true;
                 
+                colorPool->registerMove();
+                            
                 
                 lastGridY = y;
                 lastGridX = x;
