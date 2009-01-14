@@ -32,7 +32,7 @@ Color pieceColors[numColors] = {
     };
 
 
-#define startingSteps 12
+#define startingSteps 96
 #define minSteps 6
 
 ColorPool::ColorPool( int inX, int inY )
