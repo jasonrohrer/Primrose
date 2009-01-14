@@ -117,7 +117,7 @@ void callbackTimer( int inValue ) {
     
     
     if( glutGet( GLUT_WINDOW_WIDTH ) != w ||
-        glutGet( GLUT_WINDOW_WIDTH ) != h ) {
+        glutGet( GLUT_WINDOW_HEIGHT ) != h ) {
         
         glutReshapeWindow( w, h );
         }
