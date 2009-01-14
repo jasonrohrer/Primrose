@@ -13,10 +13,10 @@
 #include <GL/gl.h>
 
 
-#include "minorGems/util/random/StdRandomSource.h"
+#include "minorGems/util/random/CustomRandomSource.h"
 
 
-StdRandomSource randSource( 10 );
+CustomRandomSource randSource( 10 );
 
 
 int screenW, screenH;
@@ -146,7 +146,7 @@ void endGame() {
 
 void initFrameDrawer( int inWidth, int inHeight ) {
     for( int i=0; i<10; i++ ) {
-        printf( "Rand output: %ld\n", randSource.getRandomInt() );
+        printf( "Rand output: %u\n", randSource.getRandomInt() );
         }
     
 

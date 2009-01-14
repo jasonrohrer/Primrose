@@ -12,9 +12,9 @@
 #include <GL/gl.h>
 
 
-#include "minorGems/util/random/StdRandomSource.h"
+#include "minorGems/util/random/CustomRandomSource.h"
 
-extern StdRandomSource randSource;
+extern CustomRandomSource randSource;
 
 
 #define numColors 7
