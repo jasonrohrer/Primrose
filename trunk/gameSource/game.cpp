@@ -145,6 +145,11 @@ void endGame() {
 
 
 void initFrameDrawer( int inWidth, int inHeight ) {
+    for( int i=0; i<10; i++ ) {
+        printf( "Rand output: %ld\n", randSource.getRandomInt() );
+        }
+    
+
     screenW = inWidth;
     screenH = inHeight;
     
