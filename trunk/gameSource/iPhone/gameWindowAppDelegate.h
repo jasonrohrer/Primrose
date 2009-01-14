@@ -6,7 +6,6 @@
 //  Copyright __MyCompanyName__ 2008. All rights reserved.
 //
 
-#include "drawIntoScreen.h"
 
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
@@ -29,19 +28,7 @@
     /* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
     GLuint depthRenderbuffer;
     
-    GLuint textureID;
     
-    
-	
-	Uint32 *screenBitmap;
-    int bitmapW;
-    int bitmapH;
-    int bitmapBytes;
-    
-    // for old DrawImage version
-    // CGDataProviderRef provider;
-	// CGColorSpaceRef colorSpaceRef;
-	// CGImageRef imageRef;
 }
 
 @property NSTimer *animationTimer;

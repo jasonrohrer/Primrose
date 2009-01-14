@@ -45,7 +45,7 @@
     accelerationBuffer[1] = acceleration.y * filterFactor + (1-filterFactor) * accelerationBuffer[1];
     accelerationBuffer[2] = acceleration.z * filterFactor + (1-filterFactor) * accelerationBuffer[2];
     
-    setOrientation( asin( accelerationBuffer[0] ), asin( accelerationBuffer[1] ) );
+    //setOrientation( asin( accelerationBuffer[0] ), asin( accelerationBuffer[1] ) );
     
 }
 
@@ -64,7 +64,7 @@
 
 
 
-#include "drawIntoScreen.h"
+#include "game.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
@@ -138,8 +138,6 @@ int appFrameCount = 0;
         return NO;
     }
     
-    glGenTextures( 1, &textureID );
-    
     return YES;
 }
 
@@ -154,9 +152,7 @@ int appFrameCount = 0;
     if(depthRenderbuffer) {
         glDeleteRenderbuffersOES(1, &depthRenderbuffer);
         depthRenderbuffer = 0;
-    }
-    
-    glDeleteTextures( 1, &textureID );
+    }    
 }
 
 
@@ -174,32 +170,7 @@ int appFrameCount = 0;
     self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
 
     
-    
-    bitmapW = 128;
-    bitmapH = 128;    
-    
-	int screenPixels = bitmapW * bitmapH;
-    bitmapBytes = screenPixels* 4;
-
-	screenBitmap = (Uint32 *) malloc( bitmapBytes );
-    /*
-     // for old DrawImage version
-	provider = CGDataProviderCreateWithData( NULL, screenBitmap, screenPixels * 4, NULL );
-	colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-	imageRef = CGImageCreate(
-								  bitmapW,
-								  bitmapH,
-								  8,
-								  32,
-								  4 * bitmapW,
-								  colorSpaceRef,
-								  kCGImageAlphaNoneSkipLast,
-								  provider,
-								  NULL,
-								  NO,
-								  kCGRenderingIntentDefault );
-     */
-	initScreenDrawer( screenBitmap, bitmapW, bitmapH );
+    initFrameDrawer( backingWidth, backingHeight );
 }
 
 
@@ -207,9 +178,8 @@ int appFrameCount = 0;
 	printf( "Stop anim called\n" );
     self.animationTimer = nil;
 	
-    free( screenBitmap );
     
-	freeScreenDrawer();
+	freeFrameDrawer();
 }
 
 
@@ -222,107 +192,26 @@ int appFrameCount = 0;
 
 
 - (void)drawFrame {
-    // old DrawImage version
-	//[self setNeedsDisplay];
-    
-    
-    
-    
-    const GLfloat squareVertices[] = {
-        -1.6f, -1.6f,
-        1.6f,  -1.6f,
-        -1.6f,  1.6f,
-        1.6f,   1.6f,
-    };
-    /*
-    const GLubyte squareColors[] = {
-        255, 255,   0, 255,
-        0,   255, 255, 255,
-        255,     0,   0,   0,
-        255,   0, 255, 255,
-    };
-     */
-    const GLfloat squareTextureCoords[] = {
-        0, 0,
-        1,  0,
-        0,  1,
-        1,   1
-    };
     
     [EAGLContext setCurrentContext:context];
     
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
     glViewport(0, 0, backingWidth, backingHeight);
     
+    
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrthof(-1.0f, 1.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+    glOrthof( 0, 320, 480, 0, -1.0f, 1.0f);
     
     
     glMatrixMode(GL_MODELVIEW);
     
-    //glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT);
+    glDisable( GL_TEXTURE_2D );
+	glDisable( GL_CULL_FACE );
+    glDisable( GL_DEPTH_TEST );
     
-    glVertexPointer(2, GL_FLOAT, 0, squareVertices);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    
-    //glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
-    //glEnableClientState(GL_COLOR_ARRAY);
-    
-    glTexCoordPointer(2, GL_FLOAT, 0, squareTextureCoords);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    
-
-    // set new texture data
-    drawIntoScreen( screenBitmap, bitmapW, bitmapH );
-    
-    int error;
-    
-	GLenum texFormat = GL_RGBA;
-	glBindTexture( GL_TEXTURE_2D, textureID );
-    
-    error = glGetError();
-	if( error != GL_NO_ERROR ) {		// error
-		printf( "Error binding to texture id %d, error = %d\n",
-               (int)textureID,
-               error );
-    }
-    
-    
-	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-    
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-    
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    
-	glTexImage2D( GL_TEXTURE_2D, 0,
-                 texFormat, bitmapW,
-                 bitmapH, 0,
-                 texFormat, GL_UNSIGNED_BYTE, screenBitmap );
-    
-	error = glGetError();
-	if( error != GL_NO_ERROR ) {		// error
-		printf( "Error setting texture data for id %d, error = %d\n",
-               (int)textureID, error );
-        printf( "Perhaps texture image width or height is not a power of 2\n"
-               "Width = %lu, Height = %lu\n",
-               bitmapW, bitmapH );
-    }
-    
-    
-    
-    
-    glEnable( GL_TEXTURE_2D );
-	glBindTexture( GL_TEXTURE_2D, textureID );
-    
-    
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
@@ -398,7 +287,7 @@ int appFrameCount = 0;
 	CGPoint	location = [touch locationInView:self];
 	location.y = bounds.size.height - location.y;
     
-    touchStartPoint( location.x, location.y );
+    pointerUp( location.x, location.y );
 }
 
 
@@ -413,7 +302,7 @@ int appFrameCount = 0;
 	CGPoint	location = [touch locationInView:self];
 	location.y = bounds.size.height - location.y;
     
-    touchMovePoint( location.x, location.y );
+    pointerMove( location.x, location.y );
 }
 
 
@@ -427,7 +316,7 @@ int appFrameCount = 0;
 	CGPoint	location = [touch locationInView:self];
 	location.y = bounds.size.height - location.y;
     
-    touchEndPoint( location.x, location.y );
+    pointerUp( location.x, location.y );
 }
 
 

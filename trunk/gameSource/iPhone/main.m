@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     
     //printf( "Mac:  app path %s\n", appDirectoryPath );
     
-    char *bundleName = "Passage.app";
+    char *bundleName = "tileGame1.app";
     
     char *appNamePointer = strstr( appDirectoryPath, bundleName );
     
