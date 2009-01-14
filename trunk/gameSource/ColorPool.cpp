@@ -31,7 +31,7 @@ Color pieceColors[numColors] = {
     };
 
 
-#define startingSteps 12
+#define startingSteps 3
 
 
 ColorPool::ColorPool( int inX, int inY )
@@ -91,8 +91,8 @@ void ColorPool::registerMove() {
         
         mStepsBetweenUpdates /= 2;
         
-        if( mStepsBetweenUpdates < 6 ) {
-            mStepsBetweenUpdates = 6;
+        if( mStepsBetweenUpdates < 3 ) {
+            mStepsBetweenUpdates = 3;
             }
         
         mStepsUntilUpdate = mStepsBetweenUpdates;
@@ -115,6 +115,7 @@ void ColorPool::registerMove() {
     
 
 Color colorAddCountColor( 76/255.0, 76/255.0, 255/255.0 );
+Color colorRemoveCountColor( 0/255.0, 0/255.0, 0/255.0 );
 
 
         
@@ -133,19 +134,33 @@ void ColorPool::draw() {
         mSpaces[i]->drawPieceHalo();
         }
 
-    if( mNumActiveColors < numColors ) {
-        i = mNumActiveColors;
+    if( mNumActiveColors < numColors || mColorsToSkip < (numColors-1) ) {
+        
+        Color *thisNumberColor;
+        
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+        
+        
+        if( mNumActiveColors < numColors ) {
+            i = mNumActiveColors;
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+            thisNumberColor = &colorAddCountColor;
+            }
+        else {
+            i = mColorsToSkip;
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            thisNumberColor = &colorRemoveCountColor;
+            }
         
         // draw counter over next active space
 
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
         
         // blend between last count
         
         drawCounter( mStepsUntilUpdate,
                      mSpaces[i]->mX,  mSpaces[i]->mY,
-                     &( colorAddCountColor ),
+                     thisNumberColor,
                      mStepCountTransitionProgress );
         
         
@@ -156,28 +171,70 @@ void ColorPool::draw() {
             
             drawCounter( mLastStepCount,
                          mSpaces[i]->mX,  mSpaces[i]->mY,
-                         &( colorAddCountColor ),
+                         thisNumberColor,
                          1 - mStepCountTransitionProgress );
             }
         
 
-        if( i > 0 && 
-            ( mSpaces[i-1]->mDrawColor == NULL 
+        int lastSpaceIndex = -1;
+        
+
+        if( i > 0 && mNumActiveColors < numColors ) {
+            lastSpaceIndex = i-1;
+            }
+        else if( mNumActiveColors == numColors && mColorsToSkip == 0 ) {
+            lastSpaceIndex = numColors - 1;
+            }
+        else if( mNumActiveColors == numColors && mColorsToSkip > 0 ) {
+            lastSpaceIndex = i-1;
+            }
+                 
+
+        
+
+        if( lastSpaceIndex >= 0 && 
+            ( mSpaces[lastSpaceIndex]->mDrawColor == NULL 
               || 
-              mSpaces[i-1]->mDrawColor->a < 1 ) ) {
+              ( mNumActiveColors < numColors 
+                &&
+                mSpaces[lastSpaceIndex]->mDrawColor->a < 1 )
+              ||
+              ( mNumActiveColors >= numColors 
+                &&
+                mSpaces[lastSpaceIndex]->mDrawColor->a > 0 ) ) ) {
+
             
-            float alpha = 1;
-            
-            if( mSpaces[i-1]->mDrawColor != NULL ) {
-                alpha = 1 - mSpaces[i-1]->mDrawColor->a;
+            float alpha;
+            if( mColorsToSkip == 0 ) {
+                // last space fading in
+                alpha = 1;
+                
+                if( mSpaces[lastSpaceIndex]->mDrawColor != NULL ) {
+                    alpha = 1 - mSpaces[lastSpaceIndex]->mDrawColor->a;
+                    }
+
+                glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+                thisNumberColor = &colorAddCountColor;
+                }
+            else {
+                // last space fading out
+                alpha = 0;
+                
+                if( mSpaces[lastSpaceIndex]->mDrawColor != NULL ) {
+                    alpha = mSpaces[lastSpaceIndex]->mDrawColor->a;
+                    }
+                glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                thisNumberColor = &colorRemoveCountColor;
                 }
             
+
 
             // fade out 1 on last space as color fades in
             
             drawCounter( 1,
-                         mSpaces[i-1]->mX,  mSpaces[i-1]->mY,
-                         &( colorAddCountColor ),
+                         mSpaces[lastSpaceIndex]->mX,  
+                         mSpaces[lastSpaceIndex]->mY,
+                         thisNumberColor,
                          alpha );
             }
         
@@ -198,7 +255,7 @@ void ColorPool::step() {
 
     if( mStepCountTransitionProgress < 1 ) {
         
-        mStepCountTransitionProgress += 0.075;
+        mStepCountTransitionProgress += 0.2;
         
         if( mStepCountTransitionProgress >= 1 ) {
             mStepCountTransitionProgress = 1;
