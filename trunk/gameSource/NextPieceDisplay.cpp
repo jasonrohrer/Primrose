@@ -11,10 +11,6 @@
 #include <GL/gl.h>
 
 
-#include "minorGems/util/random/StdRandomSource.h"
-
-extern StdRandomSource randSource;
-
 
 /*
 Color pieceColors[8] = { 
