@@ -66,6 +66,9 @@ int score = 0;
 int lastScore = 0;
 float scoreTransitionProgress = 1;
 
+// for rewind
+int savedScore = 0;
+
 
 int chainLength = 1;
 
@@ -80,6 +83,9 @@ void newGame() {
     lastScore = 0;
     scoreTransitionProgress = 1;
     
+    savedScore = 0;
+    
+
     chainLength = 1;
     
 
@@ -315,6 +321,8 @@ void drawFrame() {
 
 
         // check if any more clear (which will start more animations)
+        lastScore = score;
+        
         if( !checkAndClear() ) {
             
             
@@ -406,7 +414,6 @@ void drawFrame() {
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
     if( scoreTransitionProgress < 1 ) {
-        
         drawScore( lastScore, 320 - 19, nextPiece->mY + 41, &scoreColor,
                    1 - scoreTransitionProgress );
         }
@@ -441,7 +448,7 @@ void undoMove() {
 
 
     int temScore = score;
-    score = lastScore;
+    score = savedScore;
     lastScore = temScore;
     
     scoreTransitionProgress = 0;
@@ -512,6 +519,8 @@ void pointerUp( float inX, float inY ) {
                 
                 randSource.saveState();
                 
+                savedScore = score;
+                
                 
                 space->setColor( nextPiece->getNextPiece() );
                 piecePlaced = true;
@@ -523,9 +532,6 @@ void pointerUp( float inX, float inY ) {
                 lastGridY = y;
                 lastGridX = x;
                 
-                lastScore = score;
-                
-
                 // reset chain length counter
                 chainLength = 1;
                 
