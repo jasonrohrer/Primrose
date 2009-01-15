@@ -38,7 +38,7 @@ class GridSpace {
         
 
         // draws onto screen
-        void drawGrid();
+        void drawGrid( float inAlpha=1.0f );
         void drawPieceCenter();
         void drawPieceHalo();
         
@@ -53,6 +53,15 @@ class GridSpace {
 
         // color destroyed by this class
         void setColor( Color *inColor );
+
+
+
+        // saves state to return to upon rewind
+        void saveState();
+        
+        void rewindState();
+        
+        
         
             
         // returns a copy of this space's current color, or NULL
@@ -117,6 +126,10 @@ class GridSpace {
 
         float mScoreFade;
         char mScoreSent;
+
+        Color *mSavedColor;
+        char mSavedActive;
+        
         
         
     };

@@ -29,7 +29,9 @@ GridSpace::GridSpace( int inX, int inY )
          mBrightHaloProgress( 0 ),
          mActiveProgress( 0 ),
          mScoreFade( 0 ),
-         mScoreSent( false ) {
+         mScoreSent( false ),
+         mSavedColor( NULL ),
+         mSavedActive( false ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -80,30 +82,61 @@ void GridSpace::setColor( Color *inColor ) {
 
 
 
+void GridSpace::saveState() {
+    if( mSavedColor != NULL ) {
+        delete mSavedColor;
+        }
+    if( mPieceColor != NULL ) {
+        mSavedColor = mPieceColor->copy();
+        }
+    else {
+        mSavedColor = NULL;
+        }
+            
+    mSavedActive = mActive;
+    }
+        
+        
 
-void GridSpace::drawGrid() {
+void GridSpace::rewindState() {
+    mActive = mSavedActive;
+            
+    if( mSavedColor != NULL ) {
+        setColor( mSavedColor->copy() );
+        }
+    else {
+        setColor( NULL );
+        }
+    }
+
+
+
+Color gridLineColor( 1, 1, 1 );
+
+
+void GridSpace::drawGrid( float inAlpha ) {
     
 
     glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    drawSprite( gridLineTop, mX, mY, 32, 32 );
+    drawSprite( gridLineTop, mX, mY, 32, 32, &gridLineColor, inAlpha );
     
-    drawSprite( gridLineLeft, mX, mY, 32, 32 );
+    drawSprite( gridLineLeft, mX, mY, 32, 32, &gridLineColor, inAlpha );
     
 
     if( mNeighbors[bottom] == NULL ) {
-        drawSprite( gridLineBottom, mX, mY, 32, 32 );
+        drawSprite( gridLineBottom, mX, mY, 32, 32, &gridLineColor, inAlpha );
         }
     
     if( mNeighbors[right] == NULL ) {
-        drawSprite( gridLineRight, mX, mY, 32, 32 );
+        drawSprite( gridLineRight, mX, mY, 32, 32, &gridLineColor, inAlpha );
         }
     
     if( mActiveProgress > 0 ) {
-        Color white( 1, 1, 1, 1 );
-        
-        drawSprite( plus, mX, mY, 16, 16, &white, mActiveProgress );
+                
+        drawSprite( plus, mX, mY, 16, 16, &gridLineColor, 
+                    inAlpha * mActiveProgress );
         }
     
 

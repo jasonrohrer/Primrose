@@ -21,12 +21,18 @@ class ColorPool {
 
         void registerMove();
         
+        // undoes move registration
+        // this is a hack that doesn't work across color addition
+        // however, this is okay, because transitions always happen after
+        // an even number of moves, and we only allow undo of the odd moves
+        void deRegisterMove();
+        
         
         int getLevel() {
             return mLevel;
             }
         
-
+        
 
         // steps animations
         void step();

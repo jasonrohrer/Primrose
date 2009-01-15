@@ -27,6 +27,7 @@ GridSpace.cpp \
 NextPieceDisplay.cpp \
 numeral.cpp \
 ColorPool.cpp \
+Button.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
