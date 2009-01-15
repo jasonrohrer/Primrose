@@ -118,6 +118,13 @@ void ColorPool::registerMove() {
         }
     }
 
+
+
+void ColorPool::deRegisterMove() {
+    mStepsUntilUpdate ++;
+    mStepCountTransitionProgress = 0;
+    }
+
     
 
 Color colorAddCountColor( 76/255.0, 76/255.0, 255/255.0 );

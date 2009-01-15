@@ -5,7 +5,7 @@
 #include "NextPieceDisplay.h"
 #include "numeral.h"
 #include "ColorPool.h"
-
+#include "Button.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -34,6 +34,15 @@ Color scoreColor( 255/255.0, 255/255.0, 160/255.0 );
 
 GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
+
+
+#define numButtons 1
+
+Button *allButtons[ numButtons ];
+
+Button *undoButton;
+
+
 
 ColorPool *colorPool;
 
@@ -128,14 +137,25 @@ void newGame() {
                                       spaces[6][3]->mY + 40 + 20 + 19 + 1,
                                       colorPool );
     
+    undoButton = new Button( nextPiece->mX - 60, nextPiece->mY, "undo" );
+    
+    allButtons[0] = undoButton;
+
+    undoButton->setVisible( false );
+    
     }
 
 
 void endGame() {
     
-    for( int i=0; i<numGridSpaces; i++ ) {
+    int i;
+    for( i=0; i<numGridSpaces; i++ ) {
         delete allSpaces[i];
         }
+    for( i=0; i<numButtons; i++ ) {
+        delete allButtons[i];
+        }
+    
     delete nextPiece;
     delete colorPool;
     }
@@ -262,6 +282,10 @@ void drawFrame() {
 
         animDone &= allSpaces[i]->isAnimationDone();
         }
+    for( i=0; i<numButtons; i++ ) {
+        allButtons[i]->step();
+        }
+    
     nextPiece->step();
     
     colorPool->step();
@@ -293,17 +317,21 @@ void drawFrame() {
         // check if any more clear (which will start more animations)
         if( !checkAndClear() ) {
             
+            
+            
 
             nextPiece->update();
             
             piecePlaced = false;
 
         
-            int i;
+            
         
 
             if( nextPiece->isSecondPiece() ) {
-            
+                // allow undo of first piece
+                undoButton->setVisible( true );
+
                 // set grid spaces in same row/column to active
                 int x;
                 int y;
@@ -339,6 +367,11 @@ void drawFrame() {
                         }
                     }
                 }
+            else {
+                // placing new first piece
+                undoButton->setVisible( false );
+                }
+            
 
             }
         
@@ -350,6 +383,11 @@ void drawFrame() {
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->drawGrid();
         }
+
+    for( i=0; i<numButtons; i++ ) {
+        allButtons[i]->draw();
+        }
+
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->drawPieceCenter();
         }
@@ -361,15 +399,7 @@ void drawFrame() {
     
     colorPool->draw();
     
-    glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
-    drawString( "douts", left, 
-                nextPiece->mX, nextPiece->mY );
-    drawString( "douts", right, 
-                nextPiece->mX, nextPiece->mY + 20 );
-    drawStringBig( "douts", center, 
-                nextPiece->mX, nextPiece->mY + 40 );
-    
+        
 
     // additive needed for smooth cross-fade between last score and new score
     glEnable( GL_BLEND );
@@ -396,6 +426,30 @@ void drawFrame() {
     
     }
 
+
+void undoMove() {
+    int i;
+    
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->rewindState();
+        }
+    nextPiece->rewindState();
+    
+    colorPool->deRegisterMove();
+    
+    randSource.rewindState();
+
+
+    int temScore = score;
+    score = lastScore;
+    lastScore = temScore;
+    
+    scoreTransitionProgress = 0;
+    
+    
+    // only one step of undo allowed
+    undoButton->setVisible( false );
+    }
 
 
 
@@ -449,6 +503,15 @@ void pointerUp( float inX, float inY ) {
                 && 
                 ( considerNonActive || space->mActive ) ) {
                 
+                int i;
+                // save previous state for undo
+                for( i=0; i<numGridSpaces; i++ ) {
+                    allSpaces[i]->saveState();
+                    }
+                nextPiece->saveState();
+                
+                randSource.saveState();
+                
                 
                 space->setColor( nextPiece->getNextPiece() );
                 piecePlaced = true;
@@ -483,6 +546,19 @@ void pointerUp( float inX, float inY ) {
         
         
         }
+
+    int i;
+    
+    for( i=0; i<numButtons; i++ ) {
+        if( allButtons[i]->isVisible() && 
+            allButtons[i]->isInside( (int)pointerX, (int)pointerY ) ) {
+            
+            if( allButtons[i] == undoButton ) {
+                undoMove();
+                }
+            }
+        }
+    
     
     }
 

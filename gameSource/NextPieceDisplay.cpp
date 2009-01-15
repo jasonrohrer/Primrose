@@ -88,6 +88,22 @@ char NextPieceDisplay::isSecondPiece() {
     return returnVal;
     }
 
+
+
+void NextPieceDisplay::saveState() {
+    for( int i=0; i<2; i++ ) {
+        mSpaces[i]->saveState();
+        }
+    }
+
+
+
+void NextPieceDisplay::rewindState() {
+    for( int i=0; i<2; i++ ) {
+        mSpaces[i]->rewindState();
+        }
+    }
+
         
 
 void NextPieceDisplay::draw() {

@@ -26,6 +26,11 @@ class NextPieceDisplay {
         // true if getNextPiece will return the second piece from a pair
         char isSecondPiece();
         
+        
+        // saves state to return to upon rewind
+        void saveState();
+        
+        void rewindState();
 
 
         // steps animations
