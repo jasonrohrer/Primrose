@@ -5,7 +5,7 @@
 #include "minorGems/graphics/Color.h"
 
 
-#define numSprites 12
+#define numSprites 18
 
 enum SpriteHandle {
     gridLineTop = 0,
@@ -19,7 +19,13 @@ enum SpriteHandle {
     pieceBrightHalo,
     pieceBrightCenter,
     numerals,
-    numeralsBig
+    numeralsBig,
+    abcdefghijkl,
+    mnopqrstuvwx,
+    yzplus,
+    abcdefghijkl_big,
+    mnopqrstuvwx_big,
+    yzplus_big
     };
 
 

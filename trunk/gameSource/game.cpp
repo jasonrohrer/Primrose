@@ -361,7 +361,16 @@ void drawFrame() {
     
     colorPool->draw();
     
+    glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+    drawString( "douts", left, 
+                nextPiece->mX, nextPiece->mY );
+    drawString( "douts", right, 
+                nextPiece->mX, nextPiece->mY + 20 );
+    drawStringBig( "douts", center, 
+                nextPiece->mX, nextPiece->mY + 40 );
     
+
     // additive needed for smooth cross-fade between last score and new score
     glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE );

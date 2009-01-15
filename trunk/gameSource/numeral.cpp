@@ -5,6 +5,8 @@
 #include <GL/gl.h>
 
 #include <math.h>
+#include <ctype.h>
+#include <string.h>
 
 
 
@@ -40,6 +42,119 @@ void drawNumeralBig( int inNumber,
                 40 / 512.0f );
 
     }
+
+
+
+void drawLetter( char inLetter,
+                 float inCenterX, float inCenterY,
+                 Color *inColor, float inAlpha ) {
+    
+    // default to 'a'
+    SpriteHandle handle = abcdefghijkl;
+    int indexOffset = 0;
+    
+    float imageHeight = 256.0f;
+    
+    
+
+    if( inLetter == '+' ) {
+        handle = yzplus;
+        indexOffset = 2;
+        imageHeight = 64.0f;
+        }
+    else {
+        inLetter = (char)tolower( inLetter );
+        
+        if( inLetter >= 'a' && inLetter <= 'z' ) {
+        
+            if( inLetter <= 'l' ) {
+                handle = abcdefghijkl;
+                indexOffset = inLetter - 'a';
+                }
+            else if( inLetter <= 'x' ) {
+                handle = mnopqrstuvwx;
+                indexOffset = inLetter - 'm';
+                }
+            else {
+                handle = yzplus;
+                indexOffset = inLetter - 'y';
+                imageHeight = 64.0f;
+                }
+            }
+        else {
+            printf( "Error:  letter out of 'a-z' or '+' range: %c\n",
+                    inLetter );
+            }
+        }
+    
+    
+
+    drawSprite( handle,
+                inCenterX, inCenterY,
+                8, 10,
+                inColor, inAlpha,
+                indexOffset * 20 / imageHeight,
+                20 / imageHeight );
+    }
+
+
+
+void drawLetterBig( char inLetter,
+                    float inCenterX, float inCenterY,
+                    Color *inColor, float inAlpha ) {
+    
+    // default to 'a'
+    SpriteHandle handle = abcdefghijkl_big;
+    int indexOffset = 0;
+    
+    float imageHeight = 512.0f;
+    
+    
+
+    if( inLetter == '+' ) {
+        handle = yzplus_big;
+        indexOffset = 2;
+        imageHeight = 128.0f;
+        }
+    else {
+        inLetter = (char)tolower( inLetter );
+        
+        if( inLetter >= 'a' && inLetter <= 'z' ) {
+        
+            if( inLetter <= 'l' ) {
+                handle = abcdefghijkl_big;
+                indexOffset = inLetter - 'a';
+                }
+            else if( inLetter <= 'x' ) {
+                handle = mnopqrstuvwx_big;
+                indexOffset = inLetter - 'm';
+                }
+            else {
+                handle = yzplus_big;
+                indexOffset = inLetter - 'y';
+                imageHeight = 128.0f;
+                }
+            }
+        else {
+            printf( "Error:  letter out of 'a-z' or '+' range: %c\n",
+                    inLetter );
+            }
+        }
+    
+    
+
+    drawSprite( handle,
+                inCenterX, inCenterY,
+                16, 20,
+                inColor, inAlpha,
+                indexOffset * 40 / imageHeight,
+                40 / imageHeight );
+    }
+
+
+
+
+
 
 
 
@@ -272,3 +387,89 @@ void drawCounter( int inCount,
     
     }
 
+
+
+// internal
+void drawString( int inColSep, int inLetterW,
+                 void (*inLetterDrawingFunction)( 
+                     char ,float, float,
+                     Color *, float ), 
+                 char *inString,
+                 StringAlign inAlign,
+                 float inX, float inY,
+                 Color *inColor, float inAlpha ) {
+    
+    int numChars = strlen( inString );
+    
+
+    int colSep = inColSep;
+    int letterW = inLetterW;
+
+    int stringW = numChars * letterW + (numChars-1) * colSep;
+    
+
+    
+    int startXC = (int)inX;
+    
+    switch( inAlign ) {
+        case left:
+            // no change
+            break;
+        case center:
+            startXC -= stringW / 2;
+            break;
+        case right:
+            startXC -= stringW;
+            break;
+        }
+    
+    startXC += letterW / 2;
+    
+
+
+    int currentXC = startXC;
+    
+
+    for( int i=0; i<numChars; i++ ) {
+        
+        char c = inString[i];
+        
+        // skip drawing anything for space
+        if( c != ' ' ) {
+            (*inLetterDrawingFunction)( c, currentXC, inY, inColor, inAlpha );
+            }
+        
+
+        // advance
+        currentXC += colSep + letterW;
+        }
+    }
+
+
+
+void drawString( char *inString,
+                 StringAlign inAlign,
+                 float inX, float inY,
+                 Color *inColor, float inAlpha ) {
+    
+    drawString( 3, 6,
+                &drawLetter,
+                inString,
+                inAlign,
+                inX, inY,
+                inColor, inAlpha );
+    }
+
+
+void drawStringBig( char *inString,
+                    StringAlign inAlign,
+                    float inX, float inY,
+                    Color *inColor, float inAlpha ) {
+    
+    drawString( 6, 12,
+                &drawLetterBig,
+                inString,
+                inAlign,
+                inX, inY,
+                inColor, inAlpha );
+    }
