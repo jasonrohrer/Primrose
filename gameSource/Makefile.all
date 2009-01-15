@@ -46,6 +46,12 @@ graphics/pieceBrightHalo.tga \
 graphics/pieceBrightCenter.tga \
 graphics/numerals.tga \
 graphics/numeralsBig.tga \
+graphics/abcdefghijkl.tga \
+graphics/mnopqrstuvwx.tga \
+graphics/yzplus.tga \
+graphics/abcdefghijkl_big.tga \
+graphics/mnopqrstuvwx_big.tga \
+graphics/yzplus_big.tga \
 
 
 

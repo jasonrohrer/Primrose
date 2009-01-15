@@ -22,7 +22,13 @@ const char *spriteNames[ numSprites ] =
     "pieceBrightHalo",
     "pieceBrightCenter",
     "numerals",
-    "numeralsBig"
+    "numeralsBig",
+    "abcdefghijkl",
+    "mnopqrstuvwx",
+    "yzplus",
+    "abcdefghijkl_big",
+    "mnopqrstuvwx_big",
+    "yzplus_big"
     };
 
 
