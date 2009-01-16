@@ -150,7 +150,7 @@ Color scorePipColor( 255/255.0, 255/255.0, 160/255.0 );
 
 
 
-void GridSpace::drawPieceCenter() {
+void GridSpace::drawPieceCenter( float inAlpha ) {
     
 
     glEnable( GL_BLEND );
@@ -158,13 +158,14 @@ void GridSpace::drawPieceCenter() {
     //glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
     if( mDrawColor != NULL ) {
-        drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
+        drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, 
+                    mDrawColor->a * inAlpha );
         }
 
     if( mPieceColor == NULL && mScore > 0 ) {
         
         drawScorePip( mScore, mX, mY, &scorePipColor, 
-                      mColorShiftProgress * mScoreFade );
+                      mColorShiftProgress * mScoreFade * inAlpha );
         
         }
     
@@ -174,7 +175,7 @@ void GridSpace::drawPieceCenter() {
 
 
 
-void GridSpace::drawPieceHalo() {
+void GridSpace::drawPieceHalo( float inAlpha ) {
     
 
     glEnable( GL_BLEND );
@@ -182,20 +183,21 @@ void GridSpace::drawPieceHalo() {
     //glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
     if( mDrawColor != NULL ) {
-        drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, mDrawColor->a );
+        drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, 
+                    mDrawColor->a * inAlpha );
     
         if( mBrightHalo ) {
             //for( int i=0; i<4; i++ ) {
                 
                 drawSprite( pieceBrightHalo, mX, mY, 32, 32, mDrawColor, 
-                            mBrightHaloProgress * mDrawColor->a );
+                            mBrightHaloProgress * mDrawColor->a * inAlpha );
                 //}
                 
                 Color white( 1, 1, 1, 1 );
                 
                 glBlendFunc( GL_SRC_ALPHA, GL_ONE );
                 drawSprite( pieceBrightCenter, mX, mY, 32, 32, &white, 
-                            mBrightHaloProgress * mDrawColor->a );
+                            mBrightHaloProgress * mDrawColor->a * inAlpha );
 
             
             }

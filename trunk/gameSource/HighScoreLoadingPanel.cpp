@@ -8,17 +8,23 @@
 
 #include "minorGems/util/stringUtils.h"
 
-
+#include <math.h>
 #include <GL/gl.h>
+
+
+Color scoreLoadingGreen( 0, 1, 0 );
+
+Color scoreLoadingRed( 1, 0, 0 );
 
 
 
 HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
         : Panel( inW, inH ),
           mMessage( "loading scores" ),
-          mStatusLight( inW / 2, inH / 2 ) {
+          mStatusLight( inW / 2, inH / 2 ),
+          mBlinkTime( 0 ) {
           
-        
+    mStatusLight.setColor( scoreLoadingGreen.copy() );
     }
 
 
@@ -28,40 +34,15 @@ HighScoreLoadingPanel::~HighScoreLoadingPanel() {
 
 
 
-Color scoreLoadingGreen( 0, 1, 0 );
-
-Color scoreLoadingRed( 1, 0, 0 );
 
 
 void HighScoreLoadingPanel::step() {
     Panel::step();
     
     mStatusLight.step();
-    
-    Color *lightColor = mStatusLight.getColor();
-    
-    if( lightColor != NULL ) {
-        // light coming on
 
-        delete lightColor;
-        
-        if( mStatusLight.mDrawColor != NULL &&
-            mStatusLight.mDrawColor->a == 1 ) {
-            // done brightening
-            
-            mStatusLight.setColor( NULL );
-            }
-        }
-    else {
-        // light going off
 
-        if( mStatusLight.mDrawColor == NULL ||
-            mStatusLight.mDrawColor->a == 0 ) {
-
-            // done dimming
-            mStatusLight.setColor( scoreLoadingGreen.copy() );            
-            }
-        }
+    mBlinkTime += 0.2;
     }
 
 
@@ -112,12 +93,17 @@ void HighScoreLoadingPanel::drawBase() {
         
             
         glDisable( GL_BLEND );
+
         
 
         mStatusLight.drawGrid( mFadeProgress );
 
-        // FIXME:  need to fade this out too
-        mStatusLight.drawPieceCenter();
+        float glowVal = sin( mBlinkTime - M_PI / 2 ) * 0.5 + 0.5;
+        glowVal *= mStatusLight.mDrawColor->a;
+
+        mStatusLight.drawPieceCenter( mFadeProgress * glowVal );
+        mStatusLight.drawPieceHalo( mFadeProgress * glowVal );
+
         }
     
     }

@@ -36,7 +36,8 @@ class HighScoreLoadingPanel : public Panel {
         
         GridSpace mStatusLight;
         
-                
+        float mBlinkTime;
+
         
     };
 
