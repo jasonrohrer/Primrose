@@ -28,6 +28,8 @@ NextPieceDisplay.cpp \
 numeral.cpp \
 ColorPool.cpp \
 Button.cpp \
+Panel.cpp \
+
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
