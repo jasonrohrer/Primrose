@@ -5,14 +5,15 @@
 #include "spriteBank.h"
 #include "numeral.h"
 
+#include "gameControl.h"
+
+
 
 #include <math.h>
 
 #include <GL/gl.h>
 
 
-// interface to adding to global game score
-void addToScore( int inPointsToAdd );
 
 
 

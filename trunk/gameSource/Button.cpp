@@ -9,7 +9,8 @@
 
 
 Button::Button( int inX, int inY, char *inString )
-        : mString( stringDuplicate( inString ) ),
+        : mX( inX ), mY( inY ),
+          mString( stringDuplicate( inString ) ),
           mSpace( inX, inY ),
           mVisible( false ),
           mFadeProgress( 0 ) {
@@ -26,6 +27,13 @@ Button::~Button() {
         
 void Button::setVisible( char inIsVisible ) {
     mVisible = inIsVisible;
+    }
+
+
+
+void Button::forceVisible() {
+    mVisible = true;
+    mFadeProgress = 1;
     }
 
 

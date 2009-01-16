@@ -5,8 +5,13 @@
 #include "NextPieceDisplay.h"
 #include "numeral.h"
 #include "ColorPool.h"
+
 #include "Button.h"
+
 #include "Panel.h"
+#include "MenuPanel.h"
+
+
 
 #include <stdio.h>
 #include <math.h>
@@ -82,6 +87,10 @@ int savedScore = 0;
 int chainLength = 1;
 
 
+// for scheduling a restart
+char mustRestart = false;
+
+
 
 void newGame() {
     
@@ -97,10 +106,11 @@ void newGame() {
 
     chainLength = 1;
     
+    
 
     pointerX = -100;
     pointerY = -100;
-
+    
 
     int i=0;
     int x;
@@ -160,15 +170,25 @@ void newGame() {
     allButtons[1] = menuButton;
 
     undoButton->setVisible( false );
-    menuButton->setVisible( true );
+    menuButton->forceVisible();
     
 
-    menuPanel = new Panel( screenW, screenH );
+    menuPanel = new MenuPanel( screenW, screenH );
     
     allPanels[0] = menuPanel;
     
+    
+
+    if( mustRestart ) {
+        // previous menu panel requested a restart
+        // show this new one at full blend at first, then fade out to 
+        // restarted game
+        menuPanel->forceVisible();
+        }
+    
     menuPanel->setVisible( false );
     }
+
 
 
 void endGame() {
@@ -187,6 +207,13 @@ void endGame() {
     delete nextPiece;
     delete colorPool;
     }
+
+
+
+void restartGame() {
+    mustRestart = true;
+    }
+
 
 
 
@@ -299,6 +326,12 @@ char checkAndClear() {
 
 
 void drawFrame() {
+    if( mustRestart ) {
+        endGame();
+        newGame();
+
+        mustRestart = false;
+        }
     
 
     int i;

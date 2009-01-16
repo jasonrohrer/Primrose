@@ -26,6 +26,9 @@ class Button {
             return mVisible;
             }
         
+        // forces to become completely visible instantly
+        void forceVisible();
+        
 
         // steps animations
         void step();
