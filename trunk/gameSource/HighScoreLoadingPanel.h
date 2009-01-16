@@ -2,6 +2,10 @@
 
 #include "GridSpace.h"
 
+#include "ScoreBundle.h"
+
+#include "WebRequest.h"
+
 
 class HighScoreLoadingPanel : public Panel {
         
@@ -14,8 +18,13 @@ class HighScoreLoadingPanel : public Panel {
 
         ~HighScoreLoadingPanel();
         
+        // bundle deleted after posting
+        // posting starts when made visible
+        void setScoreToPost( ScoreBundle *inBundle );
+        
+        
 
-        // over rides these:
+        // overrides these:
         void step();
         
         void setVisible( char inIsVisible );
@@ -37,7 +46,17 @@ class HighScoreLoadingPanel : public Panel {
         GridSpace mStatusLight;
         
         float mBlinkTime;
+        
+        ScoreBundle *mScoreToPost;
+        
+        WebRequest *mWebRequest;
 
+        
+        char *mServerFinderURL;
+
+        char *mServerURL;
+        WebRequest *mServerURLFetchRequest;
+        
         
     };
 
