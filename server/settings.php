@@ -27,7 +27,7 @@ $fullServerURL = "http://localhost:8080/jcr13/primrose/server.php";
 // "test_games" and "test_columns".  Thus, more than one server
 // installation can use the same database (or the server can share a database
 // with another application that uses similar table names).
-$tableNamePrefix = "demo_";
+$tableNamePrefix = "psdemo_";
 
 
 $enableLog = 1;

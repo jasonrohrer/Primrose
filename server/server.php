@@ -73,8 +73,6 @@ ps_connectToDatabase();
 // general processing whenver server.php is accessed directly
 
 
-ps_checkForFlush();
-
 
 
 // grab POST/GET variables
@@ -328,6 +326,7 @@ function ps_clearLog() {
 
 
 function ps_fetchScores() {
+    global $tableNamePrefix;
     
     $query = "SELECT * FROM $tableNamePrefix"."all_time_scores ".
         "ORDER BY score DESC LIMIT 5;";
@@ -370,7 +369,7 @@ function ps_fetchScores() {
     
     // drop those older than one day
     $query = "DELETE FROM $tableNamePrefix"."today_scores ".
-        "WHERE $gamesTable.touch_date < ".
+        "WHERE post_date < ".
         "    SUBTIME( CURRENT_TIMESTAMP, '1 0:00:00.00' );";
 
     $result = ps_queryDatabase( $query );
@@ -409,7 +408,7 @@ function ps_postScore() {
 
 
     $query = "INSERT INTO $tableNamePrefix"."today_scores VALUES ( " .
-            "'$ame', '$score', '$seed', '$move_history', ".
+            "'$name', '$score', '$seed', '$move_history', ".
             "CURRENT_TIMESTAMP );";
 
 
@@ -487,7 +486,7 @@ function ps_postScore() {
 
     if( $addToAllTime ) {
         $query = "INSERT INTO $tableNamePrefix". "all_time_scores VALUES ( " .
-            "'$ame', '$score', '$seed', '$move_history', ".
+            "'$name', '$score', '$seed', '$move_history', ".
             "CURRENT_TIMESTAMP );";
 
         ps_log( "New score on all-time list by $name: $score." );
