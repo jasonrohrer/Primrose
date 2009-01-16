@@ -23,7 +23,9 @@
 #include "minorGems/util/SettingsManager.h"
 
 
-CustomRandomSource randSource( 10 );
+unsigned int gameSeed = time( NULL );
+
+CustomRandomSource randSource( gameSeed );
 
 
 int screenW, screenH;
@@ -43,12 +45,13 @@ GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
 
-#define numButtons 2
+#define numButtons 3
 
 Button *allButtons[ numButtons ];
 
 Button *undoButton;
 Button *menuButton;
+Button *doneButton;
 
 
 #define numPanels 1
@@ -96,7 +99,32 @@ char playerName[9];
 
 
 
+// a subset of base-64 encoding
+// converts numbers in range [0,48] to alphabetical characters
+// uses the first 49 digits of base64 as described here:
+//   http://tools.ietf.org/html/rfc4648
+char base49Encode( int inNumber ) {
+    if( inNumber < 26 ) {
+        return 'A' + inNumber;
+        }
+    else {
+        return 'a' + (inNumber - 26);
+        }
+    }
+
+
+SimpleVector<char> moveHistory;
+
+
+
+
+
 void newGame() {
+    moveHistory.deleteAll();
+    
+    gameSeed = time( NULL );
+    randSource.reseed( gameSeed );
+    
     
     lastGridX = -1;
     lastGridY = -1;
@@ -168,13 +196,19 @@ void newGame() {
     
     undoButton = new Button( nextPiece->mX - 60, nextPiece->mY - 20, "undo" );
     
+    
     menuButton = new Button( spaces[0][0]->mX, colorPool->mY - 41 - 19, "p" );
+
+    doneButton = new Button( undoButton->mX, 
+                             menuButton->mY, "done" );
 
     allButtons[0] = undoButton;
     allButtons[1] = menuButton;
+    allButtons[2] = doneButton;
 
     undoButton->setVisible( false );
     menuButton->forceVisible();
+    doneButton->setVisible( false );
     
 
     menuPanel = new MenuPanel( screenW, screenH );
@@ -405,7 +439,20 @@ void drawFrame() {
         
         if( !checkAndClear() ) {
             
+            // check if board full
+            char full = true;
             
+            for( i=0; i<numGridSpaces && full; i++ ) {
+                if( allSpaces[i]->isEmpty() ) {
+                    full = false;
+                    }
+                }
+            
+            if( full ) {
+                // game over
+                doneButton->setVisible( true );
+                }
+
             
 
             nextPiece->update();
@@ -418,8 +465,11 @@ void drawFrame() {
 
             if( nextPiece->isSecondPiece() ) {
                 // allow undo of first piece
-                undoButton->setVisible( true );
-
+                
+                if( !full ) {
+                    undoButton->setVisible( true );
+                    }
+                
                 // set grid spaces in same row/column to active
                 int x;
                 int y;
@@ -537,6 +587,11 @@ void undoMove() {
     randSource.rewindState();
 
 
+    if( moveHistory.size() > 0 ) {
+        moveHistory.deleteElement( moveHistory.size() - 1 );
+        }
+    
+
     int temScore = score;
     score = savedScore;
     lastScore = temScore;
@@ -620,6 +675,14 @@ void pointerUp( float inX, float inY ) {
                 ( considerNonActive || space->mActive ) ) {
                 
                 int i;
+                
+                i = y * gridW + x;
+                
+                char encodedMove = base49Encode( i );
+                
+                moveHistory.push_back( encodedMove );
+
+
                 // save previous state for undo
                 for( i=0; i<numGridSpaces; i++ ) {
                     allSpaces[i]->saveState();

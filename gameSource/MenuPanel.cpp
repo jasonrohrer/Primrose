@@ -15,6 +15,7 @@ MenuPanel::MenuPanel( int inW, int inH )
           mTutorialButton( inW - 21 - 19, 200, "+" ),
           mHighScoreButton( inW - 21 - 19, 300, "+" ),
           mEditNameButton( inW - 21 - 19, 400, "+" ),
+          mHighScoreLoadingPanel( inW, inH ),
           mEditNamePanel( inW, inH ) {
           
 
@@ -28,8 +29,10 @@ MenuPanel::MenuPanel( int inW, int inH )
     addButton( &mHighScoreButton );
     addButton( &mEditNameButton );
 
+    mHighScoreLoadingPanel.setVisible( false );
     mEditNamePanel.setVisible( false );
     
+    addSubPanel( &mHighScoreLoadingPanel );
     addSubPanel( &mEditNamePanel );
     }
 
@@ -61,6 +64,12 @@ char MenuPanel::pointerUp( int inX, int inY ) {
         if( mEditNameButton.isInside( inX, inY ) ) {
             
             mEditNamePanel.setVisible( true );
+            
+            return true;
+            }
+        if( mHighScoreButton.isInside( inX, inY ) ) {
+            
+            mHighScoreLoadingPanel.setVisible( true );
             
             return true;
             }
