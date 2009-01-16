@@ -99,11 +99,9 @@ void HighScoreLoadingPanel::drawBase() {
         mStatusLight.drawGrid( mFadeProgress );
 
         float glowVal = sin( mBlinkTime - M_PI / 2 ) * 0.5 + 0.5;
-        glowVal *= mStatusLight.mDrawColor->a;
 
         mStatusLight.drawPieceCenter( mFadeProgress * glowVal );
         mStatusLight.drawPieceHalo( mFadeProgress * glowVal );
-
         }
     
     }
