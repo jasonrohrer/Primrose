@@ -32,7 +32,8 @@ Panel.cpp \
 MenuPanel.cpp \
 EditNamePanel.cpp \
 HighScoreLoadingPanel.cpp \
-
+WebRequest.cpp \
+ScoreBundle.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}

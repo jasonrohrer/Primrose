@@ -22,14 +22,49 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
         : Panel( inW, inH ),
           mMessage( "loading scores" ),
           mStatusLight( inW / 2, inH / 2 ),
-          mBlinkTime( 0 ) {
+          mBlinkTime( 0 ),
+          mScoreToPost( NULL ),
+          mWebRequest( NULL ),
+          mServerFinderURL(
+            "http://hcsoftware.sourceforge.net/primrose/serverLocation.txt" ),
+          mServerURL( NULL ) {
           
     mStatusLight.setColor( scoreLoadingGreen.copy() );
+
+    mServerURLFetchRequest = new WebRequest( "GET",
+                                             mServerFinderURL,
+                                             NULL );
     }
 
 
     
 HighScoreLoadingPanel::~HighScoreLoadingPanel() {
+    if( mScoreToPost != NULL ) {
+        delete mScoreToPost;
+        }
+    if( mWebRequest != NULL ) {
+        delete mWebRequest;
+        }
+
+    if( mServerURL != NULL ) {
+        delete [] mServerURL;
+        }
+    if( mServerURLFetchRequest != NULL ) {
+        delete mServerURLFetchRequest;
+        }
+    
+    }
+
+
+
+void HighScoreLoadingPanel::setScoreToPost( ScoreBundle *inBundle ) {
+    if( mScoreToPost != NULL ) {
+        delete mScoreToPost;
+        }
+
+    mScoreToPost = inBundle;
+
+    mMessage = "posting score";
     }
 
 
@@ -43,12 +78,76 @@ void HighScoreLoadingPanel::step() {
 
 
     mBlinkTime += 0.2;
+
+    if( mServerURLFetchRequest != NULL ) {
+        int stepResult = mServerURLFetchRequest->step();
+        
+        if( stepResult == 1 ) {
+            // done
+            
+            char *result = mServerURLFetchRequest->getResult();
+            
+            SimpleVector<char *> *tokens = tokenizeString( result );
+            
+            delete [] result;
+
+            
+            char *returnedURL = *( tokens->getElement( 0 ) );
+                
+            if( mServerURL != NULL ) {
+                delete [] mServerURL;
+                }
+                    
+            mServerURL = stringDuplicate( returnedURL );
+            
+            printf( "Got server URL: %s\n", mServerURL );
+            
+
+            for( int i=0; i<tokens->size(); i++ ) {
+                delete [] *( tokens->getElement( i ) );
+                }
+            delete tokens;
+
+
+            delete mServerURLFetchRequest;
+            mServerURLFetchRequest = NULL;
+            }
+        else if( stepResult == -1 ) {
+            // error
+            delete mServerURLFetchRequest;
+            mServerURLFetchRequest = NULL;
+            
+            mMessage = "connect failed";
+
+            mStatusLight.setColor( scoreLoadingRed.copy() );
+            }
+        }
+    else if( mWebRequest != NULL ) {
+        //int stepResult = mWebRequest->step();
+    
+        // FIXME
+        }
+        
     }
 
 
 
 void HighScoreLoadingPanel::setVisible( char inIsVisible ) {
     Panel::setVisible( inIsVisible );
+    
+    if( inIsVisible ) {
+        
+        if( mWebRequest != NULL ) {
+            delete mWebRequest;
+            }
+        
+
+        if( mScoreToPost != NULL ) {
+            // FIXME
+            // compose request
+            // char *url =
+            }
+        }
     
     }
 
