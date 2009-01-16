@@ -15,7 +15,7 @@ MenuPanel::MenuPanel( int inW, int inH )
           mTutorialButton( inW - 21 - 19, 200, "+" ),
           mHighScoreButton( inW - 21 - 19, 300, "+" ),
           mEditNameButton( inW - 21 - 19, 400, "+" ),
-          mTutorialPanel( inW, inH ) {
+          mEditNamePanel( inW, inH ) {
           
 
     mNewButton.setVisible( false );
@@ -28,21 +28,15 @@ MenuPanel::MenuPanel( int inW, int inH )
     addButton( &mHighScoreButton );
     addButton( &mEditNameButton );
 
-    mTutorialPanel.setVisible( false );
+    mEditNamePanel.setVisible( false );
     
-    addSubPanel( &mTutorialPanel );
+    addSubPanel( &mEditNamePanel );
     }
 
 
     
 MenuPanel::~MenuPanel() {
-    
-    }
 
-        
-        
-void MenuPanel::setVisible( char inIsVisible ) {
-    Panel::setVisible( inIsVisible );
     }
 
 
@@ -64,21 +58,15 @@ char MenuPanel::pointerUp( int inX, int inY ) {
             setVisible( false );
             return true;
             }
-        if( mTutorialButton.isInside( inX, inY ) ) {
+        if( mEditNameButton.isInside( inX, inY ) ) {
             
-            mTutorialPanel.setVisible( true );
+            mEditNamePanel.setVisible( true );
             
             return true;
             }
         } 
     
     return false;
-    }
-
-
-
-void MenuPanel::step() {
-    Panel::step();
     }
 
 
@@ -119,6 +107,12 @@ void MenuPanel::drawBase() {
         glDisable( GL_BLEND );
         
         }
+    
+    }
+
+
+
+void MenuPanel::closePressed() {
     
     }
 

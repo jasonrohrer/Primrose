@@ -20,6 +20,7 @@
 
 
 #include "minorGems/util/random/CustomRandomSource.h"
+#include "minorGems/util/SettingsManager.h"
 
 
 CustomRandomSource randSource( 10 );
@@ -89,6 +90,9 @@ int chainLength = 1;
 
 // for scheduling a restart
 char mustRestart = false;
+
+
+char playerName[9];
 
 
 
@@ -229,6 +233,27 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     screenH = inHeight;
     
     initSpriteBank();
+
+    
+    char *nameSetting = SettingsManager::getStringSetting( "name" );
+    
+    if( nameSetting != NULL ) {
+        int nameLength = strlen( nameSetting );
+        
+        if( nameLength > 8 ) {
+            nameLength = 8;
+            }
+        
+        memcpy( playerName, nameSetting, nameLength );
+
+        playerName[ nameLength ] = '\0';
+        
+        delete nameSetting;
+        }
+    else {
+        memcpy( playerName, "anon", 5 );
+        }
+
 
     newGame();
     }
@@ -664,4 +689,23 @@ void addToScore( int inPointsToAdd ) {
     score += inPointsToAdd;
     
     scoreTransitionProgress = 0;
+    }
+
+
+
+char *getName() {
+    return playerName;
+    }
+
+
+
+void saveName() {
+    
+    if( strlen( playerName ) == 0 ) {
+        // default to anon
+        memcpy( playerName, "anon", 5 );
+        }
+    
+
+    SettingsManager::setSetting( "name", playerName );
     }

@@ -9,6 +9,7 @@
 
 
 
+// abstract base class
 // panel with a close button at the top
 class Panel {
         
@@ -56,9 +57,13 @@ class Panel {
         
         char isSubPanelVisible();
         
-        // subclasses override this
+        // subclasses override these
         virtual void drawBase();
+        virtual void closePressed() = 0;
+                
         
+        int mW, mH;
+
         float mFadeProgress;
         
         
@@ -71,10 +76,6 @@ class Panel {
         SimpleVector<Button *> mButtons;
 
         SimpleVector<Panel *> mSubPanels;
-        
-        
-
-        int mW, mH;
         
         
         char mVisible;

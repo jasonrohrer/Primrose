@@ -6,9 +6,9 @@
 
 
 Panel::Panel( int inW, int inH )
-        : mFadeProgress( 0 ),
+        : mW( inW ), mH( inH ),
+          mFadeProgress( 0 ),
           mCloseButton( 19 + 21, 19 + 21, "back" ),
-          mW( inW ), mH( inH ),
           mVisible( false ) {
 
     mCloseButton.setVisible( false );
@@ -74,6 +74,9 @@ char Panel::pointerUp( int inX, int inY ) {
     if( !somePanelVisible ) {
         
         if( mCloseButton.isInside( inX, inY ) ) {
+            // inform subclass of close
+            closePressed();
+            
             setVisible( false );
             
             return true;

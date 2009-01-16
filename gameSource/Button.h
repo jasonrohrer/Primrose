@@ -40,10 +40,10 @@ class Button {
 
         int mX, mY;
 
+        char *mString;
 
 
     private:
-        char *mString;
         
         GridSpace mSpace;
         
