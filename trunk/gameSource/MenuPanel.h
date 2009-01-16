@@ -2,6 +2,7 @@
 
 
 #include "EditNamePanel.h"
+#include "HighScoreLoadingPanel.h"
 
 
 
@@ -36,7 +37,8 @@ class MenuPanel : public Panel {
         Button mHighScoreButton;
         Button mEditNameButton;
         
-        // placeholder
+        
+        HighScoreLoadingPanel mHighScoreLoadingPanel;
         EditNamePanel mEditNamePanel;
         
         

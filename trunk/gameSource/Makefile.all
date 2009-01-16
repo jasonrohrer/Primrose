@@ -31,6 +31,7 @@ Button.cpp \
 Panel.cpp \
 MenuPanel.cpp \
 EditNamePanel.cpp \
+HighScoreLoadingPanel.cpp \
 
 
 
