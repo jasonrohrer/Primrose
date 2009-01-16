@@ -1,6 +1,9 @@
 #include "Panel.h"
 
 
+#include "EditNamePanel.h"
+
+
 
 class MenuPanel : public Panel {
         
@@ -16,20 +19,16 @@ class MenuPanel : public Panel {
 
         // over rides these:
                 
-        void setVisible( char inIsVisible );        
-
-
         char pointerUp( int inX, int inY );
         
-
-        void step();
-
 
     protected:
         // override
         void drawBase();
 
-
+        // receive close event
+        void closePressed();
+        
         
     private:
         Button mNewButton;
@@ -37,7 +36,8 @@ class MenuPanel : public Panel {
         Button mHighScoreButton;
         Button mEditNameButton;
         
-        Panel mTutorialPanel;
+        // placeholder
+        EditNamePanel mEditNamePanel;
         
         
     };

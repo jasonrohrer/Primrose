@@ -72,6 +72,34 @@ int main( int inNumArgs, char **inArgs ) {
 
 
 
+
+    #ifdef __mac__
+        // make sure working directory is the same as the directory
+        // that the app resides in
+        // this is especially important on the mac platform, which
+        // doesn't set a proper working directory for double-clicked
+        // app bundles
+
+        // arg 0 is the path to the app executable
+        char *appDirectoryPath = stringDuplicate( inArgs[0] );
+    
+        char *appNamePointer = strstr( appDirectoryPath,
+                                       "tileGame1.app" );
+
+        if( appNamePointer != NULL ) {
+            // terminate full app path to get parent directory
+            appNamePointer[0] = '\0';
+            
+            chdir( appDirectoryPath );
+            }
+        
+        delete [] appDirectoryPath;
+    #endif
+
+
+
+
+
     initFrameDrawer( w, h );
 
 
