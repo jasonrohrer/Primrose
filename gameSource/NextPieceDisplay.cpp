@@ -28,7 +28,7 @@ Color pieceColors[8] = {
 
 
 NextPieceDisplay::NextPieceDisplay( int inX, int inY, ColorPool *inPool )
-        :mX( inX ), mY( inY ), mPool( inPool ) {
+        : mX( inX ), mY( inY ), mPool( inPool ), mBlinkTime( 0 ) {
 
     mSpaces[0] = new GridSpace( inX, inY - 20 );
     mSpaces[1] = new GridSpace( inX, inY + 20 );

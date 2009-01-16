@@ -39,8 +39,8 @@ class GridSpace {
 
         // draws onto screen
         void drawGrid( float inAlpha=1.0f );
-        void drawPieceCenter();
-        void drawPieceHalo();
+        void drawPieceCenter( float inAlpha=1.0f );
+        void drawPieceHalo( float inAlpha=1.0f  );
         
 
         char isInside( int inX, int inY );
