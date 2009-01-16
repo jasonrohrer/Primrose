@@ -6,6 +6,7 @@
 #include "numeral.h"
 #include "ColorPool.h"
 #include "Button.h"
+#include "Panel.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -36,11 +37,19 @@ GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
 
-#define numButtons 1
+#define numButtons 2
 
 Button *allButtons[ numButtons ];
 
 Button *undoButton;
+Button *menuButton;
+
+
+#define numPanels 1
+
+Panel *allPanels[ numPanels ];
+
+Panel *menuPanel;
 
 
 
@@ -143,12 +152,22 @@ void newGame() {
                                       spaces[6][3]->mY + 40 + 20 + 19 + 1,
                                       colorPool );
     
-    undoButton = new Button( nextPiece->mX - 60, nextPiece->mY, "undo" );
+    undoButton = new Button( nextPiece->mX - 60, nextPiece->mY - 20, "undo" );
     
+    menuButton = new Button( spaces[0][0]->mX, colorPool->mY - 41 - 19, "p" );
+
     allButtons[0] = undoButton;
+    allButtons[1] = menuButton;
 
     undoButton->setVisible( false );
+    menuButton->setVisible( true );
     
+
+    menuPanel = new Panel( screenW, screenH );
+    
+    allPanels[0] = menuPanel;
+    
+    menuPanel->setVisible( false );
     }
 
 
@@ -160,6 +179,9 @@ void endGame() {
         }
     for( i=0; i<numButtons; i++ ) {
         delete allButtons[i];
+        }
+    for( i=0; i<numPanels; i++ ) {
+        delete allPanels[i];
         }
     
     delete nextPiece;
@@ -431,7 +453,17 @@ void drawFrame() {
             }
         }
     
+
+    for( i=0; i<numPanels; i++ ) {
+        allPanels[i]->step();
+        }
+    
+    for( i=0; i<numPanels; i++ ) {
+        allPanels[i]->draw();
+        }
+    
     }
+
 
 
 void undoMove() {
@@ -489,6 +521,25 @@ void pointerUp( float inX, float inY ) {
         return;
         }
     
+    
+    // pass through to visible panels
+    char somePanelVisible = false;
+    
+    int i;
+    
+    for( i=0; i<numPanels; i++ ) {
+        if( allPanels[i]->isVisible() ) {
+            somePanelVisible = true;
+            allPanels[i]->pointerUp( (int)pointerX, (int)pointerY );
+            }
+        }
+
+    if( somePanelVisible ) {
+        // don't pass click to grid
+        return;
+        }
+    
+
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
         considerNonActive = false;
@@ -553,8 +604,6 @@ void pointerUp( float inX, float inY ) {
         
         }
 
-    int i;
-    
     for( i=0; i<numButtons; i++ ) {
         if( allButtons[i]->isVisible() && 
             allButtons[i]->isInside( (int)pointerX, (int)pointerY ) ) {
@@ -562,8 +611,14 @@ void pointerUp( float inX, float inY ) {
             if( allButtons[i] == undoButton ) {
                 undoMove();
                 }
+            else if( allButtons[i] == menuButton ) {
+                menuPanel->setVisible( true );
+                }
+            
             }
         }
+    
+
     
     
     }

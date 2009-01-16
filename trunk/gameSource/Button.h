@@ -1,3 +1,7 @@
+#ifndef BUTTON_INCLUDED
+#define BUTTON_INCLUDED
+
+
 #include "GridSpace.h"
 
 class Button {
@@ -48,5 +52,7 @@ class Button {
                         
     };
 
+
+#endif
         
         
