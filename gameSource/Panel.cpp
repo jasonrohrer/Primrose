@@ -1,7 +1,4 @@
 #include "Panel.h"
-#include "numeral.h"
-
-#include "minorGems/util/stringUtils.h"
 
 
 #include <GL/gl.h>
@@ -9,13 +6,14 @@
 
 
 Panel::Panel( int inW, int inH )
-        : mCloseButton( inW / 2, 19 + 21, "back" ),
+        : mFadeProgress( 0 ),
+          mCloseButton( 19 + 21, 19 + 21, "back" ),
           mW( inW ), mH( inH ),
-          mVisible( false ),
-          mFadeProgress( 0 ) {
+          mVisible( false ) {
 
     mCloseButton.setVisible( false );
     
+    addButton( &mCloseButton );
     }
 
 
@@ -29,24 +27,66 @@ Panel::~Panel() {
 void Panel::setVisible( char inIsVisible ) {
     mVisible = inIsVisible;
     
-    mCloseButton.setVisible( mVisible );
+    int i;
+    
+    for( i=0; i<mButtons.size(); i++ ) {
+        Button *b = *( mButtons.getElement( i ) );
+        b->setVisible( mVisible );
+        }
     }
 
 
 
-void Panel::pointerUp( int inX, int inY ) {
+void Panel::forceVisible() {
+    mVisible = true;
+    mFadeProgress = 1;
     
-    if( mCloseButton.isInside( inX, inY ) ) {
-        setVisible( false );
+    int i;
+    
+    for( i=0; i<mButtons.size(); i++ ) {
+        Button *b = *( mButtons.getElement( i ) );
+        b->forceVisible();
+        }
+    }
+
+
+
+char Panel::pointerUp( int inX, int inY ) {
+    
+    int i;
+    
+    char somePanelVisible = false;
+    
+    for( i=0; i<mSubPanels.size(); i++ ) {
+        Panel *p = *( mSubPanels.getElement( i ) );
+        if( p->isVisible() ) {
+            somePanelVisible = true;
+            char consumed = p->pointerUp( inX, inY );
+
+            // stop as soon as consumed
+            if( consumed ) {
+                return true;
+                }
+            }
+        }
+
+    
+    if( !somePanelVisible ) {
+        
+        if( mCloseButton.isInside( inX, inY ) ) {
+            setVisible( false );
+            
+            return true;
+            }
         }
     
+    return false;
     }
 
 
 
 void Panel::step() {
-    mCloseButton.step();
-    
+   
     if( mVisible && mFadeProgress < 1 ) {
         mFadeProgress += 0.1;
         
@@ -61,12 +101,56 @@ void Panel::step() {
             mFadeProgress = 0;
             }
         }
+
+    int i;
+    
+    for( i=0; i<mButtons.size(); i++ ) {
+        Button *b = *( mButtons.getElement( i ) );
+        b->step();
+        }
+
+    for( i=0; i<mSubPanels.size(); i++ ) {
+        Panel *p = *( mSubPanels.getElement( i ) );
+        p->step();
+        }
+    
     }
 
+
+
+void Panel::addSubPanel( Panel *inPanel ) {
+    mSubPanels.push_back( inPanel );
+    }
+
+
+
+void Panel::addButton( Button *inButton ) {
+    mButtons.push_back( inButton );
+    }
+
+
+
+char Panel::isSubPanelVisible() {
+    int i;
+    for( i=0; i<mSubPanels.size(); i++ ) {
+        Panel *p = *( mSubPanels.getElement( i ) );
+        if( p->isVisible() ) {
+            return true;
+            }
+        }
     
+    return false;
+    }
+
+
+void Panel::draw() {
+    drawBase();
+    drawSubPanels();
+    }
+
 
         
-void Panel::draw() {
+void Panel::drawBase() {
     
     if( mFadeProgress > 0 ) {
 
@@ -95,9 +179,26 @@ void Panel::draw() {
     
         glDisable( GL_BLEND );
 
-
-        mCloseButton.draw();
+        
+        int i;
+        
+        for( i=0; i<mButtons.size(); i++ ) {
+            Button *b = *( mButtons.getElement( i ) );
+            b->draw();
+            }
         }
+    }
+
+    
+void Panel::drawSubPanels() {
+
+    int i;
+    
+    for( i=0; i<mSubPanels.size(); i++ ) {
+        Panel *p = *( mSubPanels.getElement( i ) );
+        p->draw();
+        }
+
     }
 
 

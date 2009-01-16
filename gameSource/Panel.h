@@ -1,4 +1,11 @@
+#ifndef PANEL_INCLUDED
+#define PANEL_INCLUDED
+
+
 #include "Button.h"
+
+
+#include "minorGems/util/SimpleVector.h"
 
 
 
@@ -12,43 +19,71 @@ class Panel {
         Panel( int inW, int inH);
         
 
-        ~Panel();
+        virtual ~Panel();
         
 
                 
-        void setVisible( char inIsVisible );
+        virtual void setVisible( char inIsVisible );
 
-        char isVisible() {
+        virtual char isVisible() {
             return mVisible;
             }
         
+        // forces to become completely visible instantly
+        virtual void forceVisible();
+        
+
 
         // tells panel that pointer released inside it
-        void pointerUp( int inX, int inY );
+        // returns true if release consumed (triggered a button somewhere)
+        virtual char pointerUp( int inX, int inY );
         
 
 
         // steps animations
-        void step();
+        virtual void step();
         
 
         // draws onto screen
+        // don't override this
         void draw();
 
 
+    protected:
+        
+        void addSubPanel( Panel *inPanel );
+        void addButton( Button *inButton );
+        
+        char isSubPanelVisible();
+        
+        // subclasses override this
+        virtual void drawBase();
+        
+        float mFadeProgress;
+        
+        
+
     private:
+        void drawSubPanels();
 
         Button mCloseButton;
         
+        SimpleVector<Button *> mButtons;
+
+        SimpleVector<Panel *> mSubPanels;
+        
+        
+
         int mW, mH;
         
         
         char mVisible;
         
-        float mFadeProgress;
         
     };
 
+
+#endif
 
         
         
