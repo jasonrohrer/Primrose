@@ -266,12 +266,78 @@ void drawScorePip( int inScore,
 
 
 
-
-
-
 void drawScore( int inScore,
                 float inRightX, float inBottomY,
                 Color *inColor, float inAlpha ) {
+    
+    
+    int numDigits = 1;
+
+    if( inScore > 0 ) {
+        numDigits = (int)( floor( log10( inScore ) ) ) + 1;
+        }
+    
+    
+    int rowSep = 2;
+    int colSep = 3;
+        
+    
+    
+    // next digit center
+    int startCX = (int)inRightX - 3;
+    int cX = startCX;
+    int cY = (int)inBottomY - 5;
+    
+    int i;
+    
+    for( i=0; i<numDigits; i++ ) {
+        
+        int number = ( inScore / ( (int)( pow( 10, i ) ) ) ) % 10;
+        
+        if( i % 3 == 0 && i != 0 ) {
+            // make room for comma
+            if( i % 12 != 0 ) {
+                // extra space around comma
+                cX -= colSep - 1;
+                }
+            }
+        
+        drawNumeral( number,
+                     cX, 
+                     cY,
+                     inColor, inAlpha );
+
+        if( i % 3 == 0 && i != 0 ) {
+            // comma after every 4th digit (between 3 and 4 )
+                    
+            drawNumeral( 10,
+                         cX + 3 + colSep,
+                         cY + 1,
+                         inColor, inAlpha );
+            }
+        
+
+        // compute next numeral center, twelve digits per line
+        if( (i + 1) % 12 != 0 ) {
+            cX -= 6 + colSep;
+            }
+        else {
+            cX = startCX;
+            cY -= 10 + rowSep;
+            }
+        }
+    
+    }
+
+
+
+
+
+
+
+void drawScoreBig( int inScore,
+                   float inRightX, float inBottomY,
+                   Color *inColor, float inAlpha ) {
     
     
     int numDigits = 1;
