@@ -91,11 +91,16 @@ int savedScore = 0;
 int chainLength = 1;
 
 
+char gameOver = false;
+
+
 // for scheduling a restart
 char mustRestart = false;
 
 
 char playerName[9];
+
+
 
 
 
@@ -137,6 +142,8 @@ void newGame() {
     
 
     chainLength = 1;
+    
+    gameOver = false;
     
     
 
@@ -250,6 +257,12 @@ void endGame() {
 
 void restartGame() {
     mustRestart = true;
+    }
+
+
+
+char isGameOver() {
+    return gameOver;
     }
 
 
@@ -450,6 +463,8 @@ void drawFrame() {
             
             if( full ) {
                 // game over
+                gameOver = true;
+                
                 doneButton->setVisible( true );
                 }
 
@@ -734,6 +749,15 @@ void pointerUp( float inX, float inY ) {
                 }
             else if( allButtons[i] == menuButton ) {
                 menuPanel->setVisible( true );
+                }
+            else if( allButtons[i] == doneButton ) {
+                char *moveString = moveHistory.getElementString();
+                
+                ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,
+                                                  moveString );
+                delete [] moveString;
+
+                ( (MenuPanel*)menuPanel )->postScore( b );
                 }
             
             }

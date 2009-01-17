@@ -50,6 +50,19 @@ void Panel::forceVisible() {
     }
 
 
+void Panel::forceInvisible() {
+    mVisible = false;
+    mFadeProgress = 0;
+    
+    int i;
+    
+    for( i=0; i<mButtons.size(); i++ ) {
+        Button *b = *( mButtons.getElement( i ) );
+        b->forceInvisible();
+        }
+    }
+
+
 
 char Panel::pointerUp( int inX, int inY ) {
     

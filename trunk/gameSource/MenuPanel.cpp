@@ -36,13 +36,22 @@ MenuPanel::MenuPanel( int inW, int inH )
     addSubPanel( &mEditNamePanel );
 
     // display panel created by loading panel, but sits under us
-    addSubPanel( mHighScoreLoadingPanel.getDisplayPanel() );
+    mDisplayPanel = mHighScoreLoadingPanel.getDisplayPanel();
+    
+    addSubPanel( mDisplayPanel );
     }
 
 
     
 MenuPanel::~MenuPanel() {
 
+    }
+
+
+
+void MenuPanel::postScore( ScoreBundle *inScore ) {
+    mHighScoreLoadingPanel.setScoreToPost( inScore );
+    mHighScoreLoadingPanel.setVisible( true );
     }
 
 
@@ -120,12 +129,27 @@ void MenuPanel::drawBase() {
         
         }
     
+
+    // check if we should force ourself visible
+    // (to pass button presses through to mDisplayPanel, and be
+    //  there to catch it when BACK is pressed)
+    if( !mVisible &&
+        mDisplayPanel->isFullyVisible() ) {
+        
+        setVisible( true );
+        }
+
+    
     }
 
 
 
 void MenuPanel::closePressed() {
-    
+    // treat close like NEW if game over
+    if( isGameOver() ) {
+        restartGame();
+        }
+
     }
 
 

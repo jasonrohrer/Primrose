@@ -54,7 +54,7 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
           mServerURL( NULL ), 
           mServerURLFetchRequest( NULL ),
           mFailed( false ),
-          mDisplayPanel( inW, inH, this ) {
+          mDisplayPanel( inW, inH ) {
 
     startConnectionTry();
 
@@ -108,6 +108,18 @@ void HighScoreLoadingPanel::step() {
 
 
     mBlinkTime += 0.2;
+
+
+    // check if we should hide ourself
+    if( mVisible &&
+        mDisplayPanel.isFullyVisible() ) {
+        
+        // display showing
+        setVisible( false );
+        }
+    
+
+
 
     if( mServerURLFetchRequest != NULL ) {
         int stepResult = mServerURLFetchRequest->step();
@@ -167,7 +179,7 @@ void HighScoreLoadingPanel::step() {
             delete [] result;
 
             
-            if( tokens->size() > 2 ) {
+            if( tokens->size() >= 2 ) {
                 
                 int numAllTime;
                 
@@ -260,6 +272,9 @@ void HighScoreLoadingPanel::step() {
                                   mScoreToPost->mScore,
                                   mScoreToPost->mSeed,
                                   mScoreToPost->mMoveHistory );
+        
+        delete mScoreToPost;
+        mScoreToPost = NULL;
         
         mWebRequest = new WebRequest( "POST",
                                       mServerURL,

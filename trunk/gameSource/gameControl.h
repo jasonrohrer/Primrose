@@ -7,6 +7,10 @@ void addToScore( int inPointsToAdd );
 void restartGame();
 
 
+char isGameOver();
+
+
+
 // returns actual 8-character array (9 chars, including \0 terminator)
 // edit name by changing characters in the array
 char *getName();

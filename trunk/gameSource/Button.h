@@ -28,6 +28,7 @@ class Button {
         
         // forces to become completely visible instantly
         void forceVisible();
+        void forceInvisible();
         
 
         // steps animations

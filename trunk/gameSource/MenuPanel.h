@@ -3,6 +3,8 @@
 
 #include "EditNamePanel.h"
 #include "HighScoreLoadingPanel.h"
+#include "HighScorePanel.h"
+#include "ScoreBundle.h"
 
 
 
@@ -16,6 +18,9 @@ class MenuPanel : public Panel {
         
 
         ~MenuPanel();
+        
+        void postScore( ScoreBundle *inScore );
+        
         
 
         // over rides these:
@@ -41,6 +46,8 @@ class MenuPanel : public Panel {
         HighScoreLoadingPanel mHighScoreLoadingPanel;
         EditNamePanel mEditNamePanel;
         
+        // pointer to display, which is maintained by HighScoreLoadingPanel
+        HighScorePanel *mDisplayPanel;
         
     };
 
