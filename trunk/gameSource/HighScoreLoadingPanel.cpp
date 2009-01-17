@@ -83,6 +83,12 @@ HighScoreLoadingPanel::~HighScoreLoadingPanel() {
 
 
 
+void HighScoreLoadingPanel::setLoadingMessage() {
+    mMessage = "loading scores";
+    }
+
+
+
 void HighScoreLoadingPanel::setScoreToPost( ScoreBundle *inBundle ) {
     if( mScoreToPost != NULL ) {
         delete mScoreToPost;

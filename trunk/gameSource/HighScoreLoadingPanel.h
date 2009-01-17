@@ -19,6 +19,11 @@ class HighScoreLoadingPanel : public Panel {
         
 
         ~HighScoreLoadingPanel();
+
+        
+        void setLoadingMessage();
+        
+
         
         // bundle deleted after posting
         // posting starts when made visible

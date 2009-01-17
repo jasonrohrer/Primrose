@@ -83,6 +83,7 @@ char MenuPanel::pointerUp( int inX, int inY ) {
             }
         if( mHighScoreButton.isInside( inX, inY ) ) {
             
+            mHighScoreLoadingPanel.setLoadingMessage();
             mHighScoreLoadingPanel.setVisible( true );
             
             return true;
