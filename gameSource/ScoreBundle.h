@@ -1,3 +1,6 @@
+#ifndef SCORE_BUNDLE_INCLUDED
+#define SCORE_BUNDLE_INCLUDED
+
 
 
 class ScoreBundle {
@@ -7,6 +10,11 @@ class ScoreBundle {
         ScoreBundle( char *inName, 
                      unsigned int inScore, unsigned int inSeed,
                      char *inMoveHistory );
+        
+        // encoded as  name#score#seed#move_history
+        // (#-delimited)
+        ScoreBundle( char *inEncoded );
+        
         
         ~ScoreBundle();
         
@@ -24,4 +32,6 @@ class ScoreBundle {
     };
 
 
+
+#endif
         

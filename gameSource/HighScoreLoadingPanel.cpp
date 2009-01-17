@@ -18,6 +18,30 @@ Color scoreLoadingRed( 1, 0, 0 );
 
 
 
+void HighScoreLoadingPanel::startConnectionTry() {
+    mFailed = false;
+    mStatusLight.setColor( scoreLoadingGreen.copy() );
+
+    if( mServerURL == NULL && mServerURLFetchRequest == NULL ) {
+        // try again
+        mServerURLFetchRequest = new WebRequest( "GET",
+                                                 mServerFinderURL,
+                                                 NULL );
+        }
+    }
+
+
+
+void HighScoreLoadingPanel::setFailed() {
+    mFailed = true;
+            
+    mMessage = "connect failed";
+    
+    mStatusLight.setColor( scoreLoadingRed.copy() );
+    }
+
+
+
 HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
         : Panel( inW, inH ),
           mMessage( "loading scores" ),
@@ -27,13 +51,15 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
           mWebRequest( NULL ),
           mServerFinderURL(
             "http://hcsoftware.sourceforge.net/primrose/serverLocation.txt" ),
-          mServerURL( NULL ) {
-          
-    mStatusLight.setColor( scoreLoadingGreen.copy() );
+          mServerURL( NULL ), 
+          mServerURLFetchRequest( NULL ),
+          mFailed( false ),
+          mDisplayPanel( inW, inH, this ) {
 
-    mServerURLFetchRequest = new WebRequest( "GET",
-                                             mServerFinderURL,
-                                             NULL );
+    startConnectionTry();
+
+    // do not manage as sub-panel
+    // addSubPanel( &mDisplayPanel );
     }
 
 
@@ -65,6 +91,10 @@ void HighScoreLoadingPanel::setScoreToPost( ScoreBundle *inBundle ) {
     mScoreToPost = inBundle;
 
     mMessage = "posting score";
+
+
+    startConnectionTry();
+    
     }
 
 
@@ -90,24 +120,27 @@ void HighScoreLoadingPanel::step() {
             SimpleVector<char *> *tokens = tokenizeString( result );
             
             delete [] result;
-
             
-            char *returnedURL = *( tokens->getElement( 0 ) );
+            if( tokens->size() > 0 ) {
                 
-            if( mServerURL != NULL ) {
-                delete [] mServerURL;
+                char *returnedURL = *( tokens->getElement( 0 ) );
+                
+                if( mServerURL != NULL ) {
+                    delete [] mServerURL;
+                    }
+                
+                mServerURL = stringDuplicate( returnedURL );
+                
+                printf( "Got server URL: %s\n", mServerURL );
                 }
-                    
-            mServerURL = stringDuplicate( returnedURL );
+            else {
+                setFailed();
+                }
             
-            printf( "Got server URL: %s\n", mServerURL );
-            
-
             for( int i=0; i<tokens->size(); i++ ) {
                 delete [] *( tokens->getElement( i ) );
                 }
             delete tokens;
-
 
             delete mServerURLFetchRequest;
             mServerURLFetchRequest = NULL;
@@ -117,16 +150,142 @@ void HighScoreLoadingPanel::step() {
             delete mServerURLFetchRequest;
             mServerURLFetchRequest = NULL;
             
-            mMessage = "connect failed";
-
-            mStatusLight.setColor( scoreLoadingRed.copy() );
+            setFailed();
             }
         }
     else if( mWebRequest != NULL ) {
-        //int stepResult = mWebRequest->step();
+        int stepResult = mWebRequest->step();
     
-        // FIXME
+        if( stepResult == 1 ) {
+            // done
+            char goodResult = false;
+            
+            char *result = mWebRequest->getResult();
+            
+            SimpleVector<char *> *tokens = tokenizeString( result );
+            
+            delete [] result;
+
+            
+            if( tokens->size() > 2 ) {
+                
+                int numAllTime;
+                
+                int numRead = sscanf( *( tokens->getElement( 0 ) ),
+                                      "%d", &numAllTime );
+                    
+                if( numRead == 1 ) {
+                        
+                    if( tokens->size() >= 2 + numAllTime ) {
+                        
+                        mDisplayPanel.clearScores();
+                        
+
+                        int i;
+                        
+                        for( i=0; i<numAllTime; i++ ) {
+                            
+                            ScoreBundle *b =
+                                new ScoreBundle( 
+                                    *( tokens->getElement( 1 + i ) ) );
+                            
+                            mDisplayPanel.addAllTimeScore( b );
+                            }
+                        
+                        
+                        int numToday;
+                
+                        int numRead = 
+                            sscanf( *( tokens->getElement( 1 +numAllTime ) ),
+                                    "%d", &numToday );
+                    
+                        if( numRead == 1 ) {
+                        
+                            if( tokens->size() >= 2 + numAllTime + numToday ) {
+                        
+                                int i;
+                                
+                                goodResult = true;
+                                
+                                for( i=0; i<numToday; i++ ) {
+                            
+                                    ScoreBundle *b =
+                                        new ScoreBundle( 
+                                            *( tokens->getElement( 
+                                                   2 + numAllTime + i ) ) );
+                            
+                                    mDisplayPanel.addTodayScore( b );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            if( !goodResult ) {
+                setFailed();
+                }
+            else {
+                mDisplayPanel.setVisible( true );
+                }
+            
+
+
+            
+            for( int i=0; i<tokens->size(); i++ ) {
+                delete [] *( tokens->getElement( i ) );
+                }
+            delete tokens;
+
+            delete mWebRequest;
+            mWebRequest = NULL;
+            }
+        else if( stepResult == -1 ) {
+            // error
+            delete mWebRequest;
+            mWebRequest = NULL;
+            
+            setFailed();
+            }
         }
+    else if( mScoreToPost != NULL && mServerURL != NULL ) {
+        // need to generate a request
+        char *body = autoSprintf( "action=post_score"
+                                  "&name=%s"
+                                  "&score=%u"
+                                  "&seed=%u"
+                                  "&move_history=%s",
+                                  mScoreToPost->mName,
+                                  mScoreToPost->mScore,
+                                  mScoreToPost->mSeed,
+                                  mScoreToPost->mMoveHistory );
+        
+        mWebRequest = new WebRequest( "POST",
+                                      mServerURL,
+                                      body );
+        
+
+        delete [] body;
+        }
+    else if( mVisible && mFadeProgress == 1 && ! mDisplayPanel.isVisible() &&
+             !mFailed && mServerURL != NULL ) {
+
+        // wait until fully faded in to avoid jumping abruptly to display
+        // if request is fast
+
+        // generate a load request
+        char *url = autoSprintf( "%s?action=fetch_scores",
+                                 mServerURL );
+        
+        mWebRequest = new WebRequest( "GET",
+                                      url,
+                                      NULL );
+        
+        delete [] url;
+        }
+    
+                                  
         
     }
 
@@ -134,21 +293,12 @@ void HighScoreLoadingPanel::step() {
 
 void HighScoreLoadingPanel::setVisible( char inIsVisible ) {
     Panel::setVisible( inIsVisible );
-    
-    if( inIsVisible ) {
-        
-        if( mWebRequest != NULL ) {
-            delete mWebRequest;
-            }
-        
 
-        if( mScoreToPost != NULL ) {
-            // FIXME
-            // compose request
-            // char *url =
-            }
+    if( inIsVisible ) {
+        // try again, afresh
+        startConnectionTry();
         }
-    
+            
     }
 
 
