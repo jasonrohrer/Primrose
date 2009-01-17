@@ -66,7 +66,8 @@ class Panel {
 
         float mFadeProgress;
         
-        
+        char mVisible;
+
 
     private:
         void drawSubPanels();
@@ -77,8 +78,6 @@ class Panel {
 
         SimpleVector<Panel *> mSubPanels;
         
-        
-        char mVisible;
         
         
     };

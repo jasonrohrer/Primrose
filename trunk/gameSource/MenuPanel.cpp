@@ -34,6 +34,9 @@ MenuPanel::MenuPanel( int inW, int inH )
     
     addSubPanel( &mHighScoreLoadingPanel );
     addSubPanel( &mEditNamePanel );
+
+    // display panel created by loading panel, but sits under us
+    addSubPanel( mHighScoreLoadingPanel.getDisplayPanel() );
     }
 
 

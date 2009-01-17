@@ -6,6 +6,8 @@
 
 #include "WebRequest.h"
 
+#include "HighScorePanel.h"
+
 
 class HighScoreLoadingPanel : public Panel {
         
@@ -21,7 +23,12 @@ class HighScoreLoadingPanel : public Panel {
         // bundle deleted after posting
         // posting starts when made visible
         void setScoreToPost( ScoreBundle *inBundle );
-        
+
+
+        // display panel is NOT managed as a sub panel of this panel
+        HighScorePanel *getDisplayPanel() {
+            return &mDisplayPanel;
+            }
         
 
         // overrides these:
@@ -56,6 +63,17 @@ class HighScoreLoadingPanel : public Panel {
 
         char *mServerURL;
         WebRequest *mServerURLFetchRequest;
+        
+        char mFailed;
+        
+
+        void startConnectionTry();
+
+        void setFailed();
+        
+
+        HighScorePanel mDisplayPanel;
+        
         
         
     };

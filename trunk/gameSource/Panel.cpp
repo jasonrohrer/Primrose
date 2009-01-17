@@ -8,8 +8,8 @@
 Panel::Panel( int inW, int inH )
         : mW( inW ), mH( inH ),
           mFadeProgress( 0 ),
-          mCloseButton( 19 + 21, 19 + 21, "back" ),
-          mVisible( false ) {
+          mVisible( false ),
+          mCloseButton( 19 + 21, 19 + 21, "back" ) {
 
     mCloseButton.setVisible( false );
     
