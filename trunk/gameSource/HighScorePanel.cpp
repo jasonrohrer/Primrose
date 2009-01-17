@@ -14,7 +14,7 @@
 
 
 HighScorePanel::HighScorePanel( int inW, int inH )
-        : Panel( inW, inH ) {
+        : Panel( inW, inH ), mMenuPanel( NULL ) {
     
 
     int i=0;
@@ -139,6 +139,13 @@ char HighScorePanel::pointerUp( int inX, int inY ) {
 
     if( ! isSubPanelVisible() ) {
         
+
+        // FIXME:  check for PLAY buttons
+        // then jump right to game screen by doing this:
+        if( mMenuPanel != NULL ) {
+            mMenuPanel->forceInvisible();
+            }
+
         }
     
     return false;
@@ -249,7 +256,7 @@ void HighScorePanel::drawBase() {
 
 
 void HighScorePanel::closePressed() {
-    
+        
     }
 
 

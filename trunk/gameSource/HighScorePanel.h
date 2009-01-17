@@ -12,12 +12,18 @@ class HighScorePanel : public Panel {
 
     public:
         
-        
-        HighScorePanel( int inW, int inH  );
+        HighScorePanel( int inW, int inH );
         
 
         ~HighScorePanel();
+
         
+        // pointer to menu panel, which this panel returns to sometimes
+        void setMenuPanel( Panel *inMenuPanel ) {
+            mMenuPanel = inMenuPanel;
+            }
+        
+
 
         void clearScores();
         
@@ -51,6 +57,9 @@ class HighScorePanel : public Panel {
 
         Button *mAllTimeButtons[8];
         Button *mTodayButtons[8];
+
+        Panel *mMenuPanel;
+        
     };
 
 
