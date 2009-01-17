@@ -30,8 +30,14 @@ class Panel {
             return mVisible;
             }
         
-        // forces to become completely visible instantly
+        // forces to become completely visible/invisible instantly
         virtual void forceVisible();
+        virtual void forceInvisible();
+        
+
+        virtual char isFullyVisible() {
+            return mVisible && (mFadeProgress == 1);
+            }
         
 
 

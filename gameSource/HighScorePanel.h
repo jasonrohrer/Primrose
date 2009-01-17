@@ -1,3 +1,7 @@
+#ifndef HIGH_SCORE_PANEL_INCLUDED
+#define HIGH_SCORE_PANEL_INCLUDED
+
+
 #include "Panel.h"
 
 #include "ScoreBundle.h"
@@ -9,9 +13,7 @@ class HighScorePanel : public Panel {
     public:
         
         
-        // loading panel will be set to non-visible as soon as this
-        // panel is fully visible (so BACK in this panel returns to menu)
-        HighScorePanel( int inW, int inH, Panel *inLoadingPanel );
+        HighScorePanel( int inW, int inH  );
         
 
         ~HighScorePanel();
@@ -46,13 +48,13 @@ class HighScorePanel : public Panel {
         
         SimpleVector<ScoreBundle*> mTodayScores;
         
-        Panel *mLoadingPanel;
-        
 
         Button *mAllTimeButtons[8];
         Button *mTodayButtons[8];
     };
 
+
+#endif
 
         
         

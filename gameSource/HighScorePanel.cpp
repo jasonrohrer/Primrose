@@ -13,9 +13,8 @@
 
 
 
-HighScorePanel::HighScorePanel( int inW, int inH, Panel *inLoadingPanel )
-        : Panel( inW, inH ),
-          mLoadingPanel( inLoadingPanel ) {
+HighScorePanel::HighScorePanel( int inW, int inH )
+        : Panel( inW, inH ) {
     
 
     int i=0;
@@ -191,6 +190,15 @@ void HighScorePanel::drawBase() {
                         &scoreHeaderColor, mFadeProgress );
             }
 
+        if( mAllTimeScores.size() == 0 ) {
+            drawStringBig( "none", center, 
+                           headerX,
+                           mAllTimeButtons[1]->mY,
+                           &scoreHeaderColor, mFadeProgress );
+            }
+
+
+        // rules around TODAY to separate
 
         int ruleY = mTodayButtons[0]->mY - 40 + 21;
         
@@ -222,18 +230,18 @@ void HighScorePanel::drawBase() {
                         &scoreHeaderColor, mFadeProgress );
             }
 
+        if( mTodayScores.size() == 0 ) {
+            drawStringBig( "none", center, 
+                           headerX,
+                           mTodayButtons[1]->mY,
+                           &scoreHeaderColor, mFadeProgress );
+            }
+        
 
         glDisable( GL_BLEND );
 
-
         
-        if( mVisible && mFadeProgress == 1 ) {
-            
-            // fully visible
-            // hide loading panel
-            mLoadingPanel->setVisible( false );
-            }
-        
+                
         }
     
     }
@@ -241,7 +249,7 @@ void HighScorePanel::drawBase() {
 
 
 void HighScorePanel::closePressed() {
-
+    
     }
 
 

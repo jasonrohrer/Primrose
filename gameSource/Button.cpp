@@ -36,6 +36,11 @@ void Button::forceVisible() {
     mFadeProgress = 1;
     }
 
+void Button::forceInvisible() {
+    mVisible = false;
+    mFadeProgress = 0;
+    }
+
 
 
 void Button::step() {
