@@ -18,6 +18,9 @@ class ScoreBundle {
         
         ~ScoreBundle();
         
+
+        ScoreBundle *copy();
+        
         
         // name up to 8 chars long
         char mName[9];
@@ -29,6 +32,9 @@ class ScoreBundle {
         
 
         char *mMoveHistory;
+
+        int mNumMoves;
+
     };
 
 

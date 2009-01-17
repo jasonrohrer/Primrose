@@ -53,10 +53,16 @@ class HighScorePanel : public Panel {
         SimpleVector<ScoreBundle*> mAllTimeScores;
         
         SimpleVector<ScoreBundle*> mTodayScores;
+
+        // scores associated with each button, or NULL
+        ScoreBundle *mAllScores[16];
         
 
         Button *mAllTimeButtons[8];
         Button *mTodayButtons[8];
+        
+        Button *mAllButtons[16];
+        
 
         Panel *mMenuPanel;
         

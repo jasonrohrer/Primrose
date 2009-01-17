@@ -38,6 +38,8 @@ MenuPanel::MenuPanel( int inW, int inH )
     // display panel created by loading panel, but sits under us
     mDisplayPanel = mHighScoreLoadingPanel.getDisplayPanel();
     
+    mDisplayPanel->setMenuPanel( this );
+    
     addSubPanel( mDisplayPanel );
     }
 

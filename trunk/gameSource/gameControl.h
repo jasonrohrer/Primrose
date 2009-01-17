@@ -1,3 +1,6 @@
+#include "ScoreBundle.h"
+
+
 
 // add to global game score
 void addToScore( int inPointsToAdd );
@@ -19,3 +22,8 @@ char *getName();
 // forces name to be saved for future sessions
 // should be called after editing name
 void saveName();
+
+
+// start playback of a new game
+// will be destroyed by game framework
+void playbackGame( ScoreBundle *inBundle );
