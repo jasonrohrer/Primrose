@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+// for DNS resolution
+#import <Foundation/NSHost.h>
+#import <dns_sd.h>
+
 
 
 
