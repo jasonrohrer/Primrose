@@ -15,6 +15,9 @@ class Button {
         
         ~Button();
         
+        // resets string
+        void setString( char *inString );
+        
 
         char isInside( int inX, int inY ) {
             return mSpace.isInside( inX, inY );

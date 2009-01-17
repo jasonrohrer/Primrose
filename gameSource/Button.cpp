@@ -23,6 +23,14 @@ Button::~Button() {
     delete [] mString;
     }
 
+
+
+void Button::setString( char *inString ) {
+    delete [] mString;
+    mString = stringDuplicate( inString );
+    }
+
+
         
         
 void Button::setVisible( char inIsVisible ) {
