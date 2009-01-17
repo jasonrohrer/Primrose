@@ -326,10 +326,10 @@ function ps_clearLog() {
 
 
 function ps_fetchScores() {
-    global $tableNamePrefix;
+    global $tableNamePrefix, $listSize;
     
     $query = "SELECT * FROM $tableNamePrefix"."all_time_scores ".
-        "ORDER BY score DESC LIMIT 5;";
+        "ORDER BY score DESC LIMIT $listSize;";
     $result = ps_queryDatabase( $query );
 
     $numRows = mysql_numrows( $result );
@@ -347,26 +347,7 @@ function ps_fetchScores() {
         echo "\n";
         }
 
-    $query = "SELECT * FROM $tableNamePrefix"."today_scores ".
-        "ORDER BY score DESC LIMIT 5;";
-    $result = ps_queryDatabase( $query );
 
-    $numRows = mysql_numrows( $result );
-
-    echo "$numRows\n";
-
-    for( $i=0; $i<$numRows; $i++ ) {
-        echo mysql_result( $result, $i, "name" );
-        echo "#";
-        echo mysql_result( $result, $i, "score" );
-        echo "#";
-        echo mysql_result( $result, $i, "seed" );
-        echo "#";
-        echo mysql_result( $result, $i, "move_history" );
-        echo "\n";
-        }
-    
-    
     // drop those older than one day
     $query = "DELETE FROM $tableNamePrefix"."today_scores ".
         "WHERE post_date < ".
@@ -378,7 +359,28 @@ function ps_fetchScores() {
     if( $numRowsRemoved ) {
         ps_log( "Removed $numRowsRemoved stale scores from daily list." );
         }
+
     
+    
+    $query = "SELECT * FROM $tableNamePrefix"."today_scores ".
+        "ORDER BY score DESC LIMIT $listSize;";
+    $result = ps_queryDatabase( $query );
+
+    $numRows = mysql_numrows( $result );
+
+    echo "$numRows\n";
+
+    for( $i=0; $i<$numRows; $i++ ) {
+        echo mysql_result( $result, $i, "name" );
+        echo "#";
+        echo mysql_result( $result, $i, "score" );
+        echo "#";
+        echo mysql_result( $result, $i, "seed" );
+        echo "#";
+        echo mysql_result( $result, $i, "move_history" );
+        echo "\n";
+        }
+        
     }
 
 
@@ -386,7 +388,7 @@ function ps_fetchScores() {
 
 function ps_postScore() {
 
-    global $tableNamePrefix;
+    global $tableNamePrefix, $listSize;
     
     $name = "";
     $score = "";
@@ -457,8 +459,8 @@ function ps_postScore() {
     $addToAllTime = false;
     
     
-    // maintain only 5 in all-time-table
-    if( $numRows > 4 ) {
+    // maintain only $listSize in all-time-table
+    if( $numRows > $listSize - 1 ) {
 
         // lowest one in table
         $otherScore = mysql_result( $result, 0, "score" );

@@ -36,6 +36,10 @@ $enableLog = 1;
 $logAccessPassword = "secret";
 
 
+// number of score items to return on each list
+$listSize = 8;
+
+
 
 
 ?>
