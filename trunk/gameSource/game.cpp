@@ -47,13 +47,15 @@ GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
 
-#define numButtons 3
+#define numButtons 5
 
 Button *allButtons[ numButtons ];
 
 Button *undoButton;
 Button *menuButton;
 Button *doneButton;
+Button *playStopButton;
+Button *stepButton;
 
 
 #define numPanels 1
@@ -104,6 +106,11 @@ char playerName[9];
 
 ScoreBundle *gameToPlayback = NULL;
 int gamePlaybackStep = 0;
+char gamePlaybackDone = false;
+char autoPlay = false;
+int stepsSinceLastAutoMove = 0;
+int stepsBetweenAutoMoves = 25;
+char manualStep = false;
 
 
 
@@ -233,14 +240,31 @@ void newGame() {
     doneButton = new Button( undoButton->mX, 
                              menuButton->mY, "done" );
 
+    // up a bit from undo (to give space between play button)
+    stepButton = 
+        new Button( undoButton->mX, undoButton->mY - 10, "step" );
+
+    // same spot as done button
+    playStopButton = 
+        new Button( doneButton->mX, doneButton->mY, "stop" );
+
     allButtons[0] = undoButton;
     allButtons[1] = menuButton;
     allButtons[2] = doneButton;
+    allButtons[3] = playStopButton;
+    allButtons[4] = stepButton;
 
     undoButton->setVisible( false );
     menuButton->forceVisible();
     doneButton->setVisible( false );
     
+    playStopButton->setVisible( false );
+    stepButton->setVisible( false );
+    
+    
+    if( gameToPlayback != NULL ) {
+        playStopButton->setVisible( true );
+        }
 
     menuPanel = new MenuPanel( screenW, screenH );
     
@@ -281,6 +305,15 @@ void endGame() {
 
 void restartGame() {
     mustRestart = true;
+
+    // clear any game in playback
+    if( gameToPlayback != NULL ) {
+        delete gameToPlayback;
+        }
+    gameToPlayback = NULL;
+    gamePlaybackStep = 0;
+    gamePlaybackDone = false;
+    
     }
 
 
@@ -297,11 +330,18 @@ void playbackGame( ScoreBundle *inBundle ) {
         }
     gameToPlayback = inBundle;
     gamePlaybackStep = 0;
+    gamePlaybackDone = false;
     
+    // default to autoPlay
+    autoPlay = true;
+    stepsSinceLastAutoMove = 0;
+    manualStep = false;
+    
+
     printf( "Playing back game with moves:\n%s\n", inBundle->mMoveHistory );
     
 
-    restartGame();
+    mustRestart = true;
     }
 
 
@@ -549,11 +589,21 @@ void drawFrame() {
                 }
             
             if( full ) {
-                // game over
-                gameOver = true;
-                
-                doneButton->setVisible( true );
+                if( gameToPlayback == NULL ) {
+                    // game over
+                    gameOver = true;
+                    
+                    doneButton->setVisible( true );
+                    }
+                else {
+                    // done with playback
+                    playStopButton->setVisible( false );
+                    stepButton->setVisible( false );
+                    gamePlaybackDone = true;
+                    }
                 }
+            
+            
 
             
 
@@ -568,7 +618,7 @@ void drawFrame() {
             if( nextPiece->isSecondPiece() ) {
                 // allow undo of first piece
                 
-                if( !full ) {
+                if( !full && gameToPlayback == NULL ) {
                     undoButton->setVisible( true );
                     }
                 
@@ -611,43 +661,69 @@ void drawFrame() {
                 // placing new first piece
                 undoButton->setVisible( false );
                 }
+            }
+        
+        }
+    
+    // recheck animDone
+    if( animDone ) {    
+        animDone = true;
+        
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->step();
             
+            animDone &= allSpaces[i]->isAnimationDone();
+            }
+        }
+    
 
-            if( gameToPlayback != NULL ) {
-                // place next piece in playback
+
+    // check if we should auto/manual step replay game
+    // only step when animation from previous step done
+    // pause when sub-panels visible
+    char somePanelVisible = false;
+    
+    for( i=0; i<numPanels && !somePanelVisible; i++ ) {
+        if( allPanels[i]->isVisible() ) {
+            somePanelVisible = true;
+            }
+        }
+
+    if( animDone && !somePanelVisible ) {
+        
+        if( gameToPlayback != NULL && !gamePlaybackDone ) {
+            
+            if( autoPlay && stepsSinceLastAutoMove > stepsBetweenAutoMoves
+                ||
+                manualStep ) {
                 
+            
                 if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
                     
                     int spaceNumber = base49Decode( 
                         gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
                     
                     gamePlaybackStep ++;
-                
+                    
                     placeNextPieceAt( spaceNumber );
                     }
-                
+
+
+                stepsSinceLastAutoMove = 0;
+                manualStep = false;
+                }
+            else if( autoPlay ) {
+                // only step after animations done
+                stepsSinceLastAutoMove ++;
+                }
+            else if( !autoPlay ) {
+                // animations done, re-enable
+                stepButton->setVisible( true );
                 }
             
-
             }
-        
         }
     
-
-    if( gameToPlayback != NULL && gamePlaybackStep == 0 ) {
-        // play first move to get things started
-                
-        if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
-            
-            int spaceNumber = base49Decode( 
-                gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
-            
-            gamePlaybackStep ++;
-            
-            placeNextPieceAt( spaceNumber );
-            }
-        
-        }
 
     
     for( i=0; i<numGridSpaces; i++ ) {
@@ -747,7 +823,7 @@ void pointerDown( float inX, float inY ) {
 void pointerMove( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
-    printf( "Pointer %f,%f\n", pointerX, pointerY );
+    
     
     }
 
@@ -760,11 +836,8 @@ void pointerUp( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
     
-    if( piecePlaced ) {
-        // last placement still in progress
-        // ignore
-        return;
-        }
+    printf( "Pointer Up at %f,%f\n", pointerX, pointerY );
+    
     
     
     // pass through to visible panels
@@ -783,9 +856,57 @@ void pointerUp( float inX, float inY ) {
         // don't pass click to grid
         return;
         }
+
+
+    for( i=0; i<numButtons; i++ ) {
+        if( allButtons[i]->isVisible() && 
+            allButtons[i]->isInside( (int)pointerX, (int)pointerY ) ) {
+            
+            if( allButtons[i] == undoButton ) {
+                undoMove();
+                }
+            else if( allButtons[i] == menuButton ) {
+                menuPanel->setVisible( true );
+                }
+            else if( allButtons[i] == doneButton ) {
+                char *moveString = moveHistory.getElementString();
+                
+                ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,
+                                                  moveString );
+                delete [] moveString;
+
+                ( (MenuPanel*)menuPanel )->postScore( b );
+                } 
+            else if( allButtons[i] == playStopButton ) {
+                if( autoPlay ) {
+                    playStopButton->setString( "play" );
+                    }
+                else {
+                    playStopButton->setString( "stop" );
+                    }
+                autoPlay = !autoPlay;
+                
+                stepButton->setVisible( !autoPlay );                    
+                }
+            else if( allButtons[i] == stepButton ) {
+                manualStep = true;
+                // disable during step animations
+                stepButton->setVisible( false );
+                }
+            }
+        }
+
+
     
     if( gameToPlayback != NULL ) {
         // don't pass click to grid
+        return;
+        }
+    
+
+    if( piecePlaced ) {
+        // last placement still in progress
+        // ignore grid clicks
         return;
         }
     
@@ -822,28 +943,6 @@ void pointerUp( float inX, float inY ) {
         
         }
 
-    for( i=0; i<numButtons; i++ ) {
-        if( allButtons[i]->isVisible() && 
-            allButtons[i]->isInside( (int)pointerX, (int)pointerY ) ) {
-            
-            if( allButtons[i] == undoButton ) {
-                undoMove();
-                }
-            else if( allButtons[i] == menuButton ) {
-                menuPanel->setVisible( true );
-                }
-            else if( allButtons[i] == doneButton ) {
-                char *moveString = moveHistory.getElementString();
-                
-                ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,
-                                                  moveString );
-                delete [] moveString;
-
-                ( (MenuPanel*)menuPanel )->postScore( b );
-                }
-            
-            }
-        }
     
 
     
