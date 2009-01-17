@@ -371,7 +371,7 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
         playerName[ nameLength ] = '\0';
         
-        delete nameSetting;
+        delete [] nameSetting;
         }
     else {
         memcpy( playerName, "anon", 5 );
@@ -388,6 +388,12 @@ void freeFrameDrawer() {
     freeSpriteBank();
     
     endGame();
+
+    // we don't do this in endGame because sometimes we're ending
+    // last game before starting a new playback
+    if( gameToPlayback != NULL ) {
+        delete gameToPlayback;
+        }
     }
 
 

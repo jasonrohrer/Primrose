@@ -51,6 +51,10 @@ GridSpace::~GridSpace() {
     if( mDrawColor != NULL ) {
         delete mDrawColor;
         }
+    if( mSavedColor != NULL ) {
+        delete mSavedColor;
+        }
+    
     }
 
 
@@ -455,7 +459,14 @@ Color *GridSpace::checkSurrounded() {
                             // color mismatch
                             return NULL;
                             }
+                        else {
+                            delete c;
+                            }
                         }
+                    else {
+                        delete c;
+                        }
+                    
                     }
                 
                 }
