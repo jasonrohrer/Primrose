@@ -69,6 +69,8 @@ EditNamePanel::EditNamePanel( int inW, int inH )
                                              s );
                 }
             
+            delete [] s;
+            
 
             addButton( mKeyButtons[i] );
             
