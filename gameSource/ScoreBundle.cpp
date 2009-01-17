@@ -10,7 +10,8 @@ ScoreBundle::ScoreBundle( char *inName,
                           unsigned int inScore, unsigned int inSeed,
                           char *inMoveHistory )
     : mScore( inScore ), mSeed( inSeed ), 
-      mMoveHistory( stringDuplicate( inMoveHistory ) ) {
+      mMoveHistory( stringDuplicate( inMoveHistory ) ),
+      mNumMoves( strlen( inMoveHistory ) ) {
     
 
     int nameLength = strlen( inName );
@@ -25,8 +26,13 @@ ScoreBundle::ScoreBundle( char *inName,
 
 
 
-ScoreBundle::ScoreBundle( char *inEncoded ) {
+ScoreBundle::ScoreBundle( char *inEncoded )
+        : mScore( 0 ), mSeed( 0 ), mMoveHistory( NULL ),
+          mNumMoves( 0 ) {
     
+    mName[0] = '\0';
+    
+
     int numParts;
     
     char **parts = split( inEncoded, "#", &numParts );
@@ -49,12 +55,25 @@ ScoreBundle::ScoreBundle( char *inEncoded ) {
         
         int numRead = sscanf( parts[1],
                               "%u", &mScore );
+        if( numRead != 1 ) {
+            printf( "Failed to decode score bundle: %s\n", inEncoded );
+            }
         
         numRead = sscanf( parts[2],
                           "%u", &mSeed );
         
+        if( numRead != 1 ) {
+            printf( "Failed to decode score bundle: %s\n", inEncoded );
+            }
+        
+
         mMoveHistory = stringDuplicate( parts[3] );
+        mNumMoves = strlen( mMoveHistory );
         }
+    else {
+        printf( "Failed to decode score bundle: %s\n", inEncoded );
+        }
+    
     
 
     for( int i=0; i<numParts; i++ ) {
@@ -66,5 +85,14 @@ ScoreBundle::ScoreBundle( char *inEncoded ) {
     
         
 ScoreBundle::~ScoreBundle() {
-    delete [] mMoveHistory;
+    if( mMoveHistory != NULL ) {
+        delete [] mMoveHistory;
+        }
     }
+
+
+
+ScoreBundle *ScoreBundle::copy() {
+    return new ScoreBundle( mName, mScore, mSeed, mMoveHistory );
+    }
+

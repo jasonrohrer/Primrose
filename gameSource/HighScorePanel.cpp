@@ -18,6 +18,7 @@ HighScorePanel::HighScorePanel( int inW, int inH )
     
 
     int i=0;
+    int a=0;
     
     int xStep = inW / 2 - 10;
     int xStart = inW / 2 - (21 + 9);
@@ -39,7 +40,10 @@ HighScorePanel::HighScorePanel( int inW, int inH )
     
             addButton( mAllTimeButtons[i] );
             
+            mAllButtons[a] = mAllTimeButtons[i];
+            
             i++;
+            a++;
             }
         }
 
@@ -58,12 +62,16 @@ HighScorePanel::HighScorePanel( int inW, int inH )
                                              "play" );
     
             addButton( mTodayButtons[i] );
-            
+
+            mAllButtons[a] = mTodayButtons[i];
+
             i++;
+            a++;
             }
         }
-
     
+
+    clearScores();
     }
 
 
@@ -71,10 +79,8 @@ HighScorePanel::HighScorePanel( int inW, int inH )
 HighScorePanel::~HighScorePanel() {
     int i;
     
-    for( i=0; i<8; i++ ) {
-        delete mAllTimeButtons[i];
-        
-        delete mTodayButtons[i];
+    for( i=0; i<16; i++ ) {
+        delete mAllButtons[i];
         }
     
     clearScores();
@@ -94,19 +100,37 @@ void HighScorePanel::clearScores() {
 
     mAllTimeScores.deleteAll();
     mTodayScores.deleteAll();
+
+    for( i=0; i<16; i++ ) {
+        mAllScores[i] = NULL;
+        }
     }
 
 
         
 void HighScorePanel::addAllTimeScore( ScoreBundle *inScore ) {
-    mAllTimeScores.push_back( inScore );
+    if( mAllTimeScores.size() < 8 ) {
+        mAllTimeScores.push_back( inScore );
+        mAllScores[ mAllTimeScores.size() - 1 ] = ( inScore );
+        }
+    else {
+        printf( "More than 8 scores added to all-time display\n" );
+        }
     }
 
 
 
 void HighScorePanel::addTodayScore( ScoreBundle *inScore ) {
-    mTodayScores.push_back( inScore );
+    if( mTodayScores.size() < 8 ) {
+        mTodayScores.push_back( inScore );
+        // skip 8 all-time slots in array
+        mAllScores[ 8 + mTodayScores.size() - 1 ] = ( inScore );
+        }
+    else {
+        printf( "More than 8 scores added to today display\n" );
+        }
     }
+
 
 
 void HighScorePanel::setVisible( char inIsVisible ) {
@@ -117,13 +141,11 @@ void HighScorePanel::setVisible( char inIsVisible ) {
     
     int i;
     
-    for( i = mAllTimeScores.size(); i<8; i++ ) {
-        mAllTimeButtons[i]->setVisible( false );
+    for( i = 0; i<16; i++ ) {
+        if( mAllScores[i] == NULL ) {
+            mAllButtons[i]->setVisible( false );
+            }
         }
-    for( i = mTodayScores.size(); i<8; i++ ) {
-        mTodayButtons[i]->setVisible( false );
-        }
-    
     }
 
 
@@ -138,21 +160,29 @@ char HighScorePanel::pointerUp( int inX, int inY ) {
     
 
     if( ! isSubPanelVisible() ) {
+    
+
+        int i;
         
-
-        // FIXME:  check for PLAY buttons
-        // then jump right to game screen by doing this:
-        if( mMenuPanel != NULL ) {
-            mMenuPanel->forceInvisible();
+        for( i = 0; i<16; i++ ) {
+            if( mAllButtons[i]->isVisible() &&
+                mAllScores[i] != NULL &&
+                mAllButtons[i]->isInside( inX, inY ) ) {
+                
+                // FIXME:  check for PLAY buttons
+                // then jump right to game screen by doing this:
+                if( mMenuPanel != NULL ) {
+                    mMenuPanel->forceInvisible();
+                    }
+                setVisible( false );
+                
+                playbackGame( mAllScores[i]->copy() );
+                }
             }
-
         }
     
     return false;
     }
-
-
-
 
 Color scoreHeaderColor( 76/255.0, 76/255.0, 255/255.0 );
 

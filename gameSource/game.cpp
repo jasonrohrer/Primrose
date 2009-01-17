@@ -11,6 +11,8 @@
 #include "Panel.h"
 #include "MenuPanel.h"
 
+#include "ScoreBundle.h"
+
 
 
 #include <stdio.h>
@@ -97,8 +99,12 @@ char gameOver = false;
 // for scheduling a restart
 char mustRestart = false;
 
-
 char playerName[9];
+
+
+ScoreBundle *gameToPlayback = NULL;
+int gamePlaybackStep = 0;
+
 
 
 
@@ -118,6 +124,17 @@ char base49Encode( int inNumber ) {
     }
 
 
+int base49Decode( char inLetter ) {
+    if( inLetter < 'A' + 26 ) {
+        return inLetter - 'A';
+        }
+    else {
+        return inLetter - 'a' + 26;
+        }
+    }
+
+
+
 SimpleVector<char> moveHistory;
 
 
@@ -127,7 +144,14 @@ SimpleVector<char> moveHistory;
 void newGame() {
     moveHistory.deleteAll();
     
-    gameSeed = time( NULL );
+    if( gameToPlayback == NULL ) {
+        
+        gameSeed = time( NULL );
+        }
+    else {
+        gameSeed = gameToPlayback->mSeed;
+        }
+    
     randSource.reseed( gameSeed );
     
     
@@ -267,6 +291,18 @@ char isGameOver() {
 
 
 
+void playbackGame( ScoreBundle *inBundle ) {
+    if( gameToPlayback != NULL ) {
+        delete gameToPlayback;
+        }
+    gameToPlayback = inBundle;
+    gamePlaybackStep = 0;
+    
+    printf( "Playing back game with moves:\n%s\n", inBundle->mMoveHistory );
+    
+
+    restartGame();
+    }
 
 
 
@@ -392,7 +428,58 @@ char checkAndClear() {
     return someCleared;
     }
 
+
+
+
+void placeNextPieceAt( int inSpaceNumber ) {
+    
+    char considerNonActive = true;
+    if( nextPiece->isSecondPiece() ) {
+        considerNonActive = false;
+        }
+
+    char encodedMove = base49Encode( inSpaceNumber );
+    
+    moveHistory.push_back( encodedMove );
+
+
+    // save previous state for undo
+    int i;
+    
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->saveState();
+        }
+    nextPiece->saveState();
+    
+    randSource.saveState();
+    
+    savedScore = score;
+                
+    
+    allSpaces[inSpaceNumber]->setColor( nextPiece->getNextPiece() );
+    piecePlaced = true;
+    levelOfPlacement = colorPool->getLevel();
+                
+    colorPool->registerMove();
+                            
+                
+    lastGridY = inSpaceNumber / gridW;
+    lastGridX = inSpaceNumber % gridW;
+                
+    // reset chain length counter
+    chainLength = 1;
+    
+    
+    if( !considerNonActive ) {
+        // just placed in an active spot (second piece)
         
+        
+        // all to non-active
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->mActive = false;
+            }
+        }
+    }
 
 
 
@@ -526,11 +613,41 @@ void drawFrame() {
                 }
             
 
+            if( gameToPlayback != NULL ) {
+                // place next piece in playback
+                
+                if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
+                    
+                    int spaceNumber = base49Decode( 
+                        gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
+                    
+                    gamePlaybackStep ++;
+                
+                    placeNextPieceAt( spaceNumber );
+                    }
+                
+                }
+            
+
             }
         
         }
     
 
+    if( gameToPlayback != NULL && gamePlaybackStep == 0 ) {
+        // play first move to get things started
+                
+        if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
+            
+            int spaceNumber = base49Decode( 
+                gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
+            
+            gamePlaybackStep ++;
+            
+            placeNextPieceAt( spaceNumber );
+            }
+        
+        }
 
     
     for( i=0; i<numGridSpaces; i++ ) {
@@ -667,6 +784,11 @@ void pointerUp( float inX, float inY ) {
         return;
         }
     
+    if( gameToPlayback != NULL ) {
+        // don't pass click to grid
+        return;
+        }
+    
 
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
@@ -693,47 +815,7 @@ void pointerUp( float inX, float inY ) {
                 
                 i = y * gridW + x;
                 
-                char encodedMove = base49Encode( i );
-                
-                moveHistory.push_back( encodedMove );
-
-
-                // save previous state for undo
-                for( i=0; i<numGridSpaces; i++ ) {
-                    allSpaces[i]->saveState();
-                    }
-                nextPiece->saveState();
-                
-                randSource.saveState();
-                
-                savedScore = score;
-                
-                
-                space->setColor( nextPiece->getNextPiece() );
-                piecePlaced = true;
-                levelOfPlacement = colorPool->getLevel();
-                
-                colorPool->registerMove();
-                            
-                
-                lastGridY = y;
-                lastGridX = x;
-                
-                // reset chain length counter
-                chainLength = 1;
-                
-                
-                if( !considerNonActive ) {
-                    // just placed in an active spot (second piece)
-
-                    int i;
-        
-                    // all to non-active
-                    for( i=0; i<numGridSpaces; i++ ) {
-                        allSpaces[i]->mActive = false;
-                        }
-                    }
-                
+                placeNextPieceAt( i );
                 }
             }
         
