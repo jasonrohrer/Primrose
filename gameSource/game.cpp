@@ -544,12 +544,12 @@ void drawFrame() {
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
     if( scoreTransitionProgress < 1 ) {
-        drawScore( lastScore, 320 - 19, nextPiece->mY + 41, &scoreColor,
-                   1 - scoreTransitionProgress );
+        drawScoreBig( lastScore, 320 - 19, nextPiece->mY + 41, &scoreColor,
+                      1 - scoreTransitionProgress );
         }
     
-    drawScore( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
-               scoreTransitionProgress );
+    drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
+                  scoreTransitionProgress );
     
     glDisable( GL_BLEND );
     

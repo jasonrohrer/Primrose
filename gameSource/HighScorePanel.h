@@ -28,6 +28,8 @@ class HighScorePanel : public Panel {
         
 
         // overrides these:
+        void setVisible( char inIsVisible );
+        
         char pointerUp( int inX, int inY );
         
 
@@ -46,6 +48,9 @@ class HighScorePanel : public Panel {
         
         Panel *mLoadingPanel;
         
+
+        Button *mAllTimeButtons[8];
+        Button *mTodayButtons[8];
     };
 
 
