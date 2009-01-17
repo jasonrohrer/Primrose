@@ -379,6 +379,12 @@ void HighScoreLoadingPanel::drawBase() {
 
 
 void HighScoreLoadingPanel::closePressed() {
+    
+    if( mWebRequest != NULL ) {
+        delete mWebRequest;
+        }
+    mWebRequest = NULL;
+    
     }
 
 
