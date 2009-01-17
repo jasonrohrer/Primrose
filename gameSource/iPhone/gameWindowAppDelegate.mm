@@ -291,7 +291,7 @@ int appFrameCount = 0;
 	CGPoint	location = [touch locationInView:self];
 	//location.y = bounds.size.height - location.y;
     
-    pointerUp( location.x, location.y );
+    pointerDown( location.x, location.y );
 }
 
 
