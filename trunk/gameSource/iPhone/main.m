@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 // for DNS resolution
-#import <Foundation/NSHost.h>
+//#import <Foundation/NSHost.h>
+//#import <CFNetwork/CFHost.h>
 #import <dns_sd.h>
 
 
@@ -43,9 +44,10 @@ bool resolveHostname( char *inHostname ) {
 		fd_set readfds;
 		struct timeval tv;
         
+        // ten second timeout
 		FD_ZERO( &readfds );
 		FD_SET( dns_sd_fd, &readfds );
-		tv.tv_sec = DNS_RESOLV_TIMEOUT;
+		tv.tv_sec = 10;
 		tv.tv_usec = 0;
 		bool ret = false;
 		int result = 
@@ -54,9 +56,12 @@ bool resolveHostname( char *inHostname ) {
 		if( result > 0 ) {
 			if( FD_ISSET( dns_sd_fd, &readfds ) ) {
 				//remove this if you want to compile in c, not obj-c
+                /*
+                    NSHost not on iPhone???
 				NSLog( @"resolved %s to %@", 
                        inHostname, [ [ NSHost hostWithName: name ] address ] );
-				ret = true;
+				*/
+                ret = true;
                 }
             }
 		//clean up and return accordingly
