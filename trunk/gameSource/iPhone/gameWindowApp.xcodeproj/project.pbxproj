@@ -21,18 +21,6 @@
 		DA34BCE50F1E7CA200126D0F /* stringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA34BCE30F1E7CA200126D0F /* stringUtils.cpp */; };
 		DA34BCE70F1E7CBB00126D0F /* TypeIOLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA34BCE60F1E7CBB00126D0F /* TypeIOLinux.cpp */; };
 		DA34BCE90F1E7CD300126D0F /* PathLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA34BCE80F1E7CD300126D0F /* PathLinux.cpp */; };
-		DA34BD2D0F1E88D500126D0F /* gridLineBottom.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD210F1E88D500126D0F /* gridLineBottom.tga */; };
-		DA34BD2E0F1E88D500126D0F /* gridLineLeft.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD220F1E88D500126D0F /* gridLineLeft.tga */; };
-		DA34BD2F0F1E88D500126D0F /* gridLineRight.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD230F1E88D500126D0F /* gridLineRight.tga */; };
-		DA34BD300F1E88D500126D0F /* gridLineTop.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD240F1E88D500126D0F /* gridLineTop.tga */; };
-		DA34BD310F1E88D500126D0F /* numerals.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD250F1E88D500126D0F /* numerals.tga */; };
-		DA34BD320F1E88D500126D0F /* numeralsBig.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD260F1E88D500126D0F /* numeralsBig.tga */; };
-		DA34BD330F1E88D500126D0F /* piece.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD270F1E88D500126D0F /* piece.tga */; };
-		DA34BD340F1E88D500126D0F /* pieceBrightCenter.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD280F1E88D500126D0F /* pieceBrightCenter.tga */; };
-		DA34BD350F1E88D500126D0F /* pieceBrightHalo.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD290F1E88D500126D0F /* pieceBrightHalo.tga */; };
-		DA34BD360F1E88D500126D0F /* pieceCenter.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD2A0F1E88D500126D0F /* pieceCenter.tga */; };
-		DA34BD370F1E88D500126D0F /* pieceHalo.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD2B0F1E88D500126D0F /* pieceHalo.tga */; };
-		DA34BD380F1E88D500126D0F /* plus.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA34BD2C0F1E88D500126D0F /* plus.tga */; };
 		DA34BD3E0F1E8A9B00126D0F /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA34BD3D0F1E8A9B00126D0F /* common.cpp */; };
 		DA7F11810EF6D77000CB6D50 /* gameWindowAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */; };
 		DA8277840EF9FFE80061079D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8277830EF9FFE80061079D /* Icon.png */; };
@@ -40,6 +28,40 @@
 		DA90DD4A0EFADE15001BABB5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA90DD490EFADE15001BABB5 /* AudioToolbox.framework */; };
 		DA9E302E0EFC010300DFACC7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9E302C0EFC010300DFACC7 /* QuartzCore.framework */; };
 		DA9E302F0EFC010300DFACC7 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9E302D0EFC010300DFACC7 /* OpenGLES.framework */; };
+		DA9F424C0F224992005574AF /* WebRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42440F224992005574AF /* WebRequest.cpp */; };
+		DA9F424D0F224992005574AF /* ScoreBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42450F224992005574AF /* ScoreBundle.cpp */; };
+		DA9F424E0F224992005574AF /* Panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42460F224992005574AF /* Panel.cpp */; };
+		DA9F424F0F224992005574AF /* MenuPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42470F224992005574AF /* MenuPanel.cpp */; };
+		DA9F42500F224992005574AF /* HighScorePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42480F224992005574AF /* HighScorePanel.cpp */; };
+		DA9F42510F224992005574AF /* HighScoreLoadingPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */; };
+		DA9F42520F224992005574AF /* EditNamePanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F424A0F224992005574AF /* EditNamePanel.cpp */; };
+		DA9F42530F224992005574AF /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F424B0F224992005574AF /* Button.cpp */; };
+		DA9F426F0F224A69005574AF /* LookupThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F426E0F224A69005574AF /* LookupThread.cpp */; };
+		DA9F42740F224A8F005574AF /* ThreadLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42730F224A8F005574AF /* ThreadLinux.cpp */; };
+		DA9F42790F224AA9005574AF /* SettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42780F224AA9005574AF /* SettingsManager.cpp */; };
+		DA9F427B0F224AB7005574AF /* MutexLockLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F427A0F224AB7005574AF /* MutexLockLinux.cpp */; };
+		DA9F42820F224AEF005574AF /* HostAddressLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */; };
+		DA9F42830F224AEF005574AF /* SocketClientLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42800F224AEF005574AF /* SocketClientLinux.cpp */; };
+		DA9F42840F224AEF005574AF /* SocketLinux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42810F224AEF005574AF /* SocketLinux.cpp */; };
+		DA9F42910F224C10005574AF /* NetworkFunctionLocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F42900F224C10005574AF /* NetworkFunctionLocks.cpp */; };
+		DA9F42AA0F224D4E005574AF /* abcdefghijkl.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42980F224D4E005574AF /* abcdefghijkl.tga */; };
+		DA9F42AB0F224D4E005574AF /* gridLineBottom.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42990F224D4E005574AF /* gridLineBottom.tga */; };
+		DA9F42AC0F224D4E005574AF /* gridLineLeft.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429A0F224D4E005574AF /* gridLineLeft.tga */; };
+		DA9F42AD0F224D4E005574AF /* gridLineRight.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429B0F224D4E005574AF /* gridLineRight.tga */; };
+		DA9F42AE0F224D4E005574AF /* gridLineTop.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429C0F224D4E005574AF /* gridLineTop.tga */; };
+		DA9F42AF0F224D4E005574AF /* mnopqrstuvwx.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429D0F224D4E005574AF /* mnopqrstuvwx.tga */; };
+		DA9F42B00F224D4E005574AF /* mnopqrstuvwx_big.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429E0F224D4E005574AF /* mnopqrstuvwx_big.tga */; };
+		DA9F42B10F224D4E005574AF /* numerals.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F429F0F224D4E005574AF /* numerals.tga */; };
+		DA9F42B20F224D4E005574AF /* numeralsBig.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A00F224D4E005574AF /* numeralsBig.tga */; };
+		DA9F42B30F224D4E005574AF /* piece.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A10F224D4E005574AF /* piece.tga */; };
+		DA9F42B40F224D4E005574AF /* pieceBrightCenter.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A20F224D4E005574AF /* pieceBrightCenter.tga */; };
+		DA9F42B50F224D4E005574AF /* pieceBrightHalo.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A30F224D4E005574AF /* pieceBrightHalo.tga */; };
+		DA9F42B60F224D4E005574AF /* pieceHalo.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A40F224D4E005574AF /* pieceHalo.tga */; };
+		DA9F42B70F224D4E005574AF /* pieceCenter.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A50F224D4E005574AF /* pieceCenter.tga */; };
+		DA9F42B80F224D4E005574AF /* plus.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A60F224D4E005574AF /* plus.tga */; };
+		DA9F42B90F224D4E005574AF /* yzplus_big.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A70F224D4E005574AF /* yzplus_big.tga */; };
+		DA9F42BA0F224D4E005574AF /* yzplus.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A80F224D4E005574AF /* yzplus.tga */; };
+		DA9F42BB0F224D4E005574AF /* abcdefghijkl_big.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A90F224D4E005574AF /* abcdefghijkl_big.tga */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,18 +90,6 @@
 		DA34BCE60F1E7CBB00126D0F /* TypeIOLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TypeIOLinux.cpp; path = ../../../../minorGems/io/linux/TypeIOLinux.cpp; sourceTree = SOURCE_ROOT; };
 		DA34BCE80F1E7CD300126D0F /* PathLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PathLinux.cpp; path = ../../../../minorGems/io/file/linux/PathLinux.cpp; sourceTree = SOURCE_ROOT; };
 		DA34BCF80F1E804C00126D0F /* SingleTextureGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleTextureGL.h; path = ../../../../minorGems/graphics/openGL/SingleTextureGL.h; sourceTree = SOURCE_ROOT; };
-		DA34BD210F1E88D500126D0F /* gridLineBottom.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineBottom.tga; path = ../graphics/gridLineBottom.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD220F1E88D500126D0F /* gridLineLeft.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineLeft.tga; path = ../graphics/gridLineLeft.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD230F1E88D500126D0F /* gridLineRight.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineRight.tga; path = ../graphics/gridLineRight.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD240F1E88D500126D0F /* gridLineTop.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineTop.tga; path = ../graphics/gridLineTop.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD250F1E88D500126D0F /* numerals.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = numerals.tga; path = ../graphics/numerals.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD260F1E88D500126D0F /* numeralsBig.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = numeralsBig.tga; path = ../graphics/numeralsBig.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD270F1E88D500126D0F /* piece.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = piece.tga; path = ../graphics/piece.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD280F1E88D500126D0F /* pieceBrightCenter.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceBrightCenter.tga; path = ../graphics/pieceBrightCenter.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD290F1E88D500126D0F /* pieceBrightHalo.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceBrightHalo.tga; path = ../graphics/pieceBrightHalo.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD2A0F1E88D500126D0F /* pieceCenter.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceCenter.tga; path = ../graphics/pieceCenter.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD2B0F1E88D500126D0F /* pieceHalo.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceHalo.tga; path = ../graphics/pieceHalo.tga; sourceTree = SOURCE_ROOT; };
-		DA34BD2C0F1E88D500126D0F /* plus.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = plus.tga; path = ../graphics/plus.tga; sourceTree = SOURCE_ROOT; };
 		DA34BD3D0F1E8A9B00126D0F /* common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = common.cpp; sourceTree = "<group>"; };
 		DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = gameWindowAppDelegate.mm; sourceTree = "<group>"; };
 		DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameWindowAppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +98,49 @@
 		DA90DD490EFADE15001BABB5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DA9E302C0EFC010300DFACC7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DA9E302D0EFC010300DFACC7 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		DA9F423B0F224970005574AF /* WebRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WebRequest.h; path = ../WebRequest.h; sourceTree = SOURCE_ROOT; };
+		DA9F423C0F224970005574AF /* ScoreBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScoreBundle.h; path = ../ScoreBundle.h; sourceTree = SOURCE_ROOT; };
+		DA9F423D0F224970005574AF /* Panel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Panel.h; path = ../Panel.h; sourceTree = SOURCE_ROOT; };
+		DA9F423E0F224970005574AF /* MenuPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuPanel.h; path = ../MenuPanel.h; sourceTree = SOURCE_ROOT; };
+		DA9F423F0F224970005574AF /* HighScorePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighScorePanel.h; path = ../HighScorePanel.h; sourceTree = SOURCE_ROOT; };
+		DA9F42400F224970005574AF /* HighScoreLoadingPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighScoreLoadingPanel.h; path = ../HighScoreLoadingPanel.h; sourceTree = SOURCE_ROOT; };
+		DA9F42410F224970005574AF /* gameControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gameControl.h; path = ../gameControl.h; sourceTree = SOURCE_ROOT; };
+		DA9F42420F224970005574AF /* EditNamePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditNamePanel.h; path = ../EditNamePanel.h; sourceTree = SOURCE_ROOT; };
+		DA9F42430F224970005574AF /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = ../Button.h; sourceTree = SOURCE_ROOT; };
+		DA9F42440F224992005574AF /* WebRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WebRequest.cpp; path = ../WebRequest.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42450F224992005574AF /* ScoreBundle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScoreBundle.cpp; path = ../ScoreBundle.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42460F224992005574AF /* Panel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Panel.cpp; path = ../Panel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42470F224992005574AF /* MenuPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MenuPanel.cpp; path = ../MenuPanel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42480F224992005574AF /* HighScorePanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HighScorePanel.cpp; path = ../HighScorePanel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HighScoreLoadingPanel.cpp; path = ../HighScoreLoadingPanel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F424A0F224992005574AF /* EditNamePanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EditNamePanel.cpp; path = ../EditNamePanel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F424B0F224992005574AF /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Button.cpp; path = ../Button.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F426E0F224A69005574AF /* LookupThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LookupThread.cpp; path = ../../../../minorGems/network/LookupThread.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42730F224A8F005574AF /* ThreadLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThreadLinux.cpp; path = ../../../../minorGems/system/linux/ThreadLinux.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42780F224AA9005574AF /* SettingsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SettingsManager.cpp; path = ../../../../minorGems/util/SettingsManager.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F427A0F224AB7005574AF /* MutexLockLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutexLockLinux.cpp; path = ../../../../minorGems/system/linux/MutexLockLinux.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HostAddressLinux.cpp; path = ../../../../minorGems/network/linux/HostAddressLinux.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42800F224AEF005574AF /* SocketClientLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocketClientLinux.cpp; path = ../../../../minorGems/network/linux/SocketClientLinux.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42810F224AEF005574AF /* SocketLinux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SocketLinux.cpp; path = ../../../../minorGems/network/linux/SocketLinux.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42900F224C10005574AF /* NetworkFunctionLocks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkFunctionLocks.cpp; path = ../../../../minorGems/network/NetworkFunctionLocks.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F42980F224D4E005574AF /* abcdefghijkl.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = abcdefghijkl.tga; path = ../graphics/abcdefghijkl.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42990F224D4E005574AF /* gridLineBottom.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineBottom.tga; path = ../graphics/gridLineBottom.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429A0F224D4E005574AF /* gridLineLeft.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineLeft.tga; path = ../graphics/gridLineLeft.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429B0F224D4E005574AF /* gridLineRight.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineRight.tga; path = ../graphics/gridLineRight.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429C0F224D4E005574AF /* gridLineTop.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = gridLineTop.tga; path = ../graphics/gridLineTop.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429D0F224D4E005574AF /* mnopqrstuvwx.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = mnopqrstuvwx.tga; path = ../graphics/mnopqrstuvwx.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429E0F224D4E005574AF /* mnopqrstuvwx_big.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = mnopqrstuvwx_big.tga; path = ../graphics/mnopqrstuvwx_big.tga; sourceTree = SOURCE_ROOT; };
+		DA9F429F0F224D4E005574AF /* numerals.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = numerals.tga; path = ../graphics/numerals.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A00F224D4E005574AF /* numeralsBig.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = numeralsBig.tga; path = ../graphics/numeralsBig.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A10F224D4E005574AF /* piece.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = piece.tga; path = ../graphics/piece.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A20F224D4E005574AF /* pieceBrightCenter.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceBrightCenter.tga; path = ../graphics/pieceBrightCenter.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A30F224D4E005574AF /* pieceBrightHalo.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceBrightHalo.tga; path = ../graphics/pieceBrightHalo.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A40F224D4E005574AF /* pieceHalo.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceHalo.tga; path = ../graphics/pieceHalo.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A50F224D4E005574AF /* pieceCenter.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = pieceCenter.tga; path = ../graphics/pieceCenter.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A60F224D4E005574AF /* plus.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = plus.tga; path = ../graphics/plus.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A70F224D4E005574AF /* yzplus_big.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = yzplus_big.tga; path = ../graphics/yzplus_big.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A80F224D4E005574AF /* yzplus.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = yzplus.tga; path = ../graphics/yzplus.tga; sourceTree = SOURCE_ROOT; };
+		DA9F42A90F224D4E005574AF /* abcdefghijkl_big.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = abcdefghijkl_big.tga; path = ../graphics/abcdefghijkl_big.tga; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,18 +225,24 @@
 		DA12F2FB0EF6E6B100A40C6D /* graphics */ = {
 			isa = PBXGroup;
 			children = (
-				DA34BD210F1E88D500126D0F /* gridLineBottom.tga */,
-				DA34BD220F1E88D500126D0F /* gridLineLeft.tga */,
-				DA34BD230F1E88D500126D0F /* gridLineRight.tga */,
-				DA34BD240F1E88D500126D0F /* gridLineTop.tga */,
-				DA34BD250F1E88D500126D0F /* numerals.tga */,
-				DA34BD260F1E88D500126D0F /* numeralsBig.tga */,
-				DA34BD270F1E88D500126D0F /* piece.tga */,
-				DA34BD280F1E88D500126D0F /* pieceBrightCenter.tga */,
-				DA34BD290F1E88D500126D0F /* pieceBrightHalo.tga */,
-				DA34BD2A0F1E88D500126D0F /* pieceCenter.tga */,
-				DA34BD2B0F1E88D500126D0F /* pieceHalo.tga */,
-				DA34BD2C0F1E88D500126D0F /* plus.tga */,
+				DA9F42980F224D4E005574AF /* abcdefghijkl.tga */,
+				DA9F42990F224D4E005574AF /* gridLineBottom.tga */,
+				DA9F429A0F224D4E005574AF /* gridLineLeft.tga */,
+				DA9F429B0F224D4E005574AF /* gridLineRight.tga */,
+				DA9F429C0F224D4E005574AF /* gridLineTop.tga */,
+				DA9F429D0F224D4E005574AF /* mnopqrstuvwx.tga */,
+				DA9F429E0F224D4E005574AF /* mnopqrstuvwx_big.tga */,
+				DA9F429F0F224D4E005574AF /* numerals.tga */,
+				DA9F42A00F224D4E005574AF /* numeralsBig.tga */,
+				DA9F42A10F224D4E005574AF /* piece.tga */,
+				DA9F42A20F224D4E005574AF /* pieceBrightCenter.tga */,
+				DA9F42A30F224D4E005574AF /* pieceBrightHalo.tga */,
+				DA9F42A40F224D4E005574AF /* pieceHalo.tga */,
+				DA9F42A50F224D4E005574AF /* pieceCenter.tga */,
+				DA9F42A60F224D4E005574AF /* plus.tga */,
+				DA9F42A70F224D4E005574AF /* yzplus_big.tga */,
+				DA9F42A80F224D4E005574AF /* yzplus.tga */,
+				DA9F42A90F224D4E005574AF /* abcdefghijkl_big.tga */,
 			);
 			name = graphics;
 			sourceTree = "<group>";
@@ -212,6 +271,23 @@
 				DA34BCD70F1E7BB200126D0F /* numeral.cpp */,
 				DA34BCD80F1E7BB200126D0F /* NextPieceDisplay.cpp */,
 				DA34BCD90F1E7BB200126D0F /* GridSpace.cpp */,
+				DA9F423B0F224970005574AF /* WebRequest.h */,
+				DA9F423C0F224970005574AF /* ScoreBundle.h */,
+				DA9F423D0F224970005574AF /* Panel.h */,
+				DA9F423E0F224970005574AF /* MenuPanel.h */,
+				DA9F423F0F224970005574AF /* HighScorePanel.h */,
+				DA9F42400F224970005574AF /* HighScoreLoadingPanel.h */,
+				DA9F42410F224970005574AF /* gameControl.h */,
+				DA9F42420F224970005574AF /* EditNamePanel.h */,
+				DA9F42430F224970005574AF /* Button.h */,
+				DA9F42440F224992005574AF /* WebRequest.cpp */,
+				DA9F42450F224992005574AF /* ScoreBundle.cpp */,
+				DA9F42460F224992005574AF /* Panel.cpp */,
+				DA9F42470F224992005574AF /* MenuPanel.cpp */,
+				DA9F42480F224992005574AF /* HighScorePanel.cpp */,
+				DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */,
+				DA9F424A0F224992005574AF /* EditNamePanel.cpp */,
+				DA9F424B0F224992005574AF /* Button.cpp */,
 				DA8C9E030EF80930002FCA67 /* minorGems */,
 			);
 			name = Unchanged;
@@ -226,6 +302,14 @@
 				DA34BCE30F1E7CA200126D0F /* stringUtils.cpp */,
 				DA34BCE60F1E7CBB00126D0F /* TypeIOLinux.cpp */,
 				DA34BCE80F1E7CD300126D0F /* PathLinux.cpp */,
+				DA9F426E0F224A69005574AF /* LookupThread.cpp */,
+				DA9F42730F224A8F005574AF /* ThreadLinux.cpp */,
+				DA9F42780F224AA9005574AF /* SettingsManager.cpp */,
+				DA9F427A0F224AB7005574AF /* MutexLockLinux.cpp */,
+				DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */,
+				DA9F42800F224AEF005574AF /* SocketClientLinux.cpp */,
+				DA9F42810F224AEF005574AF /* SocketLinux.cpp */,
+				DA9F42900F224C10005574AF /* NetworkFunctionLocks.cpp */,
 			);
 			name = minorGems;
 			sourceTree = "<group>";
@@ -275,18 +359,24 @@
 			files = (
 				DA86AEC90EF53C7100054E6B /* MainWindow.xib in Resources */,
 				DA8277840EF9FFE80061079D /* Icon.png in Resources */,
-				DA34BD2D0F1E88D500126D0F /* gridLineBottom.tga in Resources */,
-				DA34BD2E0F1E88D500126D0F /* gridLineLeft.tga in Resources */,
-				DA34BD2F0F1E88D500126D0F /* gridLineRight.tga in Resources */,
-				DA34BD300F1E88D500126D0F /* gridLineTop.tga in Resources */,
-				DA34BD310F1E88D500126D0F /* numerals.tga in Resources */,
-				DA34BD320F1E88D500126D0F /* numeralsBig.tga in Resources */,
-				DA34BD330F1E88D500126D0F /* piece.tga in Resources */,
-				DA34BD340F1E88D500126D0F /* pieceBrightCenter.tga in Resources */,
-				DA34BD350F1E88D500126D0F /* pieceBrightHalo.tga in Resources */,
-				DA34BD360F1E88D500126D0F /* pieceCenter.tga in Resources */,
-				DA34BD370F1E88D500126D0F /* pieceHalo.tga in Resources */,
-				DA34BD380F1E88D500126D0F /* plus.tga in Resources */,
+				DA9F42AA0F224D4E005574AF /* abcdefghijkl.tga in Resources */,
+				DA9F42AB0F224D4E005574AF /* gridLineBottom.tga in Resources */,
+				DA9F42AC0F224D4E005574AF /* gridLineLeft.tga in Resources */,
+				DA9F42AD0F224D4E005574AF /* gridLineRight.tga in Resources */,
+				DA9F42AE0F224D4E005574AF /* gridLineTop.tga in Resources */,
+				DA9F42AF0F224D4E005574AF /* mnopqrstuvwx.tga in Resources */,
+				DA9F42B00F224D4E005574AF /* mnopqrstuvwx_big.tga in Resources */,
+				DA9F42B10F224D4E005574AF /* numerals.tga in Resources */,
+				DA9F42B20F224D4E005574AF /* numeralsBig.tga in Resources */,
+				DA9F42B30F224D4E005574AF /* piece.tga in Resources */,
+				DA9F42B40F224D4E005574AF /* pieceBrightCenter.tga in Resources */,
+				DA9F42B50F224D4E005574AF /* pieceBrightHalo.tga in Resources */,
+				DA9F42B60F224D4E005574AF /* pieceHalo.tga in Resources */,
+				DA9F42B70F224D4E005574AF /* pieceCenter.tga in Resources */,
+				DA9F42B80F224D4E005574AF /* plus.tga in Resources */,
+				DA9F42B90F224D4E005574AF /* yzplus_big.tga in Resources */,
+				DA9F42BA0F224D4E005574AF /* yzplus.tga in Resources */,
+				DA9F42BB0F224D4E005574AF /* abcdefghijkl_big.tga in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +417,22 @@
 				DA34BCE70F1E7CBB00126D0F /* TypeIOLinux.cpp in Sources */,
 				DA34BCE90F1E7CD300126D0F /* PathLinux.cpp in Sources */,
 				DA34BD3E0F1E8A9B00126D0F /* common.cpp in Sources */,
+				DA9F424C0F224992005574AF /* WebRequest.cpp in Sources */,
+				DA9F424D0F224992005574AF /* ScoreBundle.cpp in Sources */,
+				DA9F424E0F224992005574AF /* Panel.cpp in Sources */,
+				DA9F424F0F224992005574AF /* MenuPanel.cpp in Sources */,
+				DA9F42500F224992005574AF /* HighScorePanel.cpp in Sources */,
+				DA9F42510F224992005574AF /* HighScoreLoadingPanel.cpp in Sources */,
+				DA9F42520F224992005574AF /* EditNamePanel.cpp in Sources */,
+				DA9F42530F224992005574AF /* Button.cpp in Sources */,
+				DA9F426F0F224A69005574AF /* LookupThread.cpp in Sources */,
+				DA9F42740F224A8F005574AF /* ThreadLinux.cpp in Sources */,
+				DA9F42790F224AA9005574AF /* SettingsManager.cpp in Sources */,
+				DA9F427B0F224AB7005574AF /* MutexLockLinux.cpp in Sources */,
+				DA9F42820F224AEF005574AF /* HostAddressLinux.cpp in Sources */,
+				DA9F42830F224AEF005574AF /* SocketClientLinux.cpp in Sources */,
+				DA9F42840F224AEF005574AF /* SocketLinux.cpp in Sources */,
+				DA9F42910F224C10005574AF /* NetworkFunctionLocks.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +453,10 @@
 					/Users/jasonrohrer/cpp,
 				);
 				INFOPLIST_FILE = Info.plist;
+				OTHER_CFLAGS = (
+					"-DBSD",
+					"-DIPHONE",
+				);
 				PRODUCT_NAME = tileGame1;
 			};
 			name = Debug;
@@ -363,6 +473,10 @@
 					/Users/jasonrohrer/cpp,
 				);
 				INFOPLIST_FILE = Info.plist;
+				OTHER_CFLAGS = (
+					"-DBSD",
+					"-DIPHONE",
+				);
 				PRODUCT_NAME = tileGame1;
 			};
 			name = Release;
@@ -424,6 +538,10 @@
 					/Users/jasonrohrer/cpp,
 				);
 				INFOPLIST_FILE = Info.plist;
+				OTHER_CFLAGS = (
+					"-DBSD",
+					"-DIPHONE",
+				);
 				PRODUCT_NAME = tileGame1;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0BE1AB5F-422D-4C27-A26D-B23A5A1F89C1";
 			};
