@@ -84,6 +84,17 @@ TutorialPanel::~TutorialPanel() {
 
 
 
+void TutorialPanel::setStageZero() {
+    
+    int i;
+    for( i=0; i<28; i++ ) {
+        mAllDemoSpaces[i]->mActive = false;
+        mAllDemoSpaces[i]->setColor( NULL );
+        }
+    }
+
+
+
 void TutorialPanel::setVisible( char inIsVisible ) {
     Panel::setVisible( inIsVisible );
     
@@ -129,7 +140,15 @@ void TutorialPanel::step() {
     if( isVisible() && ! isSubPanelVisible() ) {
         mStepCount++;
         }
-    
+    else {
+        // return to step 0
+        mDemoStage = 0;
+        mStepCount = 0;
+        
+        setStageZero();
+        }
+
+
     if( mStepCount >= mStepsBetweenStages ) {
         
 
@@ -143,10 +162,7 @@ void TutorialPanel::step() {
         
 
         if( mDemoStage == 0 ) {
-            for( i=0; i<28; i++ ) {
-                mAllDemoSpaces[i]->mActive = false;
-                mAllDemoSpaces[i]->setColor( NULL );
-                }
+            setStageZero();
             }
         else if( mDemoStage == 1 ) {
             GridSpace *s = mGridDemo[2][2];
@@ -248,12 +264,7 @@ void TutorialPanel::closePressed() {
     mDemoStage = 0;
     mStepCount = 0;
     
-    int i;
-    
-    for( i=0; i<28; i++ ) {
-        mAllDemoSpaces[i]->mActive = false;
-        mAllDemoSpaces[i]->setColor( NULL );
-        }
+    setStageZero();
     }
 
 

@@ -31,7 +31,7 @@ TutorialPanelB::TutorialPanelB( int inW, int inH )
     int gridH = 4;
     int gridW = 7;
     
-    int yOffset = 200;
+    int yOffset = inH / 3 - 12;
     
     for( y=0; y<gridH; y++ ) {
         for( x=0; x<gridW; x++ ) {
@@ -156,7 +156,29 @@ void TutorialPanelB::step() {
     if( isVisible() && ! isSubPanelVisible() ) {
         mStepCount++;
         }
+    else {
+        // return to step 0
+        mDemoStage = 0;
+        mStepCount = 0;
+        }
     
+
+
+    // check if we need to revert back to stage zero
+    // this might happen after we close or after displaying a sub-panel
+    if( mDemoStage == 0 
+        && 
+        ( ! mKeySpace->isEmpty() || mInnerSpaces[0]->isEmpty() )
+        && 
+        mInnerSpaces[0]->isAnimationDone() ) {
+        
+        // lingering at end of score animation
+        
+        setStageZero();
+        }
+        
+    
+
     if( mStepCount >= mStepsBetweenStages ) {
         
 
@@ -164,7 +186,7 @@ void TutorialPanelB::step() {
         
         mDemoStage++;
         
-        if( mDemoStage > 2 ) {
+        if( mDemoStage > 3 ) {
             mDemoStage = 0;
             }
         
@@ -181,19 +203,9 @@ void TutorialPanelB::step() {
                 mInnerSpaces[i]->flipToClear();
                 }
             }
-        /*
-        else if( mDemoStage == 2 ) {
-            for( i=0; i<4; i++ ) {
-                mInnerSpaces[i]->setColor( NULL );
-                }
-            }
         else if( mDemoStage == 3 ) {
-            for( i=0; i<7; i++ ) {
-                mOuterSpaces[i]->setColor( nextPieceDemoColors[0].copy() );
-                }
-
-            mKeySpace->setColor( nextPieceDemoColors[0].copy() );
-            }*/
+            // hold stage 2 for extra step
+            }
         
         
             
@@ -278,7 +290,9 @@ void TutorialPanelB::closePressed() {
     mStepCount = 0;
     
 
-    setStageZero();
+    // can't do this safely here because score animation might still be
+    // running 
+    // setStageZero();
     }
 
 
