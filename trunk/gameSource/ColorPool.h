@@ -39,7 +39,7 @@ class ColorPool {
         
 
         // draws onto screen
-        void draw();
+        void draw( float inAlpha = 1.0f );
         
 
         int mX, mY;

@@ -8,9 +8,10 @@
 #include <GL/gl.h>
 
 
-Color nextPieceDemoColors[2] = { 
+Color nextPieceDemoColors[3] = { 
     Color( 255/255.0, 128/255.0, 0/255.0 ),
-    Color( 128/255.0, 255/255.0, 0/255.0 ) 
+    Color( 128/255.0, 255/255.0, 0/255.0 ),
+    Color( 96/255.0,  0/255.0,   128/255.0 ) 
     };
 
 
@@ -80,6 +81,9 @@ TutorialPanel::TutorialPanel( int inW, int inH )
 
     
 TutorialPanel::~TutorialPanel() {
+    for( int i=0; i<28; i++ ) {
+        delete mAllDemoSpaces[i];
+        }
     }
 
 
