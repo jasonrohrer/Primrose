@@ -133,18 +133,18 @@ Color colorRemoveCountColor( 0/255.0, 0/255.0, 0/255.0 );
 
         
 
-void ColorPool::draw() {    
+void ColorPool::draw( float inAlpha ) {    
 
     // now draw spaces
     int i;
     for( i=0; i<7; i++ ) {
-        mSpaces[i]->drawGrid();
+        mSpaces[i]->drawGrid( inAlpha );
         }
     for( i=0; i<7; i++ ) {
-        mSpaces[i]->drawPieceCenter();
+        mSpaces[i]->drawPieceCenter( inAlpha );
         }
     for( i=0; i<7; i++ ) {
-        mSpaces[i]->drawPieceHalo();
+        mSpaces[i]->drawPieceHalo( inAlpha );
         }
 
     if( mNumActiveColors < numColors || mColorsToSkip < (numColors-1) ) {
@@ -174,7 +174,7 @@ void ColorPool::draw() {
         drawCounter( mStepsUntilUpdate,
                      mSpaces[i]->mX,  mSpaces[i]->mY,
                      thisNumberColor,
-                     mStepCountTransitionProgress );
+                     mStepCountTransitionProgress * inAlpha );
         
         
         if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
@@ -185,7 +185,7 @@ void ColorPool::draw() {
             drawCounter( mLastStepCount,
                          mSpaces[i]->mX,  mSpaces[i]->mY,
                          thisNumberColor,
-                         1 - mStepCountTransitionProgress );
+                         ( 1 - mStepCountTransitionProgress ) * inAlpha  );
             }
         
 
@@ -248,7 +248,7 @@ void ColorPool::draw() {
                          mSpaces[lastSpaceIndex]->mX,  
                          mSpaces[lastSpaceIndex]->mY,
                          thisNumberColor,
-                         alpha );
+                         alpha * inAlpha );
             }
         
 

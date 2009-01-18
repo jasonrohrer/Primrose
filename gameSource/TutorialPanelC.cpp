@@ -1,4 +1,4 @@
-#include "TutorialPanelB.h"
+#include "TutorialPanelC.h"
 
 #include "numeral.h"
 
@@ -11,17 +11,12 @@
 extern Color nextPieceDemoColors[3];
 
 
-TutorialPanelB::TutorialPanelB( int inW, int inH )
+TutorialPanelC::TutorialPanelC( int inW, int inH )
         : Panel( inW, inH ),
-          mNextButton( inW - ( 19 + 21 ), 19 + 21, "next" ),
-          mNextPanel( inW, inH ),
+          mColorPool( inW/2, inH - 20 - 19 - 1 ),
           mDemoStage( 0 ),
           mStepsBetweenStages( 50 ), mStepCount( 0 ) {
 
-
-    addButton( &mNextButton );
-    addSubPanel( &mNextPanel );
-    
 
 
     int x, y, i;
@@ -71,43 +66,56 @@ TutorialPanelB::TutorialPanelB( int inW, int inH )
             }
         }
     
-    mInnerSpaces[0] = mGridDemo[1][2];
-    mInnerSpaces[1] = mGridDemo[1][3];
-    mInnerSpaces[2] = mGridDemo[2][3];
-    mInnerSpaces[3] = mGridDemo[2][4];
+    mInnerSpacesA[0] = mGridDemo[1][2];
+
+    mInnerSpacesB[0] = mGridDemo[1][4];
+    mInnerSpacesB[1] = mGridDemo[1][5];
+    mInnerSpacesB[2] = mGridDemo[1][6];
+    mInnerSpacesB[3] = mGridDemo[2][6];
+
+    mOuterSpacesA[0] = mGridDemo[0][2];
+    mOuterSpacesA[1] = mGridDemo[1][3];
+    mOuterSpacesA[2] = mGridDemo[2][2];
+
+    mOuterSpacesB[0] = mGridDemo[0][4];
+    mOuterSpacesB[1] = mGridDemo[0][5];
+    mOuterSpacesB[2] = mGridDemo[0][6];
+    mOuterSpacesB[3] = mGridDemo[3][6];
+    mOuterSpacesB[4] = mGridDemo[2][5];
+    mOuterSpacesB[5] = mGridDemo[2][4];
     
-    mOuterSpaces[0] = mGridDemo[0][3];
-    mOuterSpaces[1] = mGridDemo[1][4];
-    mOuterSpaces[2] = mGridDemo[2][5];
-    mOuterSpaces[3] = mGridDemo[3][4];
-    mOuterSpaces[4] = mGridDemo[3][3];
-    mOuterSpaces[5] = mGridDemo[2][2];
-    mOuterSpaces[6] = mGridDemo[1][1];
-    
-    mKeySpace = mGridDemo[0][2];
+    mKeySpace = mGridDemo[1][1];
 
     setStageZero();
     }
 
 
 
-void TutorialPanelB::setStageZero() {
+void TutorialPanelC::setStageZero() {
     
     int i;
     
+    for( i=0; i<1; i++ ) {
+        mInnerSpacesA[i]->setColor( nextPieceDemoColors[1].copy() );
+        }
     for( i=0; i<4; i++ ) {
-        mInnerSpaces[i]->setColor( nextPieceDemoColors[0].copy() );
+        mInnerSpacesB[i]->setColor( nextPieceDemoColors[2].copy() );
         }
-    for( i=0; i<7; i++ ) {
-        mOuterSpaces[i]->setColor( nextPieceDemoColors[1].copy() );
+
+    for( i=0; i<3; i++ ) {
+        mOuterSpacesA[i]->setColor( nextPieceDemoColors[0].copy() );
         }
+    for( i=0; i<6; i++ ) {
+        mOuterSpacesB[i]->setColor( nextPieceDemoColors[1].copy() );
+        }
+
     mKeySpace->setColor( NULL );
     
     }
 
 
     
-TutorialPanelB::~TutorialPanelB() {
+TutorialPanelC::~TutorialPanelC() {
     for( int i=0; i<28; i++ ) {
         delete mAllDemoSpaces[i];
         }
@@ -115,14 +123,14 @@ TutorialPanelB::~TutorialPanelB() {
 
 
 
-void TutorialPanelB::setVisible( char inIsVisible ) {
+void TutorialPanelC::setVisible( char inIsVisible ) {
     Panel::setVisible( inIsVisible );
     
     }
 
 
 
-char TutorialPanelB::pointerUp( int inX, int inY ) {
+char TutorialPanelC::pointerUp( int inX, int inY ) {
     char consumed = Panel::pointerUp( inX, inY );
     
     if( consumed ) {
@@ -131,13 +139,14 @@ char TutorialPanelB::pointerUp( int inX, int inY ) {
     
 
     if( ! isSubPanelVisible() ) {
-
+        /*
         if( mNextButton.isInside( inX, inY ) ) {
             
-            mNextPanel.setVisible( true );
+            //mNextPanel.setVisible( true );
             
             return true;
             }
+        */
         }
     
     return false;
@@ -145,8 +154,10 @@ char TutorialPanelB::pointerUp( int inX, int inY ) {
 
 
 
-void TutorialPanelB::step() {
+void TutorialPanelC::step() {
     Panel::step();
+    
+    mColorPool.step();
     
         
     int i;
@@ -171,9 +182,13 @@ void TutorialPanelB::step() {
     // this might happen after we close or after displaying a sub-panel
     if( mDemoStage == 0 
         && 
-        ( ! mKeySpace->isEmpty() || mInnerSpaces[0]->isEmpty() )
+        ( ! mKeySpace->isEmpty() 
+          || mInnerSpacesA[0]->isEmpty() 
+          || mInnerSpacesB[0]->isEmpty() )
         && 
-        mInnerSpaces[0]->isAnimationDone() ) {
+        mInnerSpacesA[0]->isAnimationDone()
+        &&
+        mInnerSpacesB[0]->isAnimationDone() ) {
         
         // lingering at end of score animation
         
@@ -189,7 +204,7 @@ void TutorialPanelB::step() {
         
         mDemoStage++;
         
-        if( mDemoStage > 5 ) {
+        if( mDemoStage > 6 ) {
             mDemoStage = 0;
             }
         
@@ -197,22 +212,28 @@ void TutorialPanelB::step() {
         if( mDemoStage == 0 ) {
             setStageZero();
             }
-        else if( mDemoStage == 1 ) {
+        if( mDemoStage == 1 ) {
             // hold zero longer
             }
         else if( mDemoStage == 2 ) {
-            mKeySpace->setColor( nextPieceDemoColors[1].copy() );
+            mKeySpace->setColor( nextPieceDemoColors[0].copy() );
             }
         else if( mDemoStage == 3 ) {
-            for( i=0; i<4; i++ ) {
-                mInnerSpaces[i]->mScore = 16;
-                mInnerSpaces[i]->flipToClear();
+            for( i=0; i<1; i++ ) {
+                mInnerSpacesA[i]->mScore = 1;
+                mInnerSpacesA[i]->flipToClear();
                 }
             }
         else if( mDemoStage == 4 ) {
-            // hold stage 2 for extra step
+            for( i=0; i<4; i++ ) {
+                mInnerSpacesB[i]->mScore = 128;
+                mInnerSpacesB[i]->flipToClear();
+                }
             }
         else if( mDemoStage == 5 ) {
+            // hold stage 3 for extra step
+            }
+        else if( mDemoStage == 6 ) {
             // blank before next cycle
             for( i=0; i<28; i++ ) {
                 mAllDemoSpaces[i]->setColor( NULL );
@@ -220,6 +241,7 @@ void TutorialPanelB::step() {
             // this stage short
             mStepCount += mStepsBetweenStages / 2;
             }
+        
         
             
 
@@ -232,7 +254,7 @@ void TutorialPanelB::step() {
 extern Color tutorialTextColor;
 
         
-void TutorialPanelB::drawBase() {
+void TutorialPanelC::drawBase() {
     
     Panel::drawBase();
     
@@ -241,33 +263,33 @@ void TutorialPanelB::drawBase() {
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-        drawString( "clear a group of tiles by", left, 
+        drawString( "chain reactions are possible", left, 
                     19,
                     mGridDemo[0][0]->mY - 20 - 60,
                     &tutorialTextColor, mFadeProgress );        
-        drawString( "surrounding it with another", left, 
+        drawString( "and longer chains score even", left, 
                     19,
                     mGridDemo[0][0]->mY - 20 - 40,
                     &tutorialTextColor, mFadeProgress );        
-        drawString( "color and score points", left, 
+        drawString( "more points", left, 
                     19,
                     mGridDemo[0][0]->mY - 20 - 20,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "the surrounding tiles flip color", left, 
+        drawString( "make use of grid edges too", left, 
                     19,
                     mGridDemo[3][0]->mY + 20 + 20,
                     &tutorialTextColor, mFadeProgress );        
 
 
-        drawString( "clear bigger groups for even", left, 
+        drawString( "three colors to start and", left, 
                     19,
-                    mGridDemo[3][0]->mY + 20 + 71,
+                    mColorPool.mY - 20 - 40,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "more points", left, 
+        drawString( "next color in ninety six moves", left, 
                     19,
-                    mGridDemo[3][0]->mY + 20 + 91,
+                    mColorPool.mY - 20 - 20,
                     &tutorialTextColor, mFadeProgress );        
         
 
@@ -289,6 +311,8 @@ void TutorialPanelB::drawBase() {
             }
         
 
+        mColorPool.draw( mFadeProgress );
+        
         }
     
 
@@ -297,7 +321,7 @@ void TutorialPanelB::drawBase() {
 
 
 
-void TutorialPanelB::closePressed() {
+void TutorialPanelC::closePressed() {
     // return to step 0
     mDemoStage = 0;
     mStepCount = 0;

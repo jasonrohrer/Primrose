@@ -1,20 +1,18 @@
 #include "Panel.h"
 
-
-#include "TutorialPanelC.h"
-
+#include "ColorPool.h"
 
 
-class TutorialPanelB : public Panel {
+class TutorialPanelC : public Panel {
         
 
     public:
         
 
-        TutorialPanelB( int inW, int inH );
+        TutorialPanelC( int inW, int inH );
         
 
-        ~TutorialPanelB();
+        ~TutorialPanelC();
         
         
 
@@ -38,20 +36,23 @@ class TutorialPanelB : public Panel {
         
         void setStageZero();
         
-
-        Button mNextButton;
-        TutorialPanelC mNextPanel;
+        ColorPool mColorPool;
         
-
         
         GridSpace *mGridDemo[4][7];
         GridSpace *mAllDemoSpaces[28];
         
 
         // surrounded
-        GridSpace *mInnerSpaces[4];
+        GridSpace *mInnerSpacesA[1];
         // surrounding
-        GridSpace *mOuterSpaces[7];
+        GridSpace *mOuterSpacesA[3];
+
+        // surrounded
+        GridSpace *mInnerSpacesB[4];
+        // surrounding
+        GridSpace *mOuterSpacesB[6];
+
         // final to complete
         GridSpace *mKeySpace;
         

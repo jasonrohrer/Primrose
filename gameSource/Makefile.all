@@ -37,6 +37,7 @@ ScoreBundle.cpp \
 HighScorePanel.cpp \
 TutorialPanel.cpp \
 TutorialPanelB.cpp \
+TutorialPanelC.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
