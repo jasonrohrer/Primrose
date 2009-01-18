@@ -352,7 +352,7 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         // working directory on iPhone is inside bundle, but 
         // we can't save persistent files there.
         // Document directory is backed up.
-        SettingsManager::setDirectoryName( "../Document" );
+        SettingsManager::setDirectoryName( "../Documents" );
     #endif
 
     for( int i=0; i<10; i++ ) {
