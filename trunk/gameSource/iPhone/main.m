@@ -8,9 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+#import <NetworkController.h>
+
 
 
 int main(int argc, char *argv[]) {
+
+
+    // force network to start
+    if( !( [[NetworkController sharedInstance]isNetworkUp] ) ) {
+		if( ! [[NetworkController sharedInstance]isEdgeUp] ) {
+			[[NetworkController sharedInstance]keepEdgeUp];
+			[[NetworkController sharedInstance]bringUpEdge];
+            }
+        }
+    
+
 
     //printf( "Arg 0 = %s\n", argv[0] );
     
