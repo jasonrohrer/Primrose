@@ -1,0 +1,26 @@
+Primrose is an addictive tile clearing puzzle game by world-renowned designer Jason Rohrer.
+
+If you find the glut of match-3 puzzle games to be mindless and boring...
+
+If you think Tetris is interesting, except for the for the fact that it is over 20 years old...
+
+If you're ready for something that is more challenging than Tetris...
+
+If you're looking for an elegant puzzle game that's completely novel...
+
+
+Then you should take a look at Primrose, which you can download for free on Mac, PC, and GNU/Linux here:  http://primrose.sf.net
+
+
+Includes the following features:
+
+--Live world-wide high score boards.
+
+--Instant replay, move-by-move, of all games on the high score boards.
+
+--Comprehensive instruction pages with animated examples.
+
+
+You can read an in-depth profile of Jason Rohrer in Esquire Magazine's December 2008 "Genius" issue.
+
+
