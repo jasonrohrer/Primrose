@@ -347,6 +347,14 @@ void playbackGame( ScoreBundle *inBundle ) {
 
 
 void initFrameDrawer( int inWidth, int inHeight ) {
+    
+    #ifdef IPHONE
+        // working directory on iPhone is inside bundle, but 
+        // we can't save persistent files there.
+        // Document directory is backed up.
+        SettingsManager::setDirectoryName( "../Document" );
+    #endif
+
     for( int i=0; i<10; i++ ) {
         printf( "Rand output: %u\n", randSource.getRandomInt() );
         }
