@@ -2,6 +2,7 @@
 
 
 #include "EditNamePanel.h"
+#include "TutorialPanel.h"
 #include "HighScoreLoadingPanel.h"
 #include "HighScorePanel.h"
 #include "ScoreBundle.h"
@@ -45,7 +46,9 @@ class MenuPanel : public Panel {
         
         HighScoreLoadingPanel mHighScoreLoadingPanel;
         EditNamePanel mEditNamePanel;
+        TutorialPanel mTutorialPanel;
         
+
         // pointer to display, which is maintained by HighScoreLoadingPanel
         HighScorePanel *mDisplayPanel;
         

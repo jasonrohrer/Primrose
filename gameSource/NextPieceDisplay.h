@@ -1,3 +1,7 @@
+#ifndef NEXT_PIECE_DISPLAY_INCLUDED
+#define NEXT_PIECE_DISPLAY_INCLUDED
+
+
 #include "GridSpace.h"
 #include "ColorPool.h"
 
@@ -7,6 +11,13 @@ class NextPieceDisplay {
         
         // constructs w/ center location on screen
         NextPieceDisplay( int inX, int inY, ColorPool *inPool );
+
+        // constructs, forcing two colors
+        // inPool can be NULL
+        // if inPool is NULL, update() must not be called
+        NextPieceDisplay( int inX, int inY, ColorPool *inPool,
+                          Color *inA, Color *inB );
+
         
         ~NextPieceDisplay();
         
@@ -38,7 +49,7 @@ class NextPieceDisplay {
         
 
         // draws onto screen
-        void draw();
+        void draw( float inAlpha = 1.0f );
         
 
         int mX, mY;
@@ -56,5 +67,8 @@ class NextPieceDisplay {
                         
     };
 
+
+
+#endif
         
         

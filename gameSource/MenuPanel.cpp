@@ -16,7 +16,8 @@ MenuPanel::MenuPanel( int inW, int inH )
           mHighScoreButton( inW - 21 - 19, 300, "+" ),
           mEditNameButton( inW - 21 - 19, 400, "+" ),
           mHighScoreLoadingPanel( inW, inH ),
-          mEditNamePanel( inW, inH ) {
+          mEditNamePanel( inW, inH ),
+          mTutorialPanel( inW, inH ) {
           
 
     mNewButton.setVisible( false );
@@ -34,7 +35,8 @@ MenuPanel::MenuPanel( int inW, int inH )
     
     addSubPanel( &mHighScoreLoadingPanel );
     addSubPanel( &mEditNamePanel );
-
+    addSubPanel( &mTutorialPanel );
+    
     // display panel created by loading panel, but sits under us
     mDisplayPanel = mHighScoreLoadingPanel.getDisplayPanel();
     
@@ -78,6 +80,12 @@ char MenuPanel::pointerUp( int inX, int inY ) {
         if( mEditNameButton.isInside( inX, inY ) ) {
             
             mEditNamePanel.setVisible( true );
+            
+            return true;
+            }
+        if( mTutorialButton.isInside( inX, inY ) ) {
+            
+            mTutorialPanel.setVisible( true );
             
             return true;
             }
