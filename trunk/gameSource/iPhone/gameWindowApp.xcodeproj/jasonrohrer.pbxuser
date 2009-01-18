@@ -1,25 +1,25 @@
 // !$*UTF8*$!
 {
-	1D6058900D05DD3D006BFB54 /* tileGame1 */ = {
+	1D6058900D05DD3D006BFB54 /* Primrose */ = {
 		activeExec = 0;
 		executables = (
-			DA86AE6F0EF538E500054E6B /* tileGame1 */,
+			DA86AE6F0EF538E500054E6B /* Primrose */,
 		);
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Debug;
-		activeExecutable = DA86AE6F0EF538E500054E6B /* tileGame1 */;
+		activeBuildConfigurationName = Distribution;
+		activeExecutable = DA86AE6F0EF538E500054E6B /* Primrose */;
 		activeSDKPreference = iphoneos2.2;
-		activeTarget = 1D6058900D05DD3D006BFB54 /* tileGame1 */;
+		activeTarget = 1D6058900D05DD3D006BFB54 /* Primrose */;
 		addToTargets = (
-			1D6058900D05DD3D006BFB54 /* tileGame1 */,
+			1D6058900D05DD3D006BFB54 /* Primrose */,
 		);
 		breakpoints = (
 			DA34BDB90F1E8BE200126D0F /* game.cpp:251 */,
 		);
 		codeSenseManager = DA86AE940EF5391600054E6B /* Code sense */;
 		executables = (
-			DA86AE6F0EF538E500054E6B /* tileGame1 */,
+			DA86AE6F0EF538E500054E6B /* Primrose */,
 		);
 		perUserDictionary = {
 			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
@@ -392,6 +392,19 @@
 			DA9F44030F234592005574AF /* PlistBookmark */ = DA9F44030F234592005574AF /* PlistBookmark */;
 			DA9F44040F234592005574AF /* PBXTextBookmark */ = DA9F44040F234592005574AF /* PBXTextBookmark */;
 			DA9F44050F234592005574AF /* PBXTextBookmark */ = DA9F44050F234592005574AF /* PBXTextBookmark */;
+			DA9F441C0F234AAA005574AF /* PlistBookmark */ = DA9F441C0F234AAA005574AF /* PlistBookmark */;
+			DA9F441D0F234AAA005574AF /* PBXTextBookmark */ = DA9F441D0F234AAA005574AF /* PBXTextBookmark */;
+			DA9F441E0F234AAA005574AF /* PlistBookmark */ = DA9F441E0F234AAA005574AF /* PlistBookmark */;
+			DA9F441F0F234AAA005574AF /* PBXTextBookmark */ = DA9F441F0F234AAA005574AF /* PBXTextBookmark */;
+			DA9F44200F234AAA005574AF /* PBXTextBookmark */ = DA9F44200F234AAA005574AF /* PBXTextBookmark */;
+			DA9F44210F234AAA005574AF /* PBXTextBookmark */ = DA9F44210F234AAA005574AF /* PBXTextBookmark */;
+			DA9F44220F234AAA005574AF /* PBXTextBookmark */ = DA9F44220F234AAA005574AF /* PBXTextBookmark */;
+			DA9F44250F234B0E005574AF /* PBXTextBookmark */ = DA9F44250F234B0E005574AF /* PBXTextBookmark */;
+			DA9F44260F234B0E005574AF /* PBXTextBookmark */ = DA9F44260F234B0E005574AF /* PBXTextBookmark */;
+			DA9F44270F234B0E005574AF /* PBXTextBookmark */ = DA9F44270F234B0E005574AF /* PBXTextBookmark */;
+			DA9F44310F234DAB005574AF /* PBXTextBookmark */ = DA9F44310F234DAB005574AF /* PBXTextBookmark */;
+			DA9F44320F234DAB005574AF /* PBXTextBookmark */ = DA9F44320F234DAB005574AF /* PBXTextBookmark */;
+			DA9F44330F234DAB005574AF /* PBXTextBookmark */ = DA9F44330F234DAB005574AF /* PBXTextBookmark */;
 			DAADB67F0EF981DA00169CE3 = DAADB67F0EF981DA00169CE3 /* PBXTextBookmark */;
 			DAADB6880EF981DA00169CE3 = DAADB6880EF981DA00169CE3 /* PBXTextBookmark */;
 		};
@@ -401,9 +414,9 @@
 	};
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {691, 840}}";
-			sepNavSelRange = "{1328, 0}";
-			sepNavVisRange = "{0, 663}";
+			sepNavIntBoundsRect = "{{0, 0}, {691, 966}}";
+			sepNavSelRange = "{1555, 0}";
+			sepNavVisRange = "{0, 693}";
 			sepNavWindowFrame = "{{217, 101}, {750, 558}}";
 		};
 	};
@@ -1959,8 +1972,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = tileGame1;
-		modificationTime = 253969992.477916;
-		state = 1;
+		modificationTime = 253971709.907744;
+		state = 0;
 		symbolName = "game.cpp:251";
 	};
 	DA34BDBD0F1E8C0B00126D0F /* PBXTextBookmark */ = {
@@ -2231,7 +2244,7 @@
 		vrLen = 571;
 		vrLoc = 143;
 	};
-	DA86AE6F0EF538E500054E6B /* tileGame1 */ = {
+	DA86AE6F0EF538E500054E6B /* Primrose */ = {
 		isa = PBXExecutable;
 		activeArgIndices = (
 		);
@@ -2251,7 +2264,7 @@
 		executableSystemSymbolLevel = 0;
 		executableUserSymbolLevel = 0;
 		libgmallocEnabled = 0;
-		name = tileGame1;
+		name = Primrose;
 		savedGlobals = {
 		};
 		sourceDirectories = (
@@ -3605,6 +3618,138 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRange = "{0, 671}";
 		};
+	};
+	DA9F441C0F234AAA005574AF /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = /Users/jasonrohrer/cpp/tilePlacementGames/game1/gameSource/iPhone/Info.plist;
+		rLen = 0;
+		rLoc = 2147483647;
+	};
+	DA9F441D0F234AAA005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA9F44060F2345B5005574AF /* NetworkController.h */;
+		name = "NetworkController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 671;
+		vrLoc = 0;
+	};
+	DA9F441E0F234AAA005574AF /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D1107310486CEB800E47090 /* Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+		);
+		name = /Users/jasonrohrer/cpp/tilePlacementGames/game1/gameSource/iPhone/Info.plist;
+		rLen = 0;
+		rLoc = 2147483647;
+	};
+	DA9F441F0F234AAA005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA9F44060F2345B5005574AF /* NetworkController.h */;
+		name = "NetworkController.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 671;
+		vrLoc = 0;
+	};
+	DA9F44200F234AAA005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 32";
+		rLen = 0;
+		rLoc = 728;
+		rType = 0;
+		vrLen = 545;
+		vrLoc = 196;
+	};
+	DA9F44210F234AAA005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 64";
+		rLen = 0;
+		rLoc = 1556;
+		rType = 0;
+		vrLen = 682;
+		vrLoc = 0;
+	};
+	DA9F44220F234AAA005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */;
+		name = "HostAddressLinux.cpp: 94";
+		rLen = 0;
+		rLoc = 2155;
+		rType = 0;
+		vrLen = 820;
+		vrLoc = 1777;
+	};
+	DA9F44250F234B0E005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 32";
+		rLen = 0;
+		rLoc = 728;
+		rType = 0;
+		vrLen = 551;
+		vrLoc = 196;
+	};
+	DA9F44260F234B0E005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 64";
+		rLen = 0;
+		rLoc = 1556;
+		rType = 0;
+		vrLen = 693;
+		vrLoc = 0;
+	};
+	DA9F44270F234B0E005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */;
+		name = "HostAddressLinux.cpp: 94";
+		rLen = 0;
+		rLoc = 2155;
+		rType = 0;
+		vrLen = 876;
+		vrLoc = 1777;
+	};
+	DA9F44310F234DAB005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 64";
+		rLen = 0;
+		rLoc = 1555;
+		rType = 0;
+		vrLen = 627;
+		vrLoc = 264;
+	};
+	DA9F44320F234DAB005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 64";
+		rLen = 0;
+		rLoc = 1555;
+		rType = 0;
+		vrLen = 693;
+		vrLoc = 0;
+	};
+	DA9F44330F234DAB005574AF /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */;
+		name = "HostAddressLinux.cpp: 94";
+		rLen = 0;
+		rLoc = 2155;
+		rType = 0;
+		vrLen = 876;
+		vrLoc = 1777;
 	};
 	DAADB67F0EF981DA00169CE3 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
