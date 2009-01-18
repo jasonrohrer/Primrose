@@ -21,7 +21,7 @@
 // (otherwise, DNS through gethostbyname is spotty!!)
 
 bool resolveHostname( char *inHostname ) {
-	NSString * name = [NSString stringWithFormat: @"%s", inHostname ];
+	NSString *name = [NSString stringWithFormat: @"%s", inHostname ];
 
 	NSLog( @"Resolving for %@", name );
 	DNSServiceErrorType error;
@@ -81,9 +81,25 @@ bool resolveHostname( char *inHostname ) {
 
 
 
-
+#include <netdb.h>
 
 int main(int argc, char *argv[]) {
+    
+    char *names[5] = { "hcsoftware.sf.net", "www.yahoo.com", "northcountrynotes.org", "www.google.com",
+    "asdfdsfjjdsf.com" };   
+    
+    for( int i=0; i<5; i++ ) {
+        struct hostent* result;
+        result = gethostbyname( names[i] );
+        
+        if( result == NULL ) {  
+            printf( "lookup of %s failed\n", names[i] );
+            }
+        else {
+            printf( "lookup of %s success\n", names[i] );
+        }
+    }
+    
     
     // force resolve here so that looking it up later works
     resolveHostname( "hcsoftware.sourceforge.net" );
