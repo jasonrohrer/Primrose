@@ -22,6 +22,9 @@ class MenuPanel : public Panel {
         
         void postScore( ScoreBundle *inScore );
         
+        // used after restart
+        void forceFadeOutScoreDisplay();
+        
         
 
         // over rides these:

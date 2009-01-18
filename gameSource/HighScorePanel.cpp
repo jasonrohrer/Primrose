@@ -12,6 +12,11 @@
 #include <GL/gl.h>
 
 
+extern SimpleVector<ScoreBundle*> savedAllTimeScores;
+extern SimpleVector<ScoreBundle*> savedTodayScores;
+
+
+
 
 HighScorePanel::HighScorePanel( int inW, int inH )
         : Panel( inW, inH ), mMenuPanel( NULL ) {
@@ -72,6 +77,21 @@ HighScorePanel::HighScorePanel( int inW, int inH )
     
 
     clearScores();
+    
+    // add the ones that are saved
+    for( i=0; i<savedAllTimeScores.size(); i++ ) {
+        ScoreBundle *s = *( savedAllTimeScores.getElement( i ) );
+        
+        addAllTimeScore( s->copy()  );
+        }
+    
+    for( i=0; i<savedTodayScores.size(); i++ ) {
+        ScoreBundle *s = *( savedTodayScores.getElement( i ) );
+        
+        addTodayScore( s->copy()  );
+        }
+
+
     }
 
 
@@ -143,7 +163,7 @@ void HighScorePanel::setVisible( char inIsVisible ) {
     
     for( i = 0; i<16; i++ ) {
         if( mAllScores[i] == NULL ) {
-            mAllButtons[i]->setVisible( false );
+            mAllButtons[i]->forceInvisible();
             }
         }
     }
@@ -169,11 +189,26 @@ char HighScorePanel::pointerUp( int inX, int inY ) {
                 mAllScores[i] != NULL &&
                 mAllButtons[i]->isInside( inX, inY ) ) {
                 
-                // FIXME:  check for PLAY buttons
-                // then jump right to game screen by doing this:
                 if( mMenuPanel != NULL ) {
                     mMenuPanel->forceInvisible();
                     }
+
+                clearSavedScores();
+                
+                // save scores because we're about to be destroyed
+                
+                int j;
+                
+                for( j=0; j<mAllTimeScores.size(); j++ ) {
+                    ScoreBundle *s = *( mAllTimeScores.getElement( j ) );
+                    savedAllTimeScores.push_back( s->copy() );
+                    }
+                for( j=0; j<mTodayScores.size(); j++ ) {
+                    ScoreBundle *s = *( mTodayScores.getElement( j ) );
+                    savedTodayScores.push_back( s->copy() );
+                    }
+                
+
                 setVisible( false );
                 
                 playbackGame( mAllScores[i]->copy() );
