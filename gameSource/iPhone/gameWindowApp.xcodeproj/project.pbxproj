@@ -62,6 +62,10 @@
 		DA9F42B90F224D4E005574AF /* yzplus_big.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A70F224D4E005574AF /* yzplus_big.tga */; };
 		DA9F42BA0F224D4E005574AF /* yzplus.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A80F224D4E005574AF /* yzplus.tga */; };
 		DA9F42BB0F224D4E005574AF /* abcdefghijkl_big.tga in Resources */ = {isa = PBXBuildFile; fileRef = DA9F42A90F224D4E005574AF /* abcdefghijkl_big.tga */; };
+		DA9F43C40F231E7F005574AF /* TutorialPanelC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */; };
+		DA9F43C50F231E7F005574AF /* TutorialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */; };
+		DA9F43C60F231E7F005574AF /* TutorialPanelB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */; };
+		DA9F43F60F23453A005574AF /* Message.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9F43F50F23453A005574AF /* Message.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -141,6 +145,14 @@
 		DA9F42A70F224D4E005574AF /* yzplus_big.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = yzplus_big.tga; path = ../graphics/yzplus_big.tga; sourceTree = SOURCE_ROOT; };
 		DA9F42A80F224D4E005574AF /* yzplus.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = yzplus.tga; path = ../graphics/yzplus.tga; sourceTree = SOURCE_ROOT; };
 		DA9F42A90F224D4E005574AF /* abcdefghijkl_big.tga */ = {isa = PBXFileReference; lastKnownFileType = file; name = abcdefghijkl_big.tga; path = ../graphics/abcdefghijkl_big.tga; sourceTree = SOURCE_ROOT; };
+		DA9F43BE0F231E6B005574AF /* TutorialPanelB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialPanelB.h; path = ../TutorialPanelB.h; sourceTree = SOURCE_ROOT; };
+		DA9F43BF0F231E6B005574AF /* TutorialPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialPanel.h; path = ../TutorialPanel.h; sourceTree = SOURCE_ROOT; };
+		DA9F43C00F231E6B005574AF /* TutorialPanelC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialPanelC.h; path = ../TutorialPanelC.h; sourceTree = SOURCE_ROOT; };
+		DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelC.cpp; path = ../TutorialPanelC.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanel.cpp; path = ../TutorialPanel.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelB.cpp; path = ../TutorialPanelB.cpp; sourceTree = SOURCE_ROOT; };
+		DA9F43F50F23453A005574AF /* Message.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Message.framework; path = System/Library/PrivateFrameworks/Message.framework; sourceTree = SDKROOT; };
+		DA9F44060F2345B5005574AF /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +165,7 @@
 				DA90DD4A0EFADE15001BABB5 /* AudioToolbox.framework in Frameworks */,
 				DA9E302E0EFC010300DFACC7 /* QuartzCore.framework in Frameworks */,
 				DA9E302F0EFC010300DFACC7 /* OpenGLES.framework in Frameworks */,
+				DA9F43F60F23453A005574AF /* Message.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +195,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				DA9F43F50F23453A005574AF /* Message.framework */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -195,6 +209,7 @@
 				DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */,
 				DA7F11800EF6D77000CB6D50 /* gameWindowApp_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				DA9F44060F2345B5005574AF /* NetworkController.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -288,6 +303,12 @@
 				DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */,
 				DA9F424A0F224992005574AF /* EditNamePanel.cpp */,
 				DA9F424B0F224992005574AF /* Button.cpp */,
+				DA9F43BE0F231E6B005574AF /* TutorialPanelB.h */,
+				DA9F43BF0F231E6B005574AF /* TutorialPanel.h */,
+				DA9F43C00F231E6B005574AF /* TutorialPanelC.h */,
+				DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */,
+				DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */,
+				DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */,
 				DA8C9E030EF80930002FCA67 /* minorGems */,
 			);
 			name = Unchanged;
@@ -433,6 +454,9 @@
 				DA9F42830F224AEF005574AF /* SocketClientLinux.cpp in Sources */,
 				DA9F42840F224AEF005574AF /* SocketLinux.cpp in Sources */,
 				DA9F42910F224C10005574AF /* NetworkFunctionLocks.cpp in Sources */,
+				DA9F43C40F231E7F005574AF /* TutorialPanelC.cpp in Sources */,
+				DA9F43C50F231E7F005574AF /* TutorialPanel.cpp in Sources */,
+				DA9F43C60F231E7F005574AF /* TutorialPanelB.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +468,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -466,6 +494,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = gameWindowApp_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
@@ -531,6 +563,10 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jason Rohrer";
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = gameWindowApp_Prefix.pch;
 				HEADER_SEARCH_PATHS = (

@@ -17,11 +17,20 @@ int main(int argc, char *argv[]) {
 
     // force network to start
     if( !( [[NetworkController sharedInstance]isNetworkUp] ) ) {
+        printf( "Network not up...\n" );
 		if( ! [[NetworkController sharedInstance]isEdgeUp] ) {
+            printf( "Edge not up... bringing it up\n" );
+		    
 			[[NetworkController sharedInstance]keepEdgeUp];
 			[[NetworkController sharedInstance]bringUpEdge];
             }
+        else {
+            printf( "Edge already up\n" );
         }
+    }
+    else {
+        printf( "Network already up\n" );
+    }
     
 
 
