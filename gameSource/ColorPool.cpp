@@ -204,8 +204,12 @@ void ColorPool::draw( float inAlpha ) {
                  
 
         
-
-        if( lastSpaceIndex >= 0 && 
+        // skip this at beginning, when there are first 3 colors
+        // only (otherwise, a 1 fades out on 3rd color)
+        if( mNumActiveColors > 3
+            &&
+            lastSpaceIndex >= 0 
+            && 
             ( mSpaces[lastSpaceIndex]->mDrawColor == NULL 
               || 
               ( mNumActiveColors < numColors 
