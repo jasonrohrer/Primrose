@@ -43,6 +43,24 @@ NextPieceDisplay::NextPieceDisplay( int inX, int inY, ColorPool *inPool )
     }
 
 
+
+NextPieceDisplay::NextPieceDisplay( int inX, int inY, ColorPool *inPool,
+                                    Color *inA, Color *inB )        
+        : mX( inX ), mY( inY ), mPool( inPool ), mBlinkTime( 0 ) {
+
+    mSpaces[0] = new GridSpace( inX, inY - 20 );
+    mSpaces[1] = new GridSpace( inX, inY + 20 );
+    
+    mSpaces[0]->mNeighbors[ GridSpace::bottom ] = mSpaces[1];
+    mSpaces[1]->mNeighbors[ GridSpace::top ] = mSpaces[0];
+
+    mSpaces[0]->setColor( inA );
+    mSpaces[1]->setColor( inB );
+    }
+
+
+
+
 NextPieceDisplay::~NextPieceDisplay() {
     for( int i=0; i<2; i++ ) {
         delete mSpaces[i];
@@ -104,9 +122,13 @@ void NextPieceDisplay::rewindState() {
         }
     }
 
-        
 
-void NextPieceDisplay::draw() {
+        
+Color nextPieceLineWhite( 1, 1, 1 );
+
+
+
+void NextPieceDisplay::draw( float inAlpha ) {
     
     
     // extra grid lines around space 0
@@ -117,12 +139,16 @@ void NextPieceDisplay::draw() {
     
 
     drawSprite( gridLineTop, 
-                mSpaces[0]->mX, mSpaces[0]->mY - border, 32, 32 );
+                mSpaces[0]->mX, mSpaces[0]->mY - border, 32, 32,
+                &nextPieceLineWhite, inAlpha );
     
     drawSprite( gridLineLeft, 
-                mSpaces[0]->mX - border, mSpaces[0]->mY, 32, 32 );    
+                mSpaces[0]->mX - border, mSpaces[0]->mY, 32, 32,
+                &nextPieceLineWhite, inAlpha );
+    
     drawSprite( gridLineRight, 
-                mSpaces[0]->mX + border, mSpaces[0]->mY, 32, 32 );
+                mSpaces[0]->mX + border, mSpaces[0]->mY, 32, 32,
+                &nextPieceLineWhite, inAlpha );
     
 
     glDisable( GL_BLEND );
@@ -131,10 +157,10 @@ void NextPieceDisplay::draw() {
     // now draw spaces
     int i;
     for( i=0; i<2; i++ ) {
-        mSpaces[i]->drawGrid();
+        mSpaces[i]->drawGrid( inAlpha );
         }
     for( i=0; i<2; i++ ) {
-        mSpaces[i]->drawPieceCenter();
+        mSpaces[i]->drawPieceCenter( inAlpha );
         }
 
     if( mSpaces[0]->mDrawColor != NULL ) {
@@ -154,7 +180,7 @@ void NextPieceDisplay::draw() {
         drawSprite( pieceBrightHalo, 
                     mSpaces[0]->mX, mSpaces[0]->mY, 
                     32, 32, mSpaces[0]->mDrawColor, 
-                    glowVal );
+                    glowVal * inAlpha );
     
 
         glBlendFunc( GL_SRC_ALPHA, GL_ONE );
@@ -163,7 +189,7 @@ void NextPieceDisplay::draw() {
         drawSprite( pieceBrightCenter, 
                     mSpaces[0]->mX, mSpaces[0]->mY, 
                     32, 32, &white, 
-                    glowVal );
+                    glowVal * inAlpha );
     
         glDisable( GL_BLEND );
 
@@ -180,7 +206,7 @@ void NextPieceDisplay::draw() {
     
 
     for( i=0; i<2; i++ ) {
-        mSpaces[i]->drawPieceHalo();
+        mSpaces[i]->drawPieceHalo( inAlpha );
         }
     }
 
