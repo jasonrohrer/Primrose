@@ -17,6 +17,9 @@ Color scoreLoadingGreen( 0, 1, 0 );
 Color scoreLoadingRed( 1, 0, 0 );
 
 
+extern char *savedServerURL;
+
+
 
 void HighScoreLoadingPanel::startConnectionTry() {
     mFailed = false;
@@ -55,6 +58,11 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
           mServerURLFetchRequest( NULL ),
           mFailed( false ),
           mDisplayPanel( inW, inH ) {
+    
+    if( savedServerURL != NULL ) {
+        mServerURL = stringDuplicate( savedServerURL );
+        }
+    
 
     startConnectionTry();
 
@@ -150,6 +158,12 @@ void HighScoreLoadingPanel::step() {
                 mServerURL = stringDuplicate( returnedURL );
                 
                 printf( "Got server URL: %s\n", mServerURL );
+                
+                // save it
+                if( savedServerURL != NULL ) {
+                    delete [] savedServerURL;
+                    }
+                savedServerURL = stringDuplicate( mServerURL );
                 }
             else {
                 setFailed();
