@@ -61,7 +61,7 @@ Color pieceColors[numColors] = {
 #define minSteps 6
 
 ColorPool::ColorPool( int inX, int inY )
-        : mX( inX ), mY( inY ), mNumActiveColors( 7 ), mColorsToSkip( 0 ),
+        : mX( inX ), mY( inY ), mNumActiveColors( 3 ), mColorsToSkip( 0 ),
           mStepsBetweenUpdates( startingSteps ),
           mStepsUntilUpdate( startingSteps ),
           mLastStepCount( startingSteps ),
