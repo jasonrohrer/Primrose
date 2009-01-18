@@ -77,7 +77,7 @@ Color *NextPieceDisplay::getNextPiece() {
 
 
 void NextPieceDisplay::update() {
-    printf( "Update called\n" );
+    //printf( "Update called\n" );
     
     if( mSpaces[1]->isEmpty() ) {
         // two new colors

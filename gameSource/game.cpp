@@ -369,7 +369,7 @@ void playbackGame( ScoreBundle *inBundle ) {
     manualStep = false;
     
 
-    printf( "Playing back game with moves:\n%s\n", inBundle->mMoveHistory );
+    //printf( "Playing back game with moves:\n%s\n", inBundle->mMoveHistory );
     
 
     mustRestart = true;
@@ -386,8 +386,9 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         SettingsManager::setDirectoryName( "../Documents" );
     #endif
 
+        
     for( int i=0; i<10; i++ ) {
-        printf( "Rand output: %u\n", randSource.getRandomInt() );
+        //printf( "Rand output: %u\n", randSource.getRandomInt() );
         }
     
 
@@ -903,7 +904,7 @@ void pointerUp( float inX, float inY ) {
     pointerX = inX;
     pointerY = inY;
     
-    printf( "Pointer Up at %f,%f\n", pointerX, pointerY );
+    //printf( "Pointer Up at %f,%f\n", pointerX, pointerY );
     
     
     
