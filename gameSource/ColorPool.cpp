@@ -20,7 +20,9 @@ extern CustomRandomSource randSource;
 #define numColors 7
 
 Color pieceColors[numColors] = { 
-    Color( 255/255.0, 128/255.0, 0/255.0 ),
+    //Color( 255/255.0, 128/255.0, 0/255.0 ),
+    // redder orange
+    Color( 255/255.0, 112/255.0, 0/255.0 ),
     Color( 128/255.0, 255/255.0, 0/255.0 ),
     //    Color( 96/255.0,  0/255.0,   128/255.0 ),
     // brighter purple
@@ -30,7 +32,9 @@ Color pieceColors[numColors] = {
     //Color( 255/255.0, 96/255.0,  255/255.0 ),
     // ligher pink (to avoid purple)
     Color( 255/255.0, 128/255.0,  255/255.0 ),
-    Color( 128/255.0, 96/255.0,  0/255.0 )    
+    //Color( 128/255.0, 96/255.0,  0/255.0 )
+    // greener brown
+    Color( 96/255.0, 96/255.0,  0/255.0 )    
     //Color( 255/255.0, 255/255.0, 160/255.0 )//,
     //    Color( 128/255.0, 96/255.0,  0/255.0 )    
     };
