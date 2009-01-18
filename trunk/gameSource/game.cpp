@@ -828,7 +828,14 @@ void drawFrame() {
         
         drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
                       scoreTransitionProgress );
-    
+        
+        /*
+        drawStringBig( "primrose", left, 
+                       spaces[5][2]->mX,
+                       spaces[5][2]->mY,
+                       &scoreColor ); 
+        */
+
         glDisable( GL_BLEND );
     
 
