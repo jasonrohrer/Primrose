@@ -216,7 +216,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>DA9F44040F234592005574AF</string>
+						<string>DA9F44320F234DAB005574AF</string>
 						<key>history</key>
 						<array>
 							<string>DA9F43620F22D6DF005574AF</string>
@@ -256,7 +256,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>DA9F44050F234592005574AF</string>
+						<string>DA9F44330F234DAB005574AF</string>
 						<key>history</key>
 						<array>
 							<string>DA9F433F0F22C3FE005574AF</string>
@@ -362,12 +362,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>62</integer>
-									<integer>61</integer>
+									<integer>52</integer>
+									<integer>48</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 730}, {270, 477}}</string>
+							<string>{{0, 832}, {270, 477}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -402,7 +403,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Info.plist</string>
+								<string>main.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -410,11 +411,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Info.plist</string>
+										<string>main.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>DA9F44030F234592005574AF</string>
+										<string>DA9F44310F234DAB005574AF</string>
 										<key>history</key>
 										<array>
 											<string>DA12F3600EF6EB5E00A40C6D</string>
@@ -465,14 +466,15 @@
 											<string>DA9F436C0F231E3D005574AF</string>
 											<string>DA9F436F0F231E3D005574AF</string>
 											<string>DA9F43710F231E3D005574AF</string>
-											<string>DA9F43730F231E3D005574AF</string>
 											<string>DA9F43740F231E3D005574AF</string>
 											<string>DA9F43760F231E3D005574AF</string>
 											<string>DA9F43FB0F234592005574AF</string>
 											<string>DA9F43FC0F234592005574AF</string>
 											<string>DA9F43FD0F234592005574AF</string>
 											<string>DA9F43FE0F234592005574AF</string>
-											<string>DA34BD5A0F1E8B4700126D0F</string>
+											<string>DA9F441C0F234AAA005574AF</string>
+											<string>DA9F441D0F234AAA005574AF</string>
+											<string>DA9F43730F231E3D005574AF</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -583,6 +585,8 @@
 											<string>DA9F44000F234592005574AF</string>
 											<string>DA9F44010F234592005574AF</string>
 											<string>DA9F44020F234592005574AF</string>
+											<string>DA9F441E0F234AAA005574AF</string>
+											<string>DA9F441F0F234AAA005574AF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -782,8 +786,8 @@
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>DA9F43B80F231E3D005574AF</string>
 		<string>DA9F43B20F231E3D005574AF</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/jasonrohrer/cpp/tilePlacementGames/game1/gameSource/iPhone/gameWindowApp.xcodeproj</string>
+		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
 	<string>88 135 906 536 0 0 1024 746 </string>
