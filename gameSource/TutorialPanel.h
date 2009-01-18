@@ -36,7 +36,10 @@ class TutorialPanel : public Panel {
         
         
     private:
-        
+
+        void setStageZero();
+
+
         Button mNextButton;
         TutorialPanelB mNextPanel;
         
