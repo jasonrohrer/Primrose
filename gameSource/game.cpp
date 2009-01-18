@@ -246,7 +246,7 @@ void newGame() {
 
     // same spot as done button
     playStopButton = 
-        new Button( doneButton->mX, doneButton->mY, "stop" );
+        new Button( doneButton->mX, doneButton->mY, "run" );
 
     allButtons[0] = undoButton;
     allButtons[1] = menuButton;
@@ -264,6 +264,7 @@ void newGame() {
     
     if( gameToPlayback != NULL ) {
         playStopButton->setVisible( true );
+        stepButton->setVisible( true );
         }
 
     menuPanel = new MenuPanel( screenW, screenH );
@@ -332,8 +333,8 @@ void playbackGame( ScoreBundle *inBundle ) {
     gamePlaybackStep = 0;
     gamePlaybackDone = false;
     
-    // default to autoPlay
-    autoPlay = true;
+    // default to not autoPlay
+    autoPlay = false;
     stepsSinceLastAutoMove = 0;
     manualStep = false;
     
@@ -893,7 +894,7 @@ void pointerUp( float inX, float inY ) {
                 } 
             else if( allButtons[i] == playStopButton ) {
                 if( autoPlay ) {
-                    playStopButton->setString( "play" );
+                    playStopButton->setString( "run" );
                     }
                 else {
                     playStopButton->setString( "stop" );
