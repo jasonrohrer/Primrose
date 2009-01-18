@@ -113,6 +113,9 @@ int stepsBetweenAutoMoves = 25;
 char manualStep = false;
 
 
+// only fetch once per app run
+char *savedServerURL = NULL;
+
 
 // used to keep high score panel consisten across the destroys that
 // happen to it when a new game is triggered
@@ -432,6 +435,10 @@ void freeFrameDrawer() {
         delete gameToPlayback;
         }
 
+    if( savedServerURL != NULL ) {
+        delete [] savedServerURL;
+        }
+    
     clearSavedScores();
     }
 
