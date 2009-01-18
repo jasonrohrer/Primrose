@@ -594,14 +594,21 @@ void drawFrame() {
 
         animDone &= allSpaces[i]->isAnimationDone();
         }
+
     for( i=0; i<numButtons; i++ ) {
         allButtons[i]->step();
+        }
+
+    for( i=0; i<numPanels; i++ ) {
+        allPanels[i]->step();
         }
     
     nextPiece->step();
     
     colorPool->step();
     
+
+
 
     if( piecePlaced && animDone ) {
         // done with placement, all placement (or clearing) animations done
@@ -734,12 +741,19 @@ void drawFrame() {
     // only step when animation from previous step done
     // pause when sub-panels visible
     char somePanelVisible = false;
+    // skip drawing board when one fully visible
+    char somePanelFullyVisible = false;
     
     for( i=0; i<numPanels && !somePanelVisible; i++ ) {
         if( allPanels[i]->isVisible() ) {
             somePanelVisible = true;
             }
+        if( allPanels[i]->isFullyVisible() ) {
+            somePanelFullyVisible = true;
+            }
         }
+
+
 
     if( animDone && !somePanelVisible ) {
         
@@ -777,54 +791,55 @@ void drawFrame() {
         }
     
 
-    
-    for( i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->drawGrid();
-        }
+    if( !somePanelFullyVisible ) {
+        
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->drawGrid();
+            }
 
-    for( i=0; i<numButtons; i++ ) {
-        allButtons[i]->draw();
-        }
+        for( i=0; i<numButtons; i++ ) {
+            allButtons[i]->draw();
+            }
 
-    for( i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->drawPieceCenter();
-        }
-    for( i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->drawPieceHalo();
-        }
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->drawPieceCenter();
+            }
+        for( i=0; i<numGridSpaces; i++ ) {
+            allSpaces[i]->drawPieceHalo();
+            }
 
-    nextPiece->draw();
-    
-    colorPool->draw();
+        nextPiece->draw();
+        
+        colorPool->draw();
     
         
 
-    // additive needed for smooth cross-fade between last score and new score
-    glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+        // additive needed for smooth cross-fade between last score and 
+        // new score
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+        
+        if( scoreTransitionProgress < 1 ) {
+            drawScoreBig( lastScore, 320 - 19, nextPiece->mY + 41, 
+                          &scoreColor,
+                          1 - scoreTransitionProgress );
+            }
+        
+        drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
+                      scoreTransitionProgress );
+    
+        glDisable( GL_BLEND );
+    
 
-    if( scoreTransitionProgress < 1 ) {
-        drawScoreBig( lastScore, 320 - 19, nextPiece->mY + 41, &scoreColor,
-                      1 - scoreTransitionProgress );
-        }
-    
-    drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
-                  scoreTransitionProgress );
-    
-    glDisable( GL_BLEND );
-    
-
-    if( scoreTransitionProgress < 1 ) {
-        scoreTransitionProgress += 0.075;
-        if( scoreTransitionProgress > 1 ) {
-            scoreTransitionProgress = 1;
+        if( scoreTransitionProgress < 1 ) {
+            scoreTransitionProgress += 0.075;
+            if( scoreTransitionProgress > 1 ) {
+                scoreTransitionProgress = 1;
+                }
             }
         }
     
 
-    for( i=0; i<numPanels; i++ ) {
-        allPanels[i]->step();
-        }
     
     for( i=0; i<numPanels; i++ ) {
         allPanels[i]->draw();

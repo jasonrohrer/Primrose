@@ -63,6 +63,9 @@ class Panel {
         
         char isSubPanelVisible();
         
+        char isSubPanelFullyVisible();
+        
+
         // subclasses override these
         virtual void drawBase();
         virtual void closePressed() = 0;
