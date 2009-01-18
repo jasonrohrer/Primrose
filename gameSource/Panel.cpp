@@ -161,8 +161,28 @@ char Panel::isSubPanelVisible() {
     }
 
 
+
+char Panel::isSubPanelFullyVisible() {
+    int i;
+    for( i=0; i<mSubPanels.size(); i++ ) {
+        Panel *p = *( mSubPanels.getElement( i ) );
+        if( p->isFullyVisible() ) {
+            return true;
+            }
+        }
+    
+    return false;
+    }
+
+
+
+
 void Panel::draw() {
-    drawBase();
+    // skip drawing this panel if hidden
+    if( mFadeProgress > 0 && ! isSubPanelFullyVisible() ) {
+        drawBase();
+        }
+    
     drawSubPanels();
     }
 
@@ -171,9 +191,6 @@ void Panel::draw() {
 void Panel::drawBase() {
     
     if( mFadeProgress > 0 ) {
-
-        
-        
 
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -206,6 +223,7 @@ void Panel::drawBase() {
             }
         }
     }
+
 
     
 void Panel::drawSubPanels() {
