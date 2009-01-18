@@ -13,7 +13,7 @@ extern Color nextPieceDemoColors[3];
 
 TutorialPanelC::TutorialPanelC( int inW, int inH )
         : Panel( inW, inH ),
-          mColorPool( inW/2, inH - 20 - 19 - 1 ),
+          mColorPool( inW/2, inH - 20 - 19 - 1 - 20 ),
           mDemoStage( 0 ),
           mStepsBetweenStages( 50 ), mStepCount( 0 ) {
 
@@ -290,6 +290,11 @@ void TutorialPanelC::drawBase() {
         drawString( "next color in ninety six moves", left, 
                     19,
                     mColorPool.mY - 20 - 20,
+                    &tutorialTextColor, mFadeProgress );        
+
+        drawString( "score even more in later phases", left, 
+                    19,
+                    mColorPool.mY + 20 + 20,
                     &tutorialTextColor, mFadeProgress );        
         
 
