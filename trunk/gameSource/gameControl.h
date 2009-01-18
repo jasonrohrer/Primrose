@@ -27,3 +27,7 @@ void saveName();
 // start playback of a new game
 // will be destroyed by game framework
 void playbackGame( ScoreBundle *inBundle );
+
+
+// clears scores that have been saved across HighScorePanel destroys
+void clearSavedScores();

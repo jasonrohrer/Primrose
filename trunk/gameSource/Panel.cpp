@@ -38,7 +38,8 @@ void Panel::setVisible( char inIsVisible ) {
 
 
 void Panel::forceVisible() {
-    mVisible = true;
+    setVisible( true );
+    
     mFadeProgress = 1;
     
     int i;
@@ -51,7 +52,8 @@ void Panel::forceVisible() {
 
 
 void Panel::forceInvisible() {
-    mVisible = false;
+    setVisible( false );
+
     mFadeProgress = 0;
     
     int i;

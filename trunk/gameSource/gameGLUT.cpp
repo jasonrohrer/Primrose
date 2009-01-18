@@ -37,6 +37,7 @@ int h = 480;
 
 // 25 fps
 int frameMS = 40;
+//int frameMS = 500;
 
 
 int main( int inNumArgs, char **inArgs ) {

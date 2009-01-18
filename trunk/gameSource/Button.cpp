@@ -40,12 +40,14 @@ void Button::setVisible( char inIsVisible ) {
 
 
 void Button::forceVisible() {
-    mVisible = true;
+    setVisible( true );
+    
     mFadeProgress = 1;
     }
 
 void Button::forceInvisible() {
-    mVisible = false;
+    setVisible( false );
+
     mFadeProgress = 0;
     }
 

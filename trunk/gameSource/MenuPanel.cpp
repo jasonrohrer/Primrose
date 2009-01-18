@@ -60,6 +60,14 @@ void MenuPanel::postScore( ScoreBundle *inScore ) {
 
 
 
+void MenuPanel::forceFadeOutScoreDisplay() {
+    mDisplayPanel->forceVisible();
+    
+    mDisplayPanel->setVisible( false );
+    }
+
+
+
 char MenuPanel::pointerUp( int inX, int inY ) {
     
     char consumed = Panel::pointerUp( inX, inY );

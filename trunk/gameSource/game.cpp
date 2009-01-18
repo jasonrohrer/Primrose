@@ -114,6 +114,27 @@ char manualStep = false;
 
 
 
+// used to keep high score panel consisten across the destroys that
+// happen to it when a new game is triggered
+SimpleVector<ScoreBundle*> savedAllTimeScores;
+SimpleVector<ScoreBundle*> savedTodayScores;
+
+
+void clearSavedScores() {
+    int i;
+    for( i=0; i<savedAllTimeScores.size(); i++ ) {
+        delete *( savedAllTimeScores.getElement( i ) );
+        }
+    
+    for( i=0; i<savedTodayScores.size(); i++ ) {
+        delete *( savedTodayScores.getElement( i ) );
+        }
+
+    savedAllTimeScores.deleteAll();
+    savedTodayScores.deleteAll();
+    }
+
+
 
 
 
@@ -277,7 +298,13 @@ void newGame() {
         // previous menu panel requested a restart
         // show this new one at full blend at first, then fade out to 
         // restarted game
-        menuPanel->forceVisible();
+        if( gameToPlayback == NULL ) {
+            menuPanel->forceVisible();
+            }
+        else {
+            // it was high score display that triggered restart
+            ( (MenuPanel *)menuPanel )->forceFadeOutScoreDisplay();
+            }
         }
     
     menuPanel->setVisible( false );
@@ -394,15 +421,18 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
 
 void freeFrameDrawer() {
+    endGame();
+
     freeSpriteBank();
     
-    endGame();
 
     // we don't do this in endGame because sometimes we're ending
     // last game before starting a new playback
     if( gameToPlayback != NULL ) {
         delete gameToPlayback;
         }
+
+    clearSavedScores();
     }
 
 
