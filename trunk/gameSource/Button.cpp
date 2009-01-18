@@ -5,6 +5,7 @@
 
 
 #include <GL/gl.h>
+#include <math.h>
 
 
 
@@ -31,7 +32,22 @@ void Button::setString( char *inString ) {
     }
 
 
+
+char Button::isInside( int inX, int inY ) {
+    // slightly bigger than underlying grid
+    // to make it easier to press
+
+    if( fabs( inX - mX ) < 23
+        &&
+        fabs( inY - mY ) < 23 ) {
         
+        return true;
+        }
+    
+    return false;
+    }
+
+
         
 void Button::setVisible( char inIsVisible ) {
     mVisible = inIsVisible;

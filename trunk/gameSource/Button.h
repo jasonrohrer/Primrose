@@ -19,9 +19,8 @@ class Button {
         void setString( char *inString );
         
 
-        char isInside( int inX, int inY ) {
-            return mSpace.isInside( inX, inY );
-            }
+        char isInside( int inX, int inY );
+        
         
         void setVisible( char inIsVisible );
 
