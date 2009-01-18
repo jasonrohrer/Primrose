@@ -2,20 +2,20 @@
 
 #include "NextPieceDisplay.h"
 
-#include "TutorialPanelB.h"
+//#include "TutorialPanelC.h"
 
 
 
-class TutorialPanel : public Panel {
+class TutorialPanelB : public Panel {
         
 
     public:
         
 
-        TutorialPanel( int inW, int inH );
+        TutorialPanelB( int inW, int inH );
         
 
-        ~TutorialPanel();
+        ~TutorialPanelB();
         
         
 
@@ -37,16 +37,26 @@ class TutorialPanel : public Panel {
         
     private:
         
-        Button mNextButton;
-        TutorialPanelB mNextPanel;
+        void setStageZero();
         
 
-        NextPieceDisplay mNextPieceDemo;
+        Button mNextButton;
+        //TutorialPanelC mNextPanel;
+        
+
         
         GridSpace *mGridDemo[4][7];
         GridSpace *mAllDemoSpaces[28];
+        
 
-
+        // surrounded
+        GridSpace *mInnerSpaces[4];
+        // surrounding
+        GridSpace *mOuterSpaces[7];
+        // final to complete
+        GridSpace *mKeySpace;
+        
+            
         int mDemoStage;
         
 

@@ -23,6 +23,7 @@ GridSpace::GridSpace( int inX, int inY )
          mChecked( false ),
          mMarkedForClearing( false ),
          mScore( 0 ),
+         mAddToGlobalScore( true ),
          mDrawColor( NULL ),
          mPieceColor( NULL ), mLastColor( NULL ),
          mColorShiftProgress( 0 ),
@@ -304,7 +305,9 @@ void GridSpace::step() {
         
         // only add to score once
         if( !mScoreSent ) {
-            addToScore( mScore );
+            if( mAddToGlobalScore ) {
+                addToScore( mScore );
+                }
             
             mScoreSent = true;
             }

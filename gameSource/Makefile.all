@@ -36,6 +36,7 @@ WebRequest.cpp \
 ScoreBundle.cpp \
 HighScorePanel.cpp \
 TutorialPanel.cpp \
+TutorialPanelB.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
