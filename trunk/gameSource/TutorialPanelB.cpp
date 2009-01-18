@@ -1,4 +1,4 @@
-#include "TutorialPanel.h"
+#include "TutorialPanelB.h"
 
 #include "numeral.h"
 
@@ -8,26 +8,19 @@
 #include <GL/gl.h>
 
 
-Color nextPieceDemoColors[2] = { 
-    Color( 255/255.0, 128/255.0, 0/255.0 ),
-    Color( 128/255.0, 255/255.0, 0/255.0 ) 
-    };
+extern Color nextPieceDemoColors[2];
 
 
-
-TutorialPanel::TutorialPanel( int inW, int inH )
+TutorialPanelB::TutorialPanelB( int inW, int inH )
         : Panel( inW, inH ),
           mNextButton( inW - ( 19 + 21 ), 19 + 21, "next" ),
-          mNextPanel( inW, inH ),
-          mNextPieceDemo( inW / 2, inH / 3, NULL,
-                          nextPieceDemoColors[0].copy(),
-                          nextPieceDemoColors[1].copy() ),
+          //          mNextPanel( inW, inH ),
           mDemoStage( 0 ),
           mStepsBetweenStages( 50 ), mStepCount( 0 ) {
 
 
     addButton( &mNextButton );
-    addSubPanel( &mNextPanel );
+    //    addSubPanel( &mNextPanel );
     
 
 
@@ -38,7 +31,7 @@ TutorialPanel::TutorialPanel( int inW, int inH )
     int gridH = 4;
     int gridW = 7;
     
-    int yOffset = mNextPieceDemo.mY + 41 + 40;
+    int yOffset = 200;
     
     for( y=0; y<gridH; y++ ) {
         for( x=0; x<gridW; x++ ) {
@@ -46,6 +39,9 @@ TutorialPanel::TutorialPanel( int inW, int inH )
             mAllDemoSpaces[i] = 
             mGridDemo[y][x] =
                 new GridSpace( x * 40 + 19 + 21, y * 40 + yOffset + 21 );
+          
+            mAllDemoSpaces[i]->mAddToGlobalScore = false;
+            
             
             i++;
             }
@@ -74,24 +70,56 @@ TutorialPanel::TutorialPanel( int inW, int inH )
                 }
             }
         }
+    
+    mInnerSpaces[0] = mGridDemo[1][2];
+    mInnerSpaces[1] = mGridDemo[1][3];
+    mInnerSpaces[2] = mGridDemo[2][3];
+    mInnerSpaces[3] = mGridDemo[2][4];
+    
+    mOuterSpaces[0] = mGridDemo[0][3];
+    mOuterSpaces[1] = mGridDemo[1][4];
+    mOuterSpaces[2] = mGridDemo[2][5];
+    mOuterSpaces[3] = mGridDemo[3][4];
+    mOuterSpaces[4] = mGridDemo[3][3];
+    mOuterSpaces[5] = mGridDemo[2][2];
+    mOuterSpaces[6] = mGridDemo[1][1];
+    
+    mKeySpace = mGridDemo[0][2];
 
+    setStageZero();
+    }
+
+
+
+void TutorialPanelB::setStageZero() {
+    
+    int i;
+    
+    for( i=0; i<4; i++ ) {
+        mInnerSpaces[i]->setColor( nextPieceDemoColors[0].copy() );
+        }
+    for( i=0; i<7; i++ ) {
+        mOuterSpaces[i]->setColor( nextPieceDemoColors[1].copy() );
+        }
+    mKeySpace->setColor( NULL );
+    
     }
 
 
     
-TutorialPanel::~TutorialPanel() {
+TutorialPanelB::~TutorialPanelB() {
     }
 
 
 
-void TutorialPanel::setVisible( char inIsVisible ) {
+void TutorialPanelB::setVisible( char inIsVisible ) {
     Panel::setVisible( inIsVisible );
     
     }
 
 
 
-char TutorialPanel::pointerUp( int inX, int inY ) {
+char TutorialPanelB::pointerUp( int inX, int inY ) {
     char consumed = Panel::pointerUp( inX, inY );
     
     if( consumed ) {
@@ -103,22 +131,21 @@ char TutorialPanel::pointerUp( int inX, int inY ) {
 
         if( mNextButton.isInside( inX, inY ) ) {
             
-            mNextPanel.setVisible( true );
+            //mNextPanel.setVisible( true );
             
             return true;
             }
         }
-
+    
     return false;
     }
 
 
 
-void TutorialPanel::step() {
+void TutorialPanelB::step() {
     Panel::step();
     
-    mNextPieceDemo.step();
-    
+        
     int i;
 
     for( i=0; i<28; i++ ) {
@@ -143,34 +170,30 @@ void TutorialPanel::step() {
         
 
         if( mDemoStage == 0 ) {
-            for( i=0; i<28; i++ ) {
-                mAllDemoSpaces[i]->mActive = false;
-                mAllDemoSpaces[i]->setColor( NULL );
-                }
+            setStageZero();
             }
         else if( mDemoStage == 1 ) {
-            GridSpace *s = mGridDemo[2][2];
-            
-            s->setColor( nextPieceDemoColors[0].copy() );
-            
-            for( i=0; i<28; i++ ) {
-                GridSpace *other = mAllDemoSpaces[i];
-                
-                if( other != s ) {
-                    if( other->mY == s->mY ||
-                        other->mX == s->mX ) {
-                        other->mActive = true;
-                        }
-                    }
-                }
+            mKeySpace->setColor( nextPieceDemoColors[1].copy() );
             }
         else if( mDemoStage == 2 ) {
-            mGridDemo[0][2]->setColor( nextPieceDemoColors[1].copy() );
-        
-            for( i=0; i<28; i++ ) {
-                mAllDemoSpaces[i]->mActive = false;
+            for( i=0; i<4; i++ ) {
+                mInnerSpaces[i]->mScore = 16;
+                mInnerSpaces[i]->flipToClear();
                 }
             }
+        /*
+        else if( mDemoStage == 2 ) {
+            for( i=0; i<4; i++ ) {
+                mInnerSpaces[i]->setColor( NULL );
+                }
+            }
+        else if( mDemoStage == 3 ) {
+            for( i=0; i<7; i++ ) {
+                mOuterSpaces[i]->setColor( nextPieceDemoColors[0].copy() );
+                }
+
+            mKeySpace->setColor( nextPieceDemoColors[0].copy() );
+            }*/
         
         
             
@@ -181,10 +204,10 @@ void TutorialPanel::step() {
 
 
 
-Color tutorialTextColor( 255/255.0, 255/255.0, 160/255.0 );
+extern Color tutorialTextColor;
 
         
-void TutorialPanel::drawBase() {
+void TutorialPanelB::drawBase() {
     
     Panel::drawBase();
     
@@ -193,33 +216,39 @@ void TutorialPanel::drawBase() {
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-        drawString( "colored tiles come in pairs", left, 
+        drawString( "clear a group of tiles by", left, 
                     19,
-                    mNextPieceDemo.mY - 41 - 30,
+                    mGridDemo[0][0]->mY - 20 - 60,
                     &tutorialTextColor, mFadeProgress );        
-        
-        drawString( "press grid to place first tile", left, 
+        drawString( "surrounding it with another", left, 
                     19,
-                    mNextPieceDemo.mY + 41 + 20,
+                    mGridDemo[0][0]->mY - 20 - 40,
                     &tutorialTextColor, mFadeProgress );        
-        
+        drawString( "color and score points", left, 
+                    19,
+                    mGridDemo[0][0]->mY - 20 - 20,
+                    &tutorialTextColor, mFadeProgress );        
 
-        drawString( "second tile of pair must go in", left, 
+        drawString( "the surrounding tiles flip color", left, 
                     19,
                     mGridDemo[3][0]->mY + 20 + 20,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "the same row or column", left, 
+
+        drawString( "clear bigger groups for even", left, 
                     19,
-                    mGridDemo[3][0]->mY + 20 + 40,
+                    mGridDemo[3][0]->mY + 20 + 60,
+                    &tutorialTextColor, mFadeProgress );        
+
+        drawString( "more points", left, 
+                    19,
+                    mGridDemo[3][0]->mY + 20 + 80,
                     &tutorialTextColor, mFadeProgress );        
         
 
         glDisable( GL_BLEND );
         
 
-        mNextPieceDemo.draw( mFadeProgress );
-        
         int i;
         
         int numGridSpaces = 28;
@@ -243,17 +272,13 @@ void TutorialPanel::drawBase() {
 
 
 
-void TutorialPanel::closePressed() {
+void TutorialPanelB::closePressed() {
     // return to step 0
     mDemoStage = 0;
     mStepCount = 0;
     
-    int i;
-    
-    for( i=0; i<28; i++ ) {
-        mAllDemoSpaces[i]->mActive = false;
-        mAllDemoSpaces[i]->setColor( NULL );
-        }
+
+    setStageZero();
     }
 
 

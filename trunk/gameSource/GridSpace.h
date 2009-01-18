@@ -94,6 +94,10 @@ class GridSpace {
         
         int mScore;
         
+        // set to false to block this piece from contributing to 
+        // current game score
+        char mAddToGlobalScore;
+        
         
 
         enum NeighborDirections { top=0, right, bottom, left 
