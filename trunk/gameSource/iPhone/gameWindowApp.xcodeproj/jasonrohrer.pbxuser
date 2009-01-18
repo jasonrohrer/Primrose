@@ -16,6 +16,8 @@
 		);
 		breakpoints = (
 			DA34BDB90F1E8BE200126D0F /* game.cpp:251 */,
+			DA9F42CA0F22562D005574AF /* HighScoreLoadingPanel.cpp:131 */,
+			DA9F42D70F2289A7005574AF /* WebRequest.cpp:147 */,
 		);
 		codeSenseManager = DA86AE940EF5391600054E6B /* Code sense */;
 		executables = (
@@ -305,10 +307,10 @@
 	};
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {553, 602}}";
-			sepNavSelRange = "{449, 0}";
-			sepNavVisRange = "{166, 674}";
-			sepNavWindowFrame = "{{172, 138}, {750, 558}}";
+			sepNavIntBoundsRect = "{{0, 0}, {691, 1666}}";
+			sepNavSelRange = "{1987, 0}";
+			sepNavVisRange = "{1929, 704}";
+			sepNavWindowFrame = "{{217, 101}, {750, 558}}";
 		};
 	};
 	8D1107310486CEB800E47090 /* Info.plist */ = {
@@ -690,9 +692,9 @@
 	};
 	DA34BCCE0F1E7B3B00126D0F /* game.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {711, 13776}}";
-			sepNavSelRange = "{2533, 35}";
-			sepNavVisRange = "{2518, 60}";
+			sepNavIntBoundsRect = "{{0, 0}, {553, 13776}}";
+			sepNavSelRange = "{4765, 0}";
+			sepNavVisRange = "{4499, 542}";
 			sepNavWindowFrame = "{{15, 144}, {846, 597}}";
 		};
 	};
@@ -769,9 +771,9 @@
 	};
 	DA34BCE60F1E7CBB00126D0F /* TypeIOLinux.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {711, 1946}}";
-			sepNavSelRange = "{1832, 73}";
-			sepNavVisRange = "{1830, 77}";
+			sepNavIntBoundsRect = "{{0, 0}, {553, 1792}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 527}";
 		};
 	};
 	DA34BCE80F1E7CD300126D0F /* PathLinux.cpp */ = {
@@ -978,7 +980,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 674;
 		vrLoc = 166;
@@ -1160,8 +1162,8 @@
 		rLen = 0;
 		rLoc = 5668;
 		rType = 0;
-		vrLen = 580;
-		vrLoc = 8304;
+		vrLen = 0;
+		vrLoc = 8157;
 	};
 	DA34BD6F0F1E8B4700126D0F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1178,7 +1180,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 416;
 		vrLoc = 0;
@@ -1200,8 +1202,8 @@
 		rLen = 0;
 		rLoc = 5668;
 		rType = 0;
-		vrLen = 480;
-		vrLoc = 10522;
+		vrLen = 0;
+		vrLoc = 8157;
 	};
 	DA34BD730F1E8B4700126D0F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1230,8 +1232,8 @@
 		rLen = 0;
 		rLoc = 6747;
 		rType = 0;
-		vrLen = 513;
-		vrLoc = 9305;
+		vrLen = 0;
+		vrLoc = 8157;
 	};
 	DA34BD760F1E8B4700126D0F /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1250,7 +1252,7 @@
 		rLen = 0;
 		rLoc = 5012;
 		rType = 0;
-		vrLen = 558;
+		vrLen = 280;
 		vrLoc = 7877;
 	};
 	DA34BD780F1E8B4700126D0F /* PBXTextBookmark */ = {
@@ -1405,7 +1407,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 416;
 		vrLoc = 0;
@@ -1755,7 +1757,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 416;
 		vrLoc = 0;
@@ -1775,7 +1777,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 416;
 		vrLoc = 0;
@@ -1817,7 +1819,7 @@
 		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
 		name = "main.m: 22";
 		rLen = 0;
-		rLoc = 449;
+		rLoc = 481;
 		rType = 0;
 		vrLen = 674;
 		vrLoc = 166;
@@ -1860,10 +1862,10 @@
 		continueAfterActions = 0;
 		countType = 0;
 		delayBeforeContinue = 0;
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		location = tileGame1;
-		modificationTime = 253906183.687665;
+		modificationTime = 253941430.938772;
 		state = 1;
 		symbolName = "game.cpp:251";
 	};
@@ -2076,9 +2078,9 @@
 	};
 	DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1032, 4564}}";
-			sepNavSelRange = "{4769, 0}";
-			sepNavVisRange = "{4430, 352}";
+			sepNavIntBoundsRect = "{{0, 0}, {924, 4704}}";
+			sepNavSelRange = "{7280, 0}";
+			sepNavVisRange = "{7077, 655}";
 		};
 	};
 	DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */ = {
@@ -2142,7 +2144,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 0;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -2380,6 +2382,20 @@
 		vrLen = 455;
 		vrLoc = 4861;
 	};
+	DA9F42440F224992005574AF /* WebRequest.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {553, 5026}}";
+			sepNavSelRange = "{3447, 0}";
+			sepNavVisRange = "{3343, 279}";
+		};
+	};
+	DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {553, 5936}}";
+			sepNavSelRange = "{2530, 0}";
+			sepNavVisRange = "{2361, 459}";
+		};
+	};
 	DA9F42580F2249C9005574AF /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		comments = "error: 'class CustomRandomSource' has no member named 'reseed'";
@@ -2471,8 +2487,8 @@
 	DA9F426E0F224A69005574AF /* LookupThread.cpp */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {553, 910}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 321}";
+			sepNavSelRange = "{829, 0}";
+			sepNavVisRange = "{684, 300}";
 		};
 	};
 	DA9F42730F224A8F005574AF /* ThreadLinux.cpp */ = {
@@ -2484,9 +2500,10 @@
 	};
 	DA9F42780F224AA9005574AF /* SettingsManager.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {553, 3780}}";
+			sepNavIntBoundsRect = "{{0, 0}, {787, 3710}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 473}";
+			sepNavVisRange = "{1341, 812}";
+			sepNavWindowFrame = "{{203, 0}, {846, 597}}";
 		};
 	};
 	DA9F427A0F224AB7005574AF /* MutexLockLinux.cpp */ = {
@@ -2498,9 +2515,9 @@
 	};
 	DA9F427F0F224AEF005574AF /* HostAddressLinux.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {553, 2044}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 518}";
+			sepNavIntBoundsRect = "{{0, 0}, {787, 2044}}";
+			sepNavSelRange = "{2155, 0}";
+			sepNavVisRange = "{1777, 820}";
 		};
 	};
 	DA9F42800F224AEF005574AF /* SocketClientLinux.cpp */ = {
@@ -2512,10 +2529,51 @@
 	};
 	DA9F42810F224AEF005574AF /* SocketLinux.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {553, 5362}}";
+			sepNavIntBoundsRect = "{{0, 0}, {711, 5628}}";
 			sepNavSelRange = "{2472, 0}";
-			sepNavVisRange = "{2410, 351}";
+			sepNavVisRange = "{2377, 82}";
 		};
+	};
+	DA9F42900F224C10005574AF /* NetworkFunctionLocks.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {553, 285}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 250}";
+		};
+	};
+	DA9F42CA0F22562D005574AF /* HighScoreLoadingPanel.cpp:131 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = DA9F42490F224992005574AF /* HighScoreLoadingPanel.cpp */;
+		functionName = "HighScoreLoadingPanel::step()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 131;
+		location = tileGame1;
+		modificationTime = 253941410.615879;
+		state = 2;
+	};
+	DA9F42D70F2289A7005574AF /* WebRequest.cpp:147 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = DA9F42440F224992005574AF /* WebRequest.cpp */;
+		functionName = "WebRequest::step()";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 147;
+		location = tileGame1;
+		modificationTime = 253941410.615905;
+		state = 2;
 	};
 	DAADB67F0EF981DA00169CE3 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
