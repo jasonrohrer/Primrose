@@ -145,24 +145,41 @@ void clearSavedScores() {
 // converts numbers in range [0,48] to alphabetical characters
 // uses the first 49 digits of base64 as described here:
 //   http://tools.ietf.org/html/rfc4648
-char base49Encode( int inNumber ) {
+char base49Encode( unsigned int inNumber ) {
     if( inNumber < 26 ) {
         return 'A' + inNumber;
         }
-    else {
+    else if( inNumber < 49 ) {
         return 'a' + (inNumber - 26);
         }
+    else {
+        printf( "Bad base-49 encoding request: %u\n", inNumber );
+        
+        return 'A';
+        }
     }
 
 
-int base49Decode( char inLetter ) {
+
+unsigned int base49Decode( char inLetter ) {
+    unsigned int returnValue;
+    
     if( inLetter < 'A' + 26 ) {
-        return inLetter - 'A';
+        returnValue = inLetter - 'A';
         }
     else {
-        return inLetter - 'a' + 26;
+        returnValue = inLetter - 'a' + 26;
+        }
+
+    if( returnValue > 48 ) {
+        printf( "Bad base-49 encoding request: %c\n", inLetter );
+        return 0;
+        }
+    else {
+        return returnValue;
         }
     }
+
 
 
 
@@ -524,7 +541,7 @@ char checkAndClear() {
 
 
 
-void placeNextPieceAt( int inSpaceNumber ) {
+void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
@@ -768,7 +785,7 @@ void drawFrame() {
             
                 if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
                     
-                    int spaceNumber = base49Decode( 
+                    unsigned int spaceNumber = base49Decode( 
                         gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
                     
                     gamePlaybackStep ++;
@@ -1001,8 +1018,8 @@ void pointerUp( float inX, float inY ) {
         }
     
 
-    int x;
-    int y;
+    unsigned int x;
+    unsigned int y;
     
     for( y=0; y<gridH; y++ ) {
         for( x=0; x<gridW; x++ ) {
@@ -1016,9 +1033,7 @@ void pointerUp( float inX, float inY ) {
                 && 
                 ( considerNonActive || space->mActive ) ) {
                 
-                int i;
-                
-                i = y * gridW + x;
+                unsigned int i = y * gridW + x;
                 
                 placeNextPieceAt( i );
                 }
