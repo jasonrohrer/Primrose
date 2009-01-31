@@ -144,16 +144,7 @@ void HighScoreLoadingPanel::step() {
         setVisible( false );
         }
     
-    
-    if( mBlinkTime < 9 ) {
-        // return without doing work until a bit of blinking has happened
 
-        // this gives user a chance to read the message no matter how
-        // fast the request happens
-
-        return;
-        }
-    
 
 
     if( mServerURLFetchRequest != NULL ) {
@@ -209,7 +200,10 @@ void HighScoreLoadingPanel::step() {
     else if( mWebRequest != NULL ) {
         int stepResult = mWebRequest->step();
     
-        if( stepResult == 1 ) {
+        // don't consider processing result until at least a bit of blinking
+        // has happened (thus, we give the user time to read the loading/posting
+        // message before the score display is shown)
+        if( mBlinkTime > 9 && stepResult == 1 ) {
             // done
             char goodResult = false;
             
