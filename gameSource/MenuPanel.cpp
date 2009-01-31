@@ -149,16 +149,26 @@ void MenuPanel::drawBase() {
         }
     
 
+
+    
+    }
+
+
+
+
+void MenuPanel::step() {
+    Panel::step();
+    
+    
     // check if we should force ourself visible
-    // (to pass button presses through to mDisplayPanel, and be
-    //  there to catch it when BACK is pressed)
+    // (to pass button presses through to loading and display panel, and be
+    //  there to catch it when either of their BACK buttons are pressed)
     if( !mVisible &&
-        mDisplayPanel->isFullyVisible() ) {
+        ( mHighScoreLoadingPanel.isFullyVisible() || 
+          mDisplayPanel->isFullyVisible() ) ) {
         
         setVisible( true );
         }
-
-    
     }
 
 
