@@ -65,7 +65,11 @@
 		DA9F43C40F231E7F005574AF /* TutorialPanelC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */; };
 		DA9F43C50F231E7F005574AF /* TutorialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */; };
 		DA9F43C60F231E7F005574AF /* TutorialPanelB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */; };
-		DA9F43F60F23453A005574AF /* Message.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9F43F50F23453A005574AF /* Message.framework */; };
+		DAD088FD0F34A037007CAF68 /* BringNetworkUpThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */; };
+		DAD089060F34BC07007CAF68 /* encodingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD089050F34BC07007CAF68 /* encodingUtils.cpp */; };
+		DAD0890B0F34BC49007CAF68 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD0890A0F34BC49007CAF68 /* sha1.cpp */; };
+		DAD089340F34CEC2007CAF68 /* networkInterfaceIPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */; };
+		DAD089480F34CFBC007CAF68 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAD089470F34CFBC007CAF68 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -151,8 +155,15 @@
 		DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelC.cpp; path = ../TutorialPanelC.cpp; sourceTree = SOURCE_ROOT; };
 		DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanel.cpp; path = ../TutorialPanel.cpp; sourceTree = SOURCE_ROOT; };
 		DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelB.cpp; path = ../TutorialPanelB.cpp; sourceTree = SOURCE_ROOT; };
-		DA9F43F50F23453A005574AF /* Message.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Message.framework; path = System/Library/PrivateFrameworks/Message.framework; sourceTree = SDKROOT; };
-		DA9F44060F2345B5005574AF /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
+		DAD088F80F34A037007CAF68 /* networkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = networkInterface.h; path = ../networkInterface.h; sourceTree = SOURCE_ROOT; };
+		DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BringNetworkUpThread.cpp; path = ../BringNetworkUpThread.cpp; sourceTree = SOURCE_ROOT; };
+		DAD088FB0F34A037007CAF68 /* BringNetworkUpThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BringNetworkUpThread.h; path = ../BringNetworkUpThread.h; sourceTree = SOURCE_ROOT; };
+		DAD089010F34BBD4007CAF68 /* secureSalt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = secureSalt.h; path = ../secureSalt.h; sourceTree = SOURCE_ROOT; };
+		DAD089050F34BC07007CAF68 /* encodingUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = encodingUtils.cpp; path = ../../../../minorGems/formats/encodingUtils.cpp; sourceTree = SOURCE_ROOT; };
+		DAD089090F34BC49007CAF68 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = ../../../../minorGems/crypto/hashes/sha1.h; sourceTree = SOURCE_ROOT; };
+		DAD0890A0F34BC49007CAF68 /* sha1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sha1.cpp; path = ../../../../minorGems/crypto/hashes/sha1.cpp; sourceTree = SOURCE_ROOT; };
+		DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = networkInterfaceIPhone.mm; sourceTree = "<group>"; };
+		DAD089470F34CFBC007CAF68 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = /System/Library/Frameworks/SystemConfiguration.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,7 +176,7 @@
 				DA90DD4A0EFADE15001BABB5 /* AudioToolbox.framework in Frameworks */,
 				DA9E302E0EFC010300DFACC7 /* QuartzCore.framework in Frameworks */,
 				DA9E302F0EFC010300DFACC7 /* OpenGLES.framework in Frameworks */,
-				DA9F43F60F23453A005574AF /* Message.framework in Frameworks */,
+				DAD089480F34CFBC007CAF68 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,7 +206,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				DA9F43F50F23453A005574AF /* Message.framework */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -209,7 +219,7 @@
 				DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */,
 				DA7F11800EF6D77000CB6D50 /* gameWindowApp_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				DA9F44060F2345B5005574AF /* NetworkController.h */,
+				DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -228,6 +238,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAD089470F34CFBC007CAF68 /* SystemConfiguration.framework */,
 				DA9E302C0EFC010300DFACC7 /* QuartzCore.framework */,
 				DA9E302D0EFC010300DFACC7 /* OpenGLES.framework */,
 				DA90DD490EFADE15001BABB5 /* AudioToolbox.framework */,
@@ -309,6 +320,10 @@
 				DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */,
 				DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */,
 				DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */,
+				DAD088F80F34A037007CAF68 /* networkInterface.h */,
+				DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */,
+				DAD088FB0F34A037007CAF68 /* BringNetworkUpThread.h */,
+				DAD089010F34BBD4007CAF68 /* secureSalt.h */,
 				DA8C9E030EF80930002FCA67 /* minorGems */,
 			);
 			name = Unchanged;
@@ -317,6 +332,9 @@
 		DA8C9E030EF80930002FCA67 /* minorGems */ = {
 			isa = PBXGroup;
 			children = (
+				DAD089090F34BC49007CAF68 /* sha1.h */,
+				DAD0890A0F34BC49007CAF68 /* sha1.cpp */,
+				DAD089050F34BC07007CAF68 /* encodingUtils.cpp */,
 				DA34BCF80F1E804C00126D0F /* SingleTextureGL.h */,
 				DA34BCE00F1E7C8A00126D0F /* SingleTextureGL.cpp */,
 				DA34BCE20F1E7CA200126D0F /* StringBufferOutputStream.cpp */,
@@ -457,6 +475,10 @@
 				DA9F43C40F231E7F005574AF /* TutorialPanelC.cpp in Sources */,
 				DA9F43C50F231E7F005574AF /* TutorialPanel.cpp in Sources */,
 				DA9F43C60F231E7F005574AF /* TutorialPanelB.cpp in Sources */,
+				DAD088FD0F34A037007CAF68 /* BringNetworkUpThread.cpp in Sources */,
+				DAD089060F34BC07007CAF68 /* encodingUtils.cpp in Sources */,
+				DAD0890B0F34BC49007CAF68 /* sha1.cpp in Sources */,
+				DAD089340F34CEC2007CAF68 /* networkInterfaceIPhone.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
