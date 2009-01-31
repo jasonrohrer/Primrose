@@ -277,7 +277,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>68</integer>
+									<integer>67</integer>
 									<integer>2</integer>
 									<integer>0</integer>
 								</array>
@@ -320,7 +320,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>networkInterfaceIPhone.mm</string>
+								<string>main.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -328,11 +328,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>networkInterfaceIPhone.mm</string>
+										<string>main.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>DAD089800F34E0E6007CAF68</string>
+										<string>DAD089850F34E1AE007CAF68</string>
 										<key>history</key>
 										<array>
 											<string>DA12F3600EF6EB5E00A40C6D</string>
@@ -393,8 +393,8 @@
 											<string>DAD089560F34D52F007CAF68</string>
 											<string>DAD089780F34E0E6007CAF68</string>
 											<string>DAD089790F34E0E6007CAF68</string>
-											<string>DAD0897A0F34E0E6007CAF68</string>
-											<string>DAD0897B0F34E0E6007CAF68</string>
+											<string>DAD089820F34E1AE007CAF68</string>
+											<string>DAD089830F34E1AE007CAF68</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -470,6 +470,7 @@
 											<string>DAD0897D0F34E0E6007CAF68</string>
 											<string>DAD0897E0F34E0E6007CAF68</string>
 											<string>DAD0897F0F34E0E6007CAF68</string>
+											<string>DAD089840F34E1AE007CAF68</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
