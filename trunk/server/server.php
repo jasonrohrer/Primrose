@@ -394,6 +394,8 @@ function ps_postScore() {
     $score = "";
     $seed = "";
     $move_history = "";
+    $hash = "";
+    
     
     if( isset( $_REQUEST[ "name" ] ) ) {
         $name = $_REQUEST[ "name" ];
@@ -407,93 +409,138 @@ function ps_postScore() {
     if( isset( $_REQUEST[ "move_history" ] ) ) {
         $move_history = $_REQUEST[ "move_history" ];
         }
+    if( isset( $_REQUEST[ "hash" ] ) ) {
+        $hash = strtoupper( $_REQUEST[ "hash" ] );
+        }
 
 
-    $query = "INSERT INTO $tableNamePrefix"."today_scores VALUES ( " .
+    
+    $postValid = false;
+
+
+    $numMoves = strlen( $move_history );
+    
+    if( $numMoves > 48 ) {
+        // at least enough moves to fill board (shorter strings are dummies!)
+
+        if( preg_match( "/[A-Za-w]+/", $move_history, $matches ) == 1 ) {
+            if( strlen( $matches[0] ) == $numMoves ) {
+
+                // entire move string contains proper base-49 digits
+
+                
+                // check hash of all values
+                global $secureSalt;
+                
+                $ourHash = strtoupper( sha1( $name . $score . $seed .
+                                             $move_history . $secureSalt ) );
+                
+                if( $ourHash == $hash ) {
+                    $postValid = true;
+                    }
+                else {
+                    ps_log( "Hash mismatch for score post.  Provided $hash,  ".
+                            "expecting $ourHash" );
+                    }
+                }
+            }
+        }
+
+    
+    if( ! $postValid ) {
+        ps_log( "Bad score post: $name, $score, $seed, $move_history, $hash" );
+        }
+    
+    
+    if( $postValid ) {    
+        $query = "INSERT INTO $tableNamePrefix"."today_scores VALUES ( " .
             "'$name', '$score', '$seed', '$move_history', ".
             "CURRENT_TIMESTAMP );";
-
-
-    $result = ps_queryDatabase( $query );
-
-
-    $query = "SELECT COUNT(*) FROM $tableNamePrefix"."today_scores;";
-
-    $result = ps_queryDatabase( $query );
+        
+        
+        $result = ps_queryDatabase( $query );
     
-    $count = mysql_result( $result, 0, 0 );
 
-
-    if( $count > 50 ) {
-        // drop lowest one
-
-        $query = "SELECT * FROM $tableNamePrefix"."today_scores ".
-            "ORDER BY score ASC LIMIT 1;";
+        $query = "SELECT COUNT(*) FROM $tableNamePrefix"."today_scores;";
+        
         $result = ps_queryDatabase( $query );
         
-        $numRows = mysql_numrows( $result );
+        $count = mysql_result( $result, 0, 0 );
         
-        if( $numRows > 0 ) {
-            
-            $dropName = mysql_result( $result, 0, "name" );
-            $dropScore = mysql_result( $result, 0, "score" );
+        
+        if( $count > 50 ) {
+            // drop lowest one
 
-            $query = "DELETE FROM $tableNamePrefix"."today_scores ".
-                "WHERE name = '$dropName' ".
-                "AND score = '$dropScore';";
+            $query = "SELECT * FROM $tableNamePrefix"."today_scores ".
+                "ORDER BY score ASC LIMIT 1;";
+            $result = ps_queryDatabase( $query );
+        
+            $numRows = mysql_numrows( $result );
+        
+            if( $numRows > 0 ) {
             
+                $dropName = mysql_result( $result, 0, "name" );
+                $dropScore = mysql_result( $result, 0, "score" );
+
+                $query = "DELETE FROM $tableNamePrefix"."today_scores ".
+                    "WHERE name = '$dropName' ".
+                    "AND score = '$dropScore';";
+            
+                $result = ps_queryDatabase( $query );
+                }
+        
+            }
+    
+    
+
+        // check for lowest score in all-time highs
+        $query = "SELECT * FROM $tableNamePrefix"."all_time_scores ".
+            "ORDER BY score ASC;";
+        $result = ps_queryDatabase( $query );
+
+        $numRows = mysql_numrows( $result );
+
+        $addToAllTime = false;
+    
+    
+        // maintain only $listSize in all-time-table
+        if( $numRows > $listSize - 1 ) {
+
+            // lowest one in table
+            $otherScore = mysql_result( $result, 0, "score" );
+        
+            if( $score > $otherScore ) {
+
+                $otherName = mysql_result( $result, 0, "name" );
+
+                $query = "DELETE FROM $tableNamePrefix"."all_time_scores ".
+                    "WHERE name = '$otherName' ".
+                    "AND score = '$otherScore';";
+
+                ps_log(
+                    "Bumping $name from all-time list with score: $score." );
+
+            
+                $result = ps_queryDatabase( $query );
+
+                $addToAllTime = true;
+                }        
+            }
+        else {
+            // table not full!
+            $addToAllTime = true;
+            }
+
+        if( $addToAllTime ) {
+            $query =
+                "INSERT INTO $tableNamePrefix". "all_time_scores VALUES ( " .
+                "'$name', '$score', '$seed', '$move_history', ".
+                "CURRENT_TIMESTAMP );";
+
+            ps_log( "New score on all-time list by $name: $score." );
+        
             $result = ps_queryDatabase( $query );
             }
-        
-        }
-    
-    
-
-    // check for lowest score in all-time highs
-    $query = "SELECT * FROM $tableNamePrefix"."all_time_scores ".
-        "ORDER BY score ASC;";
-    $result = ps_queryDatabase( $query );
-
-    $numRows = mysql_numrows( $result );
-
-    $addToAllTime = false;
-    
-    
-    // maintain only $listSize in all-time-table
-    if( $numRows > $listSize - 1 ) {
-
-        // lowest one in table
-        $otherScore = mysql_result( $result, 0, "score" );
-        
-        if( $score > $otherScore ) {
-
-            $otherName = mysql_result( $result, 0, "name" );
-
-            $query = "DELETE FROM $tableNamePrefix"."all_time_scores ".
-                "WHERE name = '$otherName' ".
-                "AND score = '$otherScore';";
-
-            ps_log( "Bumping $name from all-time list with score: $score." );
-
-            
-            $result = ps_queryDatabase( $query );
-
-            $addToAllTime = true;
-            }        
-        }
-    else {
-        // table not full!
-        $addToAllTime = true;
-        }
-
-    if( $addToAllTime ) {
-        $query = "INSERT INTO $tableNamePrefix". "all_time_scores VALUES ( " .
-            "'$name', '$score', '$seed', '$move_history', ".
-            "CURRENT_TIMESTAMP );";
-
-        ps_log( "New score on all-time list by $name: $score." );
-        
-        $result = ps_queryDatabase( $query );
         }
     
     

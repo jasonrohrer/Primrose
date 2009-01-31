@@ -8,6 +8,17 @@ $databaseUsername = "testUser";
 $databasePassword = "testPassword";
 $databaseName = "test";
 
+// used to generate a hash of posted values
+// this file is NOT included with the distribution
+// must be a file containing:
+//
+//      < ? php   $secureSalt = "change_me";   ? >
+//
+// where "change_me" is a value shared with the client
+include( "secureSalt.php" );
+
+
+
 // The URL of to the server.php script.
 $fullServerURL = "http://localhost:8080/jcr13/primrose/server.php";
 

@@ -31,9 +31,15 @@ Note:
 
 
 === Call (params probably in POST body):
-server.php?action=post_score&name=[name]&score=[score]&seed=[seed]&move_history=[move_history_string]
+server.php?action=post_score&name=[name]&score=[score]&seed=[seed]&move_history=[move_history_string]&hash=[hash_string]
 
 Returns: 
 Same as fetch_scores above
+
+
+Where:
+hash_string = sha1( concat( name, score, seed, move_history, secureSalt ) )
+
+secureSalt is a secret string shared by both client and server
 
 
