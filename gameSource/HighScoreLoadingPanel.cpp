@@ -23,6 +23,7 @@ extern char *savedServerURL;
 
 void HighScoreLoadingPanel::startConnectionTry() {
     mFailed = false;
+    mBlinkTime = 0;
     mStatusLight.setColor( scoreLoadingGreen.copy() );
 
     if( mServerURL == NULL && mServerURLFetchRequest == NULL ) {
@@ -132,7 +133,16 @@ void HighScoreLoadingPanel::step() {
         setVisible( false );
         }
     
+    
+    if( mBlinkTime < 9 ) {
+        // return without doing work until a bit of blinking has happened
 
+        // this gives user a chance to read the message no matter how
+        // fast the request happens
+
+        return;
+        }
+    
 
 
     if( mServerURLFetchRequest != NULL ) {
