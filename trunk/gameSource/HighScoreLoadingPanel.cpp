@@ -6,7 +6,18 @@
 #include "gameControl.h"
 
 
+// defines a secret string shared with server
+// this file is NOT included with the distribution
+// must contain:
+//
+//    #define  secureSalt  "change_me"
+//
+// where "change_me" is a value shared with the server.
+#include "secureSalt.h"
+
+
 #include "minorGems/util/stringUtils.h"
+#include "minorGems/crypto/hashes/sha1.h"
 
 #include <math.h>
 #include <GL/gl.h>
@@ -293,15 +304,32 @@ void HighScoreLoadingPanel::step() {
         }
     else if( mScoreToPost != NULL && mServerURL != NULL ) {
         // need to generate a request
+        
+        char *stringToHash = autoSprintf( "%s%u%u%s%s",
+                                          mScoreToPost->mName,
+                                          mScoreToPost->mScore,
+                                          mScoreToPost->mSeed,
+                                          mScoreToPost->mMoveHistory,
+                                          secureSalt );
+        char *hash = computeSHA1Digest( stringToHash );
+        
+        delete [] stringToHash;
+
+
         char *body = autoSprintf( "action=post_score"
                                   "&name=%s"
                                   "&score=%u"
                                   "&seed=%u"
-                                  "&move_history=%s",
+                                  "&move_history=%s"
+                                  "&hash=%s",
                                   mScoreToPost->mName,
                                   mScoreToPost->mScore,
                                   mScoreToPost->mSeed,
-                                  mScoreToPost->mMoveHistory );
+                                  mScoreToPost->mMoveHistory,
+                                  hash );
+        
+        delete [] hash;
+        
         
         delete mScoreToPost;
         mScoreToPost = NULL;
