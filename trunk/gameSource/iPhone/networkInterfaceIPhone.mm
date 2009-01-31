@@ -83,7 +83,7 @@ char makeSureNetworkIsUp( char *inTestURL ) {
                 [ source cStringUsingEncoding:NSASCIIStringEncoding ];
         
             printf( "Fetch the following from %s when bringing up"
-                    " network connection:\n%s,\n", inTestURL, sourceString );
+                    " network connection:\n%s\n", inTestURL, sourceString );
         
             [pool release];
             
