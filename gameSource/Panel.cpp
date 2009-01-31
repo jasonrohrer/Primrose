@@ -76,12 +76,17 @@ char Panel::pointerUp( int inX, int inY ) {
         Panel *p = *( mSubPanels.getElement( i ) );
         if( p->isVisible() ) {
             somePanelVisible = true;
-            char consumed = p->pointerUp( inX, inY );
 
-            // stop as soon as consumed
-            if( consumed ) {
-                return true;
+            // only pass pointer clicks to fully-visible panels
+            if( p->isFullyVisible() ) {
+                char consumed = p->pointerUp( inX, inY );
+
+                // stop as soon as consumed
+                if( consumed ) {
+                    return true;
+                    }
                 }
+            
             }
         }
 
