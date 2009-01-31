@@ -3,8 +3,8 @@
 
 char isNetworkAlwaysOn() {
     // for testing
-    return false;
-    //return true;
+    //return false;
+    return true;
     }
 
 
@@ -13,7 +13,7 @@ char isNetworkAlwaysOn() {
 // does nothing
 char makeSureNetworkIsUp( char *inTestURL ) {
     // for testing
-    Thread::staticSleep( 5000 );
+    //Thread::staticSleep( 5000 );
     
     return true;
     }
