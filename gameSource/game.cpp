@@ -262,7 +262,7 @@ void newGame() {
     menuButton = new Button( spaces[0][0]->mX, colorPool->mY - 41 - 19, "p" );
 
     doneButton = new Button( undoButton->mX, 
-                             menuButton->mY, "done" );
+                             menuButton->mY, "send" );
 
     // up a bit from undo (to give space between play button)
     stepButton = 
