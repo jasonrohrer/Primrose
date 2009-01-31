@@ -7,6 +7,9 @@
 #include "minorGems/network/LookupThread.h"
 
 
+#include "BringNetworkUpThread.h"
+
+
 
 // a non-blocking web request
 class WebRequest {
@@ -53,6 +56,7 @@ class WebRequest {
 
         HostAddress *mSuppliedAddress;
         HostAddress *mNumericalAddress;
+        BringNetworkUpThread *mNetworkUpThread;
         LookupThread *mLookupThread;
         
         Socket *mSock;

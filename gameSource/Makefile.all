@@ -38,6 +38,8 @@ HighScorePanel.cpp \
 TutorialPanel.cpp \
 TutorialPanelB.cpp \
 TutorialPanelC.cpp \
+networkInterfaceGeneric.cpp \
+BringNetworkUpThread.cpp \
 
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
