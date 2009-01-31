@@ -651,7 +651,8 @@ void drawFrame() {
             if( full ) {
                 if( gameToPlayback == NULL ) {
                     // game over
-                    gameOver = true;
+                    // but wait to set flag until after they press DONE
+                    // gameOver = true;
                     
                     doneButton->setVisible( true );
                     }
@@ -921,7 +922,10 @@ void pointerUp( float inX, float inY ) {
     int i;
     
     for( i=0; i<numPanels; i++ ) {
-        if( allPanels[i]->isVisible() ) {
+        if( allPanels[i]->isVisible() 
+            || 
+            allPanels[i]->isSubPanelVisible() ) {
+            
             somePanelVisible = true;
             allPanels[i]->pointerUp( (int)pointerX, (int)pointerY );
             }
@@ -944,12 +948,17 @@ void pointerUp( float inX, float inY ) {
                 menuPanel->setVisible( true );
                 }
             else if( allButtons[i] == doneButton ) {
+                // end game
+                gameOver = true;
+                
                 char *moveString = moveHistory.getElementString();
                 
                 ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,
                                                   moveString );
                 delete [] moveString;
 
+                //printf( "posting score\n" );
+                
                 ( (MenuPanel*)menuPanel )->postScore( b );
                 } 
             else if( allButtons[i] == playStopButton ) {

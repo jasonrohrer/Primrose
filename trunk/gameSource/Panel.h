@@ -40,6 +40,9 @@ class Panel {
             }
         
 
+        char isSubPanelVisible();
+
+
 
         // tells panel that pointer released inside it
         // returns true if release consumed (triggered a button somewhere)
@@ -61,7 +64,6 @@ class Panel {
         void addSubPanel( Panel *inPanel );
         void addButton( Button *inButton );
         
-        char isSubPanelVisible();
         
         char isSubPanelFullyVisible();
         

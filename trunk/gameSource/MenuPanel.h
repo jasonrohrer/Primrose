@@ -30,6 +30,7 @@ class MenuPanel : public Panel {
         // over rides these:
                 
         char pointerUp( int inX, int inY );
+        void step();
         
 
     protected:
