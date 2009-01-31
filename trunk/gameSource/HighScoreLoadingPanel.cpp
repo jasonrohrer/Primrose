@@ -309,15 +309,10 @@ void HighScoreLoadingPanel::step() {
         // wait until fully faded in to avoid jumping abruptly to display
         // if request is fast
 
-        // generate a load request
-        char *url = autoSprintf( "%s?action=fetch_scores",
-                                 mServerURL );
-        
-        mWebRequest = new WebRequest( "GET",
-                                      url,
-                                      NULL );
-        
-        delete [] url;
+        // generate a load request        
+        mWebRequest = new WebRequest( "POST",
+                                      mServerURL,
+                                      "action=fetch_scores" );
         }
     
                                   

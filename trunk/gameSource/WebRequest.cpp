@@ -1,5 +1,7 @@
 #include "WebRequest.h"
 
+#include "networkInterface.h"
+
 #include "minorGems/util/stringUtils.h"
 #include "minorGems/util/StringBufferOutputStream.h"
 
@@ -72,8 +74,23 @@ WebRequest::WebRequest( char *inMethod, char *inURL,
         portNumber );
 
     mNumericalAddress = NULL;
+
+
+
+    mNetworkUpThread = NULL;
+    mLookupThread = NULL;
     
-    mLookupThread = new LookupThread( mSuppliedAddress );
+
+    if( ! isNetworkAlwaysOn() ) {
+        // start thread to make sure it is on
+        // (start name lookup thread later, after it is on)
+        mNetworkUpThread = new BringNetworkUpThread( inURL );
+        }
+    else {
+        // network always on
+        // launch right into name lookup
+        mLookupThread = new LookupThread( mSuppliedAddress );
+        }
     
 
     mSock = NULL;
@@ -118,8 +135,14 @@ WebRequest::WebRequest( char *inMethod, char *inURL,
 
 WebRequest::~WebRequest() {
 
-    delete mLookupThread;
+    if( mNetworkUpThread != NULL ) {
+        delete mNetworkUpThread;
+        }
 
+    if( mLookupThread != NULL ) {    
+        delete mLookupThread;
+        }
+    
     delete mSuppliedAddress;
     
     if( mNumericalAddress != NULL ) {
@@ -149,7 +172,35 @@ int WebRequest::step() {
         }
 
     if( mSock == NULL ) {
+        
+
+        // either mNetworkUpThread is NULL or mLookupThread is NULL,
+        // but not both (lookup thread created when network up thread done)
+        if( mNetworkUpThread != NULL ) {
+            
+            if( mNetworkUpThread->isNetworkCheckDone() ) {
                 
+                if( mNetworkUpThread->isNetworkUp() ) {
+                    
+                    delete mNetworkUpThread;
+                    
+                    mNetworkUpThread = NULL;
+                    
+                    mLookupThread = new LookupThread( mSuppliedAddress );
+                    }
+                else {
+                    // failed to bring network up
+                    return -1;
+                    }
+                }
+            else {
+                // still bringing network up
+                return 0;
+                }
+            }
+        
+
+        // we know mLookupThread is not NULL if we get here
         if( mLookupThread->isLookupDone() ) {
         
 
