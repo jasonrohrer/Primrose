@@ -265,6 +265,15 @@
 			DAD089630F34D52F007CAF68 /* PBXTextBookmark */ = DAD089630F34D52F007CAF68 /* PBXTextBookmark */;
 			DAD089640F34D52F007CAF68 /* PBXTextBookmark */ = DAD089640F34D52F007CAF68 /* PBXTextBookmark */;
 			DAD089650F34D52F007CAF68 /* PBXTextBookmark */ = DAD089650F34D52F007CAF68 /* PBXTextBookmark */;
+			DAD089780F34E0E6007CAF68 /* PBXTextBookmark */ = DAD089780F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD089790F34E0E6007CAF68 /* PBXTextBookmark */ = DAD089790F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897A0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897A0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897B0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897B0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897C0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897C0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897D0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897D0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897E0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897E0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD0897F0F34E0E6007CAF68 /* PBXTextBookmark */ = DAD0897F0F34E0E6007CAF68 /* PBXTextBookmark */;
+			DAD089800F34E0E6007CAF68 /* PBXTextBookmark */ = DAD089800F34E0E6007CAF68 /* PBXTextBookmark */;
 		};
 		sourceControlManager = DA86AE930EF5391600054E6B /* Source Control */;
 		userBuildSettings = {
@@ -273,8 +282,8 @@
 	29B97316FDCFA39411CA2CEA /* main.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {641, 1148}}";
-			sepNavSelRange = "{946, 0}";
-			sepNavVisRange = "{239, 806}";
+			sepNavSelRange = "{243, 60}";
+			sepNavVisRange = "{163, 566}";
 			sepNavWindowFrame = "{{217, 99}, {750, 558}}";
 		};
 	};
@@ -759,7 +768,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {641, 364}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 449}";
+			sepNavVisRange = "{0, 444}";
 		};
 	};
 	DA34BD450F1E8B4700126D0F /* PBXTextBookmark */ = {
@@ -1148,7 +1157,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = tileGame1;
-		modificationTime = 255120948.172127;
+		modificationTime = 255122125.618952;
 		state = 0;
 		symbolName = "game.cpp:251";
 	};
@@ -1303,9 +1312,9 @@
 	};
 	DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {618, 4508}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1032, 4438}}";
 			sepNavSelRange = "{7280, 0}";
-			sepNavVisRange = "{1535, 172}";
+			sepNavVisRange = "{2888, 645}";
 		};
 	};
 	DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */ = {
@@ -2089,7 +2098,7 @@
 		ignoreCount = 0;
 		lineNumber = 26;
 		location = Primrose;
-		modificationTime = 255120947.477585;
+		modificationTime = 255122124.970574;
 		state = 2;
 	};
 	DAD089300F34CCAC007CAF68 /* main.m:23 */ = {
@@ -2106,14 +2115,14 @@
 		ignoreCount = 0;
 		lineNumber = 23;
 		location = Primrose;
-		modificationTime = 255120947.477621;
+		modificationTime = 255122124.970609;
 		state = 2;
 	};
 	DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {641, 1428}}";
-			sepNavSelRange = "{1409, 0}";
-			sepNavVisRange = "{1155, 512}";
+			sepNavIntBoundsRect = "{{0, 0}, {641, 1554}}";
+			sepNavSelRange = "{1367, 0}";
+			sepNavVisRange = "{1095, 493}";
 		};
 	};
 	DAD089550F34D52F007CAF68 /* PBXTextBookmark */ = {
@@ -2161,7 +2170,7 @@
 		fRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */;
 		name = "networkInterfaceIPhone.mm: 55";
 		rLen = 0;
-		rLoc = 1409;
+		rLoc = 1596;
 		rType = 0;
 		vrLen = 512;
 		vrLoc = 1155;
@@ -2251,7 +2260,7 @@
 		fRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */;
 		name = "networkInterfaceIPhone.mm: 49";
 		rLen = 0;
-		rLoc = 1253;
+		rLoc = 1398;
 		rType = 0;
 		vrLen = 453;
 		vrLoc = 965;
@@ -2271,7 +2280,7 @@
 		fRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */;
 		name = "networkInterfaceIPhone.mm: 55";
 		rLen = 0;
-		rLoc = 1409;
+		rLoc = 1596;
 		rType = 0;
 		vrLen = 512;
 		vrLoc = 1155;
@@ -2285,5 +2294,95 @@
 		rType = 0;
 		vrLen = 449;
 		vrLoc = 0;
+	};
+	DAD089780F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA34BD3D0F1E8A9B00126D0F /* common.cpp */;
+		name = "common.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 444;
+		vrLoc = 0;
+	};
+	DAD089790F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
+		name = "gameWindowAppDelegate.mm: 294";
+		rLen = 0;
+		rLoc = 7280;
+		rType = 0;
+		vrLen = 645;
+		vrLoc = 2888;
+	};
+	DAD0897A0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 17";
+		rLen = 60;
+		rLoc = 243;
+		rType = 0;
+		vrLen = 566;
+		vrLoc = 163;
+	};
+	DAD0897B0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */;
+		name = "networkInterfaceIPhone.mm: 55";
+		rLen = 0;
+		rLoc = 1596;
+		rType = 0;
+		vrLen = 512;
+		vrLoc = 1155;
+	};
+	DAD0897C0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA34BD3D0F1E8A9B00126D0F /* common.cpp */;
+		name = "common.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 444;
+		vrLoc = 0;
+	};
+	DAD0897D0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 34";
+		rLen = 0;
+		rLoc = 946;
+		rType = 0;
+		vrLen = 522;
+		vrLoc = 139;
+	};
+	DAD0897E0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
+		name = "gameWindowAppDelegate.mm: 294";
+		rLen = 0;
+		rLoc = 7280;
+		rType = 0;
+		vrLen = 645;
+		vrLoc = 2888;
+	};
+	DAD0897F0F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 29B97316FDCFA39411CA2CEA /* main.m */;
+		name = "main.m: 17";
+		rLen = 60;
+		rLoc = 243;
+		rType = 0;
+		vrLen = 566;
+		vrLoc = 163;
+	};
+	DAD089800F34E0E6007CAF68 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */;
+		name = "networkInterfaceIPhone.mm: 51";
+		rLen = 0;
+		rLoc = 1367;
+		rType = 0;
+		vrLen = 493;
+		vrLoc = 1095;
 	};
 }

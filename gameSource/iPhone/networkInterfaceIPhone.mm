@@ -45,9 +45,16 @@ BOOL connectedToNetwork() {
 
 // does nothing
 char makeSureNetworkIsUp( char *inTestURL ) {
-	
+    
+    // create a new pool here in case we are called from a new thread
+	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    
 	if( connectedToNetwork() ) {
         printf( "Network is up.\n" );
+        
+        [pool release];
+        
         return true;
         }
     else {
@@ -56,8 +63,8 @@ char makeSureNetworkIsUp( char *inTestURL ) {
         // try to force the network connection to come up
         //char *testURL = "http://www.google.com";
     
-         NSString *urlString = [ NSString stringWithCString:inTestURL 
-                                 encoding:NSASCIIStringEncoding ];
+        NSString *urlString = [ NSString stringWithCString:inTestURL 
+                                encoding:NSASCIIStringEncoding ];
     
         NSURL *url = [NSURL URLWithString:urlString];
         NSError *error;
@@ -66,6 +73,8 @@ char makeSureNetworkIsUp( char *inTestURL ) {
                              encoding:NSASCIIStringEncoding error:&error];
         
         if( source == nil ) {
+            [pool release];
+            
             return false;
             }
         else {
@@ -75,6 +84,8 @@ char makeSureNetworkIsUp( char *inTestURL ) {
         
             printf( "Fetch the following from %s when bringing up"
                     " network connection:\n%s,\n", inTestURL, sourceString );
+        
+            [pool release];
             
             return true;
             }
