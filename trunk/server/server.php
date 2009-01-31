@@ -132,8 +132,8 @@ else if( preg_match( "/server\.php/", $_SERVER[ "SCRIPT_NAME" ] ) ) {
     // quick (and incomplete) test to see if we should show instructions
     global $tableNamePrefix;
     
-    // check if our "games" table exists
-    $tableName = $tableNamePrefix . "games";
+    // check if our "all_time_scores" table exists
+    $tableName = $tableNamePrefix . "all_time_scores";
     
     $exists = ps_doesTableExist( $tableName );
         
