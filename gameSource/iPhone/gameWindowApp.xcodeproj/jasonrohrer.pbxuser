@@ -1148,8 +1148,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = tileGame1;
-		modificationTime = 255120668.601864;
-		state = 1;
+		modificationTime = 255120948.172127;
+		state = 0;
 		symbolName = "game.cpp:251";
 	};
 	DA34BDBD0F1E8C0B00126D0F /* PBXTextBookmark */ = {
@@ -2089,7 +2089,7 @@
 		ignoreCount = 0;
 		lineNumber = 26;
 		location = Primrose;
-		modificationTime = 255120316.785164;
+		modificationTime = 255120947.477585;
 		state = 2;
 	};
 	DAD089300F34CCAC007CAF68 /* main.m:23 */ = {
@@ -2106,7 +2106,7 @@
 		ignoreCount = 0;
 		lineNumber = 23;
 		location = Primrose;
-		modificationTime = 255120316.785205;
+		modificationTime = 255120947.477621;
 		state = 2;
 	};
 	DAD089330F34CEC2007CAF68 /* networkInterfaceIPhone.mm */ = {
