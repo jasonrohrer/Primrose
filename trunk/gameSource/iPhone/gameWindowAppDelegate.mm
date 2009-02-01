@@ -84,6 +84,11 @@
 - (id)initWithCoder:(NSCoder*)coder {
     
     if ((self = [super initWithCoder:coder])) {
+        
+        // Set up the ability to track multiple touches.
+		[self setMultipleTouchEnabled:YES];
+        
+        
         // Get the layer
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
