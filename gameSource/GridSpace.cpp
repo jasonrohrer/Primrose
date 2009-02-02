@@ -253,14 +253,18 @@ void GridSpace::step() {
         delete blendA;
         delete blendB;
         
-        if( mLastColor != NULL && mPieceColor != NULL ) {
-            // slow shift between colors
-            mColorShiftProgress += 0.1;
+        if( mColorShiftProgress < 1 ) {
+            
+            if( mLastColor != NULL && mPieceColor != NULL ) {
+                // slow shift between colors
+                mColorShiftProgress += 0.1;
+                }
+            else {
+                // faster shift to on or off
+                mColorShiftProgress += 0.2;
+                }
             }
-        else {
-            // faster shift to on or off
-            mColorShiftProgress += 0.2;
-            }
+        
         
         
         if( mColorShiftProgress > 1 ) {

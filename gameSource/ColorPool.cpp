@@ -58,10 +58,14 @@ Color pieceColors[numColors] = {
 
 
 #define startingSteps 96
+//#define startingSteps 2
 #define minSteps 6
+//#define minSteps 2
 
 ColorPool::ColorPool( int inX, int inY )
-        : mX( inX ), mY( inY ), mNumActiveColors( 3 ), mColorsToSkip( 0 ),
+        : mX( inX ), mY( inY ), 
+          mNumActiveColors( 3 ), mColorsToSkip( 0 ),
+          mEndPhase( false ),
           mStepsBetweenUpdates( startingSteps ),
           mStepsUntilUpdate( startingSteps ),
           mLastStepCount( startingSteps ),
@@ -116,30 +120,89 @@ void ColorPool::registerMove() {
     
     if( mStepsUntilUpdate == 0 ) {
         
-        mStepsBetweenUpdates /= 2;
-        
-        if( mStepsBetweenUpdates < minSteps ) {
-            mStepsBetweenUpdates = minSteps;
+
+
+        if( ! mEndPhase ) {
+            
+            if( mNumActiveColors < numColors ) {
+                mNumActiveColors ++;
+                
+                int i = mNumActiveColors - 1;
+                
+                mSpaces[i]->setColor( pieceColors[i].copy() );
+
+                mLevel++;
+                }
+            else if( mColorsToSkip < numColors - 1 ) {
+                mSpaces[mColorsToSkip]->setColor( NULL );            
+                mColorsToSkip++;
+                
+                mLevel++;
+
+                if( mColorsToSkip >= numColors - 1 ) {
+                    printf( "Entering end phase\n" );
+                    
+                    mEndPhase = true;
+                    }
+                
+                }
             }
+        else {
+            // end mode.  One color at a time
+
+            mNumActiveColors ++;
+            mColorsToSkip++;
+            
+            if( mColorsToSkip >= numColors ) {
+                // wrap around
+                mNumActiveColors = 1;
+                mColorsToSkip = 0;
+                }
+            
+            
+            if( mColorsToSkip > 0 ) {
+                mSpaces[ mColorsToSkip - 1 ]->setColor( NULL );
+                }
+            else {
+                // wrap around
+                mSpaces[ numColors - 1 ]->setColor( NULL );
+                }
+
+            int i = mNumActiveColors - 1;
+            mSpaces[i]->setColor( pieceColors[i].copy() );
+            
+            mLevel++;
+
+            }
+        
+    
+        printf( "Level %d\n", mLevel );
+        
+
+        if( !mEndPhase ) {
+            
+            mStepsBetweenUpdates /= 2;
+            
+            if( mStepsBetweenUpdates < minSteps ) {
+                mStepsBetweenUpdates = minSteps;
+                }
+            }
+        else {
+            // random steps between updates
+            
+            // between minSteps and 48 (just enough to not fill grid)
+
+            mStepsBetweenUpdates = randSource.getRandomBoundedInt( minSteps,
+                                                                   48 );
+            
+            if( mStepsBetweenUpdates % 2 != 0 ) {
+                mStepsBetweenUpdates ++;
+                }
+            }
+        
         
         mStepsUntilUpdate = mStepsBetweenUpdates;
 
-
-        if( mNumActiveColors < numColors ) {
-            mNumActiveColors ++;
-
-            int i = mNumActiveColors - 1;
-            
-            mSpaces[i]->setColor( pieceColors[i].copy() );
-
-            mLevel++;
-            }
-        else if( mColorsToSkip < numColors - 1 ) {
-            mSpaces[mColorsToSkip]->setColor( NULL );            
-            mColorsToSkip++;
-
-            mLevel++;
-            }        
         }
     }
 
@@ -172,7 +235,7 @@ void ColorPool::draw( float inAlpha ) {
         mSpaces[i]->drawPieceHalo( inAlpha );
         }
 
-    if( mNumActiveColors < numColors || mColorsToSkip < (numColors-1) ) {
+    if( true || mNumActiveColors < numColors || mColorsToSkip < (numColors-1) ) {
         
         Color *thisNumberColor;
         
@@ -180,8 +243,13 @@ void ColorPool::draw( float inAlpha ) {
         glBlendFunc( GL_SRC_ALPHA, GL_ONE );
         
         
-        if( mNumActiveColors < numColors ) {
+        if( mNumActiveColors < numColors || mEndPhase ) {
             i = mNumActiveColors;
+
+            if( mEndPhase && mNumActiveColors > numColors - 1 ) {
+                i = 0;
+                }
+            
             glBlendFunc( GL_SRC_ALPHA, GL_ONE );
             thisNumberColor = &colorAddCountColor;
             }
@@ -213,6 +281,34 @@ void ColorPool::draw( float inAlpha ) {
                          ( 1 - mStepCountTransitionProgress ) * inAlpha  );
             }
         
+        
+        if( mEndPhase ) {
+            // draw count-down number too over current color
+            i = mColorsToSkip;
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            thisNumberColor = &colorRemoveCountColor;
+            
+            drawCounter( mStepsUntilUpdate,
+                         mSpaces[i]->mX,  mSpaces[i]->mY,
+                         thisNumberColor,
+                         mStepCountTransitionProgress * inAlpha );
+            
+        
+            if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
+                
+                // skip drawing if counter moving to next space 
+                // (when last count 0)
+                // thus, counter fades in from blank in next space
+                
+                drawCounter( mLastStepCount,
+                             mSpaces[i]->mX,  mSpaces[i]->mY,
+                             thisNumberColor,
+                             ( 1 - mStepCountTransitionProgress ) * inAlpha  );
+                }
+            
+            }
+        
+
 
         int lastSpaceIndex = -1;
         
@@ -226,28 +322,34 @@ void ColorPool::draw( float inAlpha ) {
         else if( mNumActiveColors == numColors && mColorsToSkip > 0 ) {
             lastSpaceIndex = i-1;
             }
-                 
-
+                        
+        if( mEndPhase ) {
+            if( lastSpaceIndex < 0 ) {
+                lastSpaceIndex = numColors - 1;
+                }
+            }
+        
+            
         
         // skip this at beginning, when there are first 3 colors
         // only (otherwise, a 1 fades out on 3rd color)
-        if( mNumActiveColors > 3
+        if( ( mNumActiveColors > 3 || mEndPhase )
             &&
             lastSpaceIndex >= 0 
             && 
             ( mSpaces[lastSpaceIndex]->mDrawColor == NULL 
               || 
-              ( mNumActiveColors < numColors 
+              ( mColorsToSkip <= 0 
                 &&
                 mSpaces[lastSpaceIndex]->mDrawColor->a < 1 )
               ||
-              ( mNumActiveColors >= numColors 
+              ( ( mColorsToSkip > 0 || mEndPhase ) 
                 &&
                 mSpaces[lastSpaceIndex]->mDrawColor->a > 0 ) ) ) {
 
             
             float alpha;
-            if( mColorsToSkip == 0 ) {
+            if( mColorsToSkip == 0 && ! mEndPhase ) {
                 // last space fading in
                 alpha = 1;
                 
@@ -279,8 +381,34 @@ void ColorPool::draw( float inAlpha ) {
                          thisNumberColor,
                          alpha * inAlpha );
             }
-        
 
+
+
+        if( mEndPhase ) {
+            lastSpaceIndex ++;
+            
+            if( lastSpaceIndex >= numColors ) {
+                lastSpaceIndex = 0;
+                }
+            
+            // middle space fading in
+            float alpha = 1;
+                
+            if( mSpaces[lastSpaceIndex]->mDrawColor != NULL ) {
+                alpha = 1 - mSpaces[lastSpaceIndex]->mDrawColor->a;
+                }
+            
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+            thisNumberColor = &colorAddCountColor;
+
+            drawCounter( 1,
+                         mSpaces[lastSpaceIndex]->mX,  
+                         mSpaces[lastSpaceIndex]->mY,
+                         thisNumberColor,
+                         alpha * inAlpha );
+            }
+        
+            
         glDisable( GL_BLEND );
         }
     
