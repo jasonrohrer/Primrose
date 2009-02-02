@@ -53,6 +53,9 @@ class ColorPool {
         int mNumActiveColors;
         int mColorsToSkip;
         
+        char mEndPhase;
+        
+
         int mStepsBetweenUpdates;
 
         int mStepsUntilUpdate;

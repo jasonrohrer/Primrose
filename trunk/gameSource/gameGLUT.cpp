@@ -181,6 +181,16 @@ void callbackKeyboard( unsigned char inKey, int inX, int inY ) {
     if( inKey == 'q' || inKey == 'Q' || inKey == 27 ) {
         exit( 0 );
         }
+    /*
+    if( inKey == 's' || inKey == 'S' ) {
+        // slow
+        frameMS = 500;
+        }
+    if( inKey == 'f' || inKey == 'F' ) {
+        // normal
+        frameMS = 40;
+        }
+    */
 	}
 
 
