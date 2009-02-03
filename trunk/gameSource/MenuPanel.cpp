@@ -206,10 +206,15 @@ void MenuPanel::step() {
 
 
 void MenuPanel::closePressed() {
+    // don't do this anymore
+    // instead, allow them to look at their game even after score is posted
+
+    // they can manually create a new one when ready
+    
     // treat close like NEW if game over
-    if( isGameOver() ) {
-        restartGame();
-        }
+    //if( isGameOver() ) {
+    //    restartGame();
+    //    }
 
     }
 

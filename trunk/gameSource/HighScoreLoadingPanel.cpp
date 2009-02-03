@@ -30,12 +30,15 @@ Color scoreLoadingRed( 1, 0, 0 );
 
 extern char *savedServerURL;
 
+extern char gameOver;
+
 
 
 void HighScoreLoadingPanel::startConnectionTry() {
     mFailed = false;
     mBlinkTime = 0;
     mStatusLight.setColor( scoreLoadingGreen.copy() );
+    mLightRed = false;
 
     if( mServerURL == NULL && mServerURLFetchRequest == NULL ) {
         // try again
@@ -49,10 +52,12 @@ void HighScoreLoadingPanel::startConnectionTry() {
 
 void HighScoreLoadingPanel::setFailed() {
     mFailed = true;
-            
-    mMessage = "connect failed";
+    mTryingToPostScore = false;
     
-    mStatusLight.setColor( scoreLoadingRed.copy() );
+    mLastMessage = mMessage;
+    mMessage = "connect failed";
+    // smooth transition to failure
+    mStringTransitionProgress = 0;
     }
 
 
@@ -60,8 +65,11 @@ void HighScoreLoadingPanel::setFailed() {
 HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
         : Panel( inW, inH ),
           mMessage( "loading scores" ),
+          mLastMessage( NULL ),
+          mStringTransitionProgress( 1 ),
           mStatusLight( inW / 2, inH / 2 ),
           mBlinkTime( 0 ),
+          mTryingToPostScore( false ),
           mScoreToPost( NULL ),
           mWebRequest( NULL ),
           mServerFinderURL(
@@ -69,6 +77,7 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
           mServerURL( NULL ), 
           mServerURLFetchRequest( NULL ),
           mFailed( false ),
+          mLightRed( false ),
           mDisplayPanel( inW, inH ) {
     
     if( savedServerURL != NULL ) {
@@ -104,7 +113,10 @@ HighScoreLoadingPanel::~HighScoreLoadingPanel() {
 
 
 void HighScoreLoadingPanel::setLoadingMessage() {
+    mLastMessage = mMessage;
     mMessage = "loading scores";
+    // force message
+    mStringTransitionProgress = 1;
     }
 
 
@@ -113,13 +125,24 @@ void HighScoreLoadingPanel::setScoreToPost( ScoreBundle *inBundle ) {
     if( mScoreToPost != NULL ) {
         delete mScoreToPost;
         }
-
+    
     mScoreToPost = inBundle;
 
-    mMessage = "posting score";
-
-
-    startConnectionTry();
+    if( inBundle != NULL ) {
+        
+        mTryingToPostScore = true;
+    
+        mLastMessage = mMessage;
+        mMessage = "posting score";
+        // force message
+        mStringTransitionProgress = 1;
+        
+        startConnectionTry();
+        }
+    else {
+        mTryingToPostScore = false;
+        }
+    
     
     }
 
@@ -134,6 +157,30 @@ void HighScoreLoadingPanel::step() {
 
 
     mBlinkTime += 0.2;
+
+    
+    // allow some blinking (for reading message)
+    // before we consider message transitions
+    // or consider light c
+    if( isFullyVisible() &&
+        mBlinkTime > 9 ) {
+        
+        if( mFailed && ! mLightRed ) {
+            mLightRed = true;
+            mStatusLight.setColor( scoreLoadingRed.copy() );
+            }
+        
+
+        if( mStringTransitionProgress < 1 ) {
+            mStringTransitionProgress += 0.2;
+            if( mStringTransitionProgress > 1 ) {
+                mStringTransitionProgress = 1;
+                }
+            }
+        }
+    
+
+
 
 
     // check if we should hide ourself
@@ -201,8 +248,28 @@ void HighScoreLoadingPanel::step() {
         int stepResult = mWebRequest->step();
     
         // don't consider processing result until at least a bit of blinking
-        // has happened (thus, we give the user time to read the loading/posting
+        // has happened 
+        // (thus, we give the user time to read the loading/posting
         // message before the score display is shown)
+        
+
+        // still, we want to detect a successful score post right away
+        // to prevent the user from clicking BACK while we're blinking
+        // and then reposting the score later
+        // Note that this ignores whether the result is well-formatted
+        //   oh well!
+        if( stepResult == 1 ) {
+            if( mTryingToPostScore ) {
+                // post success...
+                // prevent reposts
+                scoreSent();
+                
+                mTryingToPostScore = false;
+                }
+            }
+        
+
+        // now consider processing full result after enough blinking
         if( mBlinkTime > 9 && stepResult == 1 ) {
             // done
             char goodResult = false;
@@ -274,6 +341,8 @@ void HighScoreLoadingPanel::step() {
                 setFailed();
                 }
             else {
+                
+                
                 mDisplayPanel.setVisible( true );
                 }
             
@@ -393,15 +462,29 @@ void HighScoreLoadingPanel::drawBase() {
     if( mFadeProgress > 0 ) {
         
         glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
         int textY = 100;
             
-        drawStringBig( mMessage, center, 
-                       mW / 2,
-                       textY,
-                       &loadingMessageColor, mFadeProgress );        
+        if( mStringTransitionProgress > 0 ) {
+            
+            drawStringBig( mMessage, center, 
+                           mW / 2,
+                           textY,
+                           &loadingMessageColor, 
+                           mFadeProgress * mStringTransitionProgress );        
+            }
         
+        if( mLastMessage != NULL && mStringTransitionProgress < 1 ) {
+            
+            drawStringBig( mLastMessage, center, 
+                           mW / 2,
+                           textY,
+                           &loadingMessageColor, 
+                           mFadeProgress * (1 - mStringTransitionProgress) );
+            }
+        
+            
             
         glDisable( GL_BLEND );
 

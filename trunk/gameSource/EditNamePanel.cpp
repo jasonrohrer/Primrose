@@ -217,10 +217,7 @@ void EditNamePanel::drawBase() {
         
 
 
-        for( int i=0; i<28; i++ ) {
-            mKeyButtons[i]->draw();
-            }
-
+        
         }
     
     }
