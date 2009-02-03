@@ -373,6 +373,13 @@ char isGameOver() {
     }
 
 
+void scoreSent() {
+    // don't let them send it again
+    doneButton->setVisible( false );
+    }
+
+
+
 
 void playbackGame( ScoreBundle *inBundle ) {
     if( gameToPlayback != NULL ) {

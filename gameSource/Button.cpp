@@ -126,13 +126,12 @@ void Button::draw() {
         float alpha;
         
         if( mStringTransitionProgress > 0 ) {
-            
             alpha = mFadeProgress * mStringTransitionProgress;
             
             if( strlen( mString ) < 3 ) {
                 drawStringBig( mString, center, mSpace.mX, mSpace.mY,  
                                &buttonStringColor, 
-                           alpha );
+                               alpha );
                 }
             else {
                 drawString( mString, center, mSpace.mX, mSpace.mY,  

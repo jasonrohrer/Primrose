@@ -54,10 +54,14 @@ class HighScoreLoadingPanel : public Panel {
     private:
         
         char *mMessage;
-        
+        char *mLastMessage;
+        float mStringTransitionProgress;
+
         GridSpace mStatusLight;
         
         float mBlinkTime;
+        
+        char mTryingToPostScore;
         
         ScoreBundle *mScoreToPost;
         
@@ -70,6 +74,7 @@ class HighScoreLoadingPanel : public Panel {
         WebRequest *mServerURLFetchRequest;
         
         char mFailed;
+        char mLightRed;
         
 
         void startConnectionTry();

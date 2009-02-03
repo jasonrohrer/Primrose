@@ -13,6 +13,10 @@ void restartGame();
 char isGameOver();
 
 
+// notify game that score has been posted successfully
+void scoreSent();
+
+
 
 // returns actual 8-character array (9 chars, including \0 terminator)
 // edit name by changing characters in the array
