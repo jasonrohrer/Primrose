@@ -117,6 +117,11 @@ class GridSpace {
         
         Color *mLastColor;
         
+        // for colorblind mode
+        Color *mPieceInvertedColor;
+        Color *mLastInvertedColor;
+        
+
         float mColorShiftProgress;
         
 
@@ -132,8 +137,13 @@ class GridSpace {
         char mScoreSent;
 
         Color *mSavedColor;
+        Color *mSavedInvertedColor;
         char mSavedActive;
         
+        
+        // breather steps to let stuff settle visually
+        // after animation done
+        int mPauseStepsAfterAnimationDone;
         
         
     };

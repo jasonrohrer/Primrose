@@ -27,6 +27,7 @@ GridSpace::GridSpace( int inX, int inY )
          mAddToGlobalScore( true ),
          mDrawColor( NULL ),
          mPieceColor( NULL ), mLastColor( NULL ),
+         mPieceInvertedColor( NULL ), mLastInvertedColor( NULL ),
          mColorShiftProgress( 0 ),
          mBrightHalo( false ), 
          mBrightHaloProgress( 0 ),
@@ -34,7 +35,10 @@ GridSpace::GridSpace( int inX, int inY )
          mScoreFade( 0 ),
          mScoreSent( false ),
          mSavedColor( NULL ),
-         mSavedActive( false ) {
+         mSavedInvertedColor( NULL ),
+         mSavedActive( false ),
+         // no pause to start... set counter way over limit
+         mPauseStepsAfterAnimationDone( 999 ) {
 
     for( int n=0; n<4; n++ ) {
         mNeighbors[n] = NULL;
@@ -55,6 +59,16 @@ GridSpace::~GridSpace() {
         }
     if( mSavedColor != NULL ) {
         delete mSavedColor;
+        }
+    
+    if( mLastInvertedColor != NULL ) {
+        delete mLastInvertedColor;
+        }
+    if( mPieceInvertedColor != NULL ) {
+        delete mPieceInvertedColor;
+        }
+    if( mSavedInvertedColor != NULL ) {
+        delete mSavedInvertedColor;
         }
     
     }
@@ -78,12 +92,43 @@ void GridSpace::setColor( Color *inColor ) {
     
     if( mLastColor != NULL ) {
         delete mLastColor;
+        delete mLastInvertedColor;
         }
     
     mLastColor = mPieceColor;
+    mLastInvertedColor = mPieceInvertedColor;
     
     mPieceColor = inColor;
     
+
+    mPieceInvertedColor = NULL;
+    
+    if( inColor != NULL ) {
+        
+        mPieceInvertedColor = inColor->copy();
+    
+        int i;
+        float valueSum = 0;
+        
+        for( i=0; i<3; i++ ) {
+            float value = (*mPieceInvertedColor)[i];
+            valueSum += value;
+            }
+            
+        // invert the estimated brightness
+        float setAllTo = 1;
+        
+        if( valueSum > 1.5 ) {
+            setAllTo = 0;
+            }
+    
+        for( i=0; i<3; i++ ) {
+            (*mPieceInvertedColor)[i] = setAllTo;
+            }
+        }
+    
+
+
     mColorShiftProgress = 0;
     }
 
@@ -92,12 +137,15 @@ void GridSpace::setColor( Color *inColor ) {
 void GridSpace::saveState() {
     if( mSavedColor != NULL ) {
         delete mSavedColor;
+        delete mSavedInvertedColor;
         }
     if( mPieceColor != NULL ) {
         mSavedColor = mPieceColor->copy();
+        mSavedInvertedColor = mPieceInvertedColor->copy();
         }
     else {
         mSavedColor = NULL;
+        mSavedInvertedColor = NULL;
         }
             
     mSavedActive = mActive;
@@ -168,66 +216,29 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
                     mDrawColor->a * inAlpha );
 
 
-        if( colorblindMode && mPieceColor != NULL ) {
-            Color *stringColor = mPieceColor->copy();
-            //stringColor->invert();
+        if( colorblindMode ) {
+
             char stringToDraw[2];
-            stringToDraw[0] = getColorblindSymbol( mPieceColor );
             stringToDraw[1] = '\0';
-            
-            // find color's 2 closest components to 0.5... 
-            // floor or ceiling them.
 
-            int closestIndex[2] = {-1, -1};
-            float closestDistance[2] = {2, 2};
-            int i;
-            float valueSum = 0;
+            if( mPieceColor != NULL ) {
+                stringToDraw[0] = getColorblindSymbol( mPieceColor );
             
-            for( i=0; i<3; i++ ) {
-                float value = (*stringColor)[i];
-                valueSum += value;
-            
-                float distance = fabs( value - 0.5 );
-                if( distance < closestDistance[0] ) {
-                    closestIndex[0] = i;
-                    }
-                else if( distance < closestDistance[1] ) {
-                    closestIndex[1] = i;
-                    }
+                drawStringBig( stringToDraw, 
+                               center, mX, mY,  
+                               mPieceInvertedColor, 
+                               mColorShiftProgress * inAlpha );
                 }
-
-            float setAllTo = 1;
+            if( mLastColor != NULL ) {
+                stringToDraw[0] = getColorblindSymbol( mLastColor );
             
-            if( valueSum > 1.5 ) {
-                setAllTo = 0;
+                drawStringBig( stringToDraw, 
+                               center, mX, mY,  
+                               mLastInvertedColor,
+                               (1 - mColorShiftProgress) * inAlpha );
                 }
-            
-            for( i=0; i<3; i++ ) {
-                //float value = (*stringColor)[closestIndex[i]];
-                float value = (*stringColor)[i];
-                
-                if( value < 0.5 ) {
-                    value = 0;
-                    }
-                else {
-                    value = 1;
-                    }
-                value = setAllTo;
-                
-                //(*stringColor)[closestIndex[i]] = value;
-                (*stringColor)[i] = value;
-
-                }
-            
-            
-
-            drawStringBig( stringToDraw, 
-                           center, mX, mY,  
-                           stringColor, 
-                           mDrawColor->a * inAlpha );
-
-            delete stringColor;
             }
+        
         
         }
 
@@ -240,6 +251,9 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
     
 
     glDisable( GL_BLEND );
+
+
+    mPauseStepsAfterAnimationDone++;
     }
 
 
@@ -413,13 +427,31 @@ void GridSpace::step() {
 
 char GridSpace::isAnimationDone() { 
 
+    
+
     if( mDrawColor == NULL ) {
         return true;
         }    
-    else if( mColorShiftProgress == 1 && ! mBrightHalo && mScoreFade == 0 ) {
+    else if( mColorShiftProgress == 1 
+             && 
+             ! mBrightHalo 
+             && 
+             mScoreFade == 0 ) {
+        
+        // animation done... 
+
+        if( mPauseStepsAfterAnimationDone < 4 ) {
+            // ...but not enough pause steps
+            return false;
+            }
+
         return true;
         }
 
+    // animation still in progress
+    // set up a pause for after it ends
+    mPauseStepsAfterAnimationDone = 0;
+    
     return false;
     }
 
