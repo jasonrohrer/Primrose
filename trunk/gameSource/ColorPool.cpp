@@ -65,10 +65,10 @@ char colorblindSymbols[ numColors ] = { 'z', 'b', 'j', 'm', 'i', 'u', 'p' };
 
 
 
-//#define startingSteps 96
-#define startingSteps 2
-//#define minSteps 6
-#define minSteps 2
+#define startingSteps 96
+//#define startingSteps 2
+#define minSteps 6
+//#define minSteps 2
 
 ColorPool::ColorPool( int inX, int inY )
         : mX( inX ), mY( inY ), 
@@ -285,7 +285,7 @@ void ColorPool::draw( float inAlpha ) {
             }
         else {
             removeCounterDrawingFunction = &drawCounter;
-            removeCounterXOffset = -20 + 9;
+            removeCounterXOffset = -20 + 8;
             removeCounterYOffset = -20 + 5;            
             }
         

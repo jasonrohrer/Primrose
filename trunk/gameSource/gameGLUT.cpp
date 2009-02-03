@@ -39,6 +39,11 @@ int h = 480;
 int frameMS = 40;
 //int frameMS = 500;
 
+// s and f keys to slow down and speed up for testing
+char enableSlowdownKeys = false;
+//char enableSlowdownKeys = true;
+
+
 
 int main( int inNumArgs, char **inArgs ) {
     
@@ -182,14 +187,19 @@ void callbackKeyboard( unsigned char inKey, int inX, int inY ) {
         exit( 0 );
         }
     
-    if( inKey == 's' || inKey == 'S' ) {
-        // slow
-        frameMS = 500;
+
+    if( enableSlowdownKeys ) {
+        
+        if( inKey == 's' || inKey == 'S' ) {
+            // slow
+            frameMS = 500;
+            }
+        if( inKey == 'f' || inKey == 'F' ) {
+            // normal
+            frameMS = 40;
+            }
         }
-    if( inKey == 'f' || inKey == 'F' ) {
-        // normal
-        frameMS = 40;
-        }
+    
     
 	}
 
