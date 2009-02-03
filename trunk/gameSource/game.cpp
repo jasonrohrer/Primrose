@@ -513,7 +513,7 @@ char checkAndClear() {
                         allSpaces[i]->mScore = 
                             (int)( pow( score, 2 ) )
                             *
-                            (int)( pow( chainLength, 3 ) )
+                            (int)( pow( chainLength, 4 ) )
                             * levelOfPlacement;
                         }
                     }
