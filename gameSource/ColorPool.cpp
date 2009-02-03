@@ -16,6 +16,9 @@
 
 extern CustomRandomSource randSource;
 
+extern char colorblindMode;
+
+
 
 #define numColors 7
 
@@ -75,6 +78,7 @@ ColorPool::ColorPool( int inX, int inY )
           mStepsUntilUpdate( startingSteps ),
           mLastStepCount( startingSteps ),
           mStepCountTransitionProgress( 1 ),
+          mRewinding( false ),
           mLevel( 1 ) {
 
     int i;
@@ -228,6 +232,7 @@ void ColorPool::registerMove() {
 void ColorPool::deRegisterMove() {
     mStepsUntilUpdate ++;
     mStepCountTransitionProgress = 0;
+    mRewinding = true;
     }
 
     
@@ -252,9 +257,44 @@ void ColorPool::draw( float inAlpha ) {
         mSpaces[i]->drawPieceHalo( inAlpha );
         }
 
-    if( true || mNumActiveColors < numColors || mColorsToSkip < (numColors-1) ) {
+    if( true 
+        // used to stop drawing counters in last phase
+        // no longer is a last phase
+        // || mNumActiveColors < numColors || mColorsToSkip < (numColors-1) 
+        ) {
+
         
+        // switch counter drawing funciton and 
+        // counter position (removal counters)
+        // when in colorblind mode (so counter not on top of colorblind symbol)
+
+        void (*addCounterDrawingFunction)( int, float, float, Color *, float );
+        void (*removeCounterDrawingFunction)( int, float, float, 
+                                              Color *, float );
+        addCounterDrawingFunction = &drawCounterBig;
+        
+
+        float removeCounterXOffset;
+        float removeCounterYOffset;
+        
+
+        if( !colorblindMode ) {
+            removeCounterDrawingFunction = &drawCounterBig;
+            removeCounterXOffset = 0;
+            removeCounterYOffset = 0;            
+            }
+        else {
+            removeCounterDrawingFunction = &drawCounter;
+            removeCounterXOffset = -20 + 9;
+            removeCounterYOffset = -20 + 5;            
+            }
+        
+                
+        void (*counterDrawingFunction)( int, float, float, Color *, float );
         Color *thisNumberColor;
+        float counterXOffset;
+        float counterYOffset;
+        
         
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE );
@@ -269,11 +309,19 @@ void ColorPool::draw( float inAlpha ) {
             
             glBlendFunc( GL_SRC_ALPHA, GL_ONE );
             thisNumberColor = &colorAddCountColor;
+
+            counterDrawingFunction = addCounterDrawingFunction;
+            counterXOffset = 0;
+            counterYOffset = 0;
             }
         else {
             i = mColorsToSkip;
             glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
             thisNumberColor = &colorRemoveCountColor;
+            
+            counterDrawingFunction = removeCounterDrawingFunction;
+            counterXOffset = removeCounterXOffset;
+            counterYOffset = removeCounterYOffset;
             }
         
         // draw counter over next active space
@@ -281,21 +329,26 @@ void ColorPool::draw( float inAlpha ) {
         
         // blend between last count
         
-        drawCounter( mStepsUntilUpdate,
-                     mSpaces[i]->mX,  mSpaces[i]->mY,
-                     thisNumberColor,
-                     mStepCountTransitionProgress * inAlpha );
+        (*counterDrawingFunction)( mStepsUntilUpdate,
+                                   mSpaces[i]->mX + counterXOffset,  
+                                   mSpaces[i]->mY + counterYOffset,
+                                   thisNumberColor,
+                                   mStepCountTransitionProgress * inAlpha );
         
         
-        if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
+        if( mStepCountTransitionProgress < 1 && 
+            ( mLastStepCount > 1 || mRewinding ) ) {
             
-            // skip drawing if counter moving to next space (when last count 0)
+            // skip drawing if counter moving to next space 
+            // (when last count 1 and not rewinding)
             // thus, counter fades in from blank in next space
             
-            drawCounter( mLastStepCount,
-                         mSpaces[i]->mX,  mSpaces[i]->mY,
-                         thisNumberColor,
-                         ( 1 - mStepCountTransitionProgress ) * inAlpha  );
+            (*counterDrawingFunction)( 
+                mLastStepCount,
+                mSpaces[i]->mX + counterXOffset,  
+                mSpaces[i]->mY + counterYOffset,
+                thisNumberColor,
+                ( 1 - mStepCountTransitionProgress ) * inAlpha  );
             }
         
         
@@ -305,10 +358,17 @@ void ColorPool::draw( float inAlpha ) {
             glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
             thisNumberColor = &colorRemoveCountColor;
             
-            drawCounter( mStepsUntilUpdate,
-                         mSpaces[i]->mX,  mSpaces[i]->mY,
-                         thisNumberColor,
-                         mStepCountTransitionProgress * inAlpha );
+            counterDrawingFunction = removeCounterDrawingFunction;
+            counterXOffset = removeCounterXOffset;
+            counterYOffset = removeCounterYOffset;
+            
+            (*counterDrawingFunction)( 
+                mStepsUntilUpdate,
+                mSpaces[i]->mX + counterXOffset,  
+                mSpaces[i]->mY + counterYOffset,
+                thisNumberColor,
+                mStepCountTransitionProgress * inAlpha );
+            
             
         
             if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
@@ -317,10 +377,12 @@ void ColorPool::draw( float inAlpha ) {
                 // (when last count 0)
                 // thus, counter fades in from blank in next space
                 
-                drawCounter( mLastStepCount,
-                             mSpaces[i]->mX,  mSpaces[i]->mY,
-                             thisNumberColor,
-                             ( 1 - mStepCountTransitionProgress ) * inAlpha  );
+                (*counterDrawingFunction)( 
+                    mLastStepCount,
+                    mSpaces[i]->mX + counterXOffset,  
+                    mSpaces[i]->mY + counterYOffset,
+                    thisNumberColor,
+                    ( 1 - mStepCountTransitionProgress ) * inAlpha  );
                 }
             
             }
@@ -376,6 +438,10 @@ void ColorPool::draw( float inAlpha ) {
 
                 glBlendFunc( GL_SRC_ALPHA, GL_ONE );
                 thisNumberColor = &colorAddCountColor;
+
+                counterDrawingFunction = addCounterDrawingFunction;
+                counterXOffset = 0;
+                counterYOffset = 0;
                 }
             else {
                 // last space fading out
@@ -386,17 +452,22 @@ void ColorPool::draw( float inAlpha ) {
                     }
                 glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
                 thisNumberColor = &colorRemoveCountColor;
+                
+                counterDrawingFunction = removeCounterDrawingFunction;
+                counterXOffset = removeCounterXOffset;
+                counterYOffset = removeCounterYOffset;
                 }
             
 
 
             // fade out 1 on last space as color fades in
             
-            drawCounter( 1,
-                         mSpaces[lastSpaceIndex]->mX,  
-                         mSpaces[lastSpaceIndex]->mY,
-                         thisNumberColor,
-                         alpha * inAlpha );
+            (*counterDrawingFunction)( 
+                1,
+                mSpaces[lastSpaceIndex]->mX + counterXOffset,  
+                mSpaces[lastSpaceIndex]->mY + counterYOffset,
+                thisNumberColor,
+                alpha * inAlpha );
             }
 
 
@@ -417,12 +488,17 @@ void ColorPool::draw( float inAlpha ) {
             
             glBlendFunc( GL_SRC_ALPHA, GL_ONE );
             thisNumberColor = &colorAddCountColor;
+            
+            counterDrawingFunction = addCounterDrawingFunction;
+            counterXOffset = 0;
+            counterYOffset = 0;
 
-            drawCounter( 1,
-                         mSpaces[lastSpaceIndex]->mX,  
-                         mSpaces[lastSpaceIndex]->mY,
-                         thisNumberColor,
-                         alpha * inAlpha );
+            (*counterDrawingFunction)( 
+                1,
+                mSpaces[lastSpaceIndex]->mX + counterXOffset,  
+                mSpaces[lastSpaceIndex]->mY + counterYOffset,
+                thisNumberColor,
+                alpha * inAlpha );
             }
         
             
@@ -449,6 +525,9 @@ void ColorPool::step() {
             
             // done with transition
             mLastStepCount = mStepsUntilUpdate;
+
+            // done rewinding if we were
+            mRewinding = false;
             }
         }
     

@@ -42,10 +42,15 @@ void drawScoreBig( int inScore,
                    Color *inColor = NULL, float inAlpha = 1.0 );
 
 
-// counter of at most 2 digits, drawn with big numerals
+
+// counter of at most 2 digits
 void drawCounter( int inCount,
                   float inCenterX, float inCenterY,
                   Color *inColor = NULL, float inAlpha = 1.0 );
+
+void drawCounterBig( int inCount,
+                     float inCenterX, float inCenterY,
+                     Color *inColor = NULL, float inAlpha = 1.0 );
 
 
 
