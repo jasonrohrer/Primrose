@@ -18,6 +18,9 @@ class ColorPool {
         // gets a color from the pool
         Color *pickColor();
         
+        // gets the symbol for a color
+        char getColorblindSymbol( Color *inColor );
+        
 
         void registerMove();
         

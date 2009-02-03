@@ -13,6 +13,7 @@
 
 #include <GL/gl.h>
 
+extern char colorblindMode;
 
 
 
@@ -165,6 +166,69 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
     if( mDrawColor != NULL ) {
         drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, 
                     mDrawColor->a * inAlpha );
+
+
+        if( colorblindMode && mPieceColor != NULL ) {
+            Color *stringColor = mPieceColor->copy();
+            //stringColor->invert();
+            char stringToDraw[2];
+            stringToDraw[0] = getColorblindSymbol( mPieceColor );
+            stringToDraw[1] = '\0';
+            
+            // find color's 2 closest components to 0.5... 
+            // floor or ceiling them.
+
+            int closestIndex[2] = {-1, -1};
+            float closestDistance[2] = {2, 2};
+            int i;
+            float valueSum = 0;
+            
+            for( i=0; i<3; i++ ) {
+                float value = (*stringColor)[i];
+                valueSum += value;
+            
+                float distance = fabs( value - 0.5 );
+                if( distance < closestDistance[0] ) {
+                    closestIndex[0] = i;
+                    }
+                else if( distance < closestDistance[1] ) {
+                    closestIndex[1] = i;
+                    }
+                }
+
+            float setAllTo = 1;
+            
+            if( valueSum > 1.5 ) {
+                setAllTo = 0;
+                }
+            
+            for( i=0; i<3; i++ ) {
+                //float value = (*stringColor)[closestIndex[i]];
+                float value = (*stringColor)[i];
+                
+                if( value < 0.5 ) {
+                    value = 0;
+                    }
+                else {
+                    value = 1;
+                    }
+                value = setAllTo;
+                
+                //(*stringColor)[closestIndex[i]] = value;
+                (*stringColor)[i] = value;
+
+                }
+            
+            
+
+            drawStringBig( stringToDraw, 
+                           center, mX, mY,  
+                           stringColor, 
+                           mDrawColor->a * inAlpha );
+
+            delete stringColor;
+            }
+        
         }
 
     if( mPieceColor == NULL && mScore > 0 ) {

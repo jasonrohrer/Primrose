@@ -12,9 +12,10 @@
 MenuPanel::MenuPanel( int inW, int inH )
         : Panel( inW, inH ),
           mNewButton( inW - 21 - 19, 100, "+" ),
-          mTutorialButton( inW - 21 - 19, 200, "+" ),
-          mHighScoreButton( inW - 21 - 19, 300, "+" ),
-          mEditNameButton( inW - 21 - 19, 400, "+" ),
+          mTutorialButton( inW - 21 - 19, 175, "+" ),
+          mHighScoreButton( inW - 21 - 19, 250, "+" ),
+          mEditNameButton( inW - 21 - 19, 325, "+" ),
+          mColorblindButton( inW - 21 - 19, 400, "off" ),
           mHighScoreLoadingPanel( inW, inH ),
           mEditNamePanel( inW, inH ),
           mTutorialPanel( inW, inH ) {
@@ -24,12 +25,21 @@ MenuPanel::MenuPanel( int inW, int inH )
     mTutorialButton.setVisible( false );
     mHighScoreButton.setVisible( false );
     mEditNameButton.setVisible( false );
+    mEditNameButton.setVisible( false );
+    mColorblindButton.setVisible( false );
+
+    if( getColorblindMode() ) {
+        mColorblindButton.setString( " on " );
+        }
+    
+    
     
     addButton( &mNewButton );
     addButton( &mTutorialButton );
     addButton( &mHighScoreButton );
     addButton( &mEditNameButton );
-
+    addButton( &mColorblindButton );
+    
     mHighScoreLoadingPanel.setVisible( false );
     mEditNamePanel.setVisible( false );
     
@@ -104,6 +114,23 @@ char MenuPanel::pointerUp( int inX, int inY ) {
             
             return true;
             }
+        if( mColorblindButton.isInside( inX, inY ) ) {
+            // flip
+            char oldMode = getColorblindMode();
+            char *newString;
+            
+            if( oldMode ) {
+                newString = "off";
+                }
+            else {
+                newString = " on ";
+                }
+            mColorblindButton.setString( newString );
+            setColorblindMode( !oldMode );
+            
+            return true;
+            }
+        
         } 
     
     return false;
@@ -141,6 +168,11 @@ void MenuPanel::drawBase() {
         drawStringBig( "edit name", right, 
                        mEditNameButton.mX - 21 - 19,
                        mEditNameButton.mY,
+                       &menuItemColor, mFadeProgress );
+
+        drawStringBig( "colorblind", right, 
+                       mColorblindButton.mX - 21 - 19,
+                       mColorblindButton.mY,
                        &menuItemColor, mFadeProgress );
         
 
