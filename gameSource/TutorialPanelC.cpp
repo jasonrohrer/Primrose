@@ -226,7 +226,7 @@ void TutorialPanelC::step() {
             }
         else if( mDemoStage == 4 ) {
             for( i=0; i<4; i++ ) {
-                mInnerSpacesB[i]->mScore = 128;
+                mInnerSpacesB[i]->mScore = 256;
                 mInnerSpacesB[i]->flipToClear();
                 }
             }
