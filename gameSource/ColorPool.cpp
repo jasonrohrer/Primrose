@@ -57,10 +57,15 @@ Color pieceColors[numColors] = {
     };
 
 
-#define startingSteps 96
-//#define startingSteps 2
-#define minSteps 6
-//#define minSteps 2
+
+char colorblindSymbols[ numColors ] = { 'z', 'b', 'j', 'm', 'i', 'u', 'p' };
+
+
+
+//#define startingSteps 96
+#define startingSteps 2
+//#define minSteps 6
+#define minSteps 2
 
 ColorPool::ColorPool( int inX, int inY )
         : mX( inX ), mY( inY ), 
@@ -111,6 +116,18 @@ Color *ColorPool::pickColor() {
     return pieceColors[ colorIndex ].copy();
     }
 
+
+
+char ColorPool::getColorblindSymbol( Color *inColor ) {
+    for( int i=0; i<numColors; i++ ) {
+        if( pieceColors[ i ].equals( inColor ) ) {
+            return colorblindSymbols[ i ];
+            }
+        }
+    return ' ';
+    }
+
+        
 
 
 void ColorPool::registerMove() {

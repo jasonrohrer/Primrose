@@ -24,6 +24,17 @@ char *getName();
 void saveName();
 
 
+// true if colorblind mode on
+char getColorblindMode();
+
+// set and save (for future sessions) colorblind mode
+void setColorblindMode( char inOn );
+
+
+char getColorblindSymbol( Color *inColor );
+
+
+
 // start playback of a new game
 // will be destroyed by game framework
 void playbackGame( ScoreBundle *inBundle );

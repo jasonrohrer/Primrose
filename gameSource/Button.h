@@ -55,7 +55,9 @@ class Button {
         
         float mFadeProgress;
         
-                        
+        char *mLastString;
+        float mStringTransitionProgress;
+        
     };
 
 

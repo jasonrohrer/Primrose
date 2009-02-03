@@ -103,6 +103,8 @@ char mustRestart = false;
 
 char playerName[9];
 
+char colorblindMode = false;
+
 
 ScoreBundle *gameToPlayback = NULL;
 int gamePlaybackStep = 0;
@@ -433,6 +435,17 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     else {
         memcpy( playerName, "anon", 5 );
         }
+    
+    char found;
+    
+    colorblindMode = SettingsManager::getIntSetting( "colorblindMode",
+                                                     &found );
+
+    if( !found ) {
+        colorblindMode = false;
+        }
+    
+    
 
 
     newGame();
@@ -1076,3 +1089,24 @@ void saveName() {
 
     SettingsManager::setSetting( "name", playerName );
     }
+
+
+
+char getColorblindMode() {
+    return colorblindMode;
+    }
+
+
+
+void setColorblindMode( char inOn ) {
+    colorblindMode = inOn;
+    
+    SettingsManager::setSetting( "colorblindMode", colorblindMode );
+    }
+
+
+
+char getColorblindSymbol( Color *inColor ) {
+    return colorPool->getColorblindSymbol( inColor );
+    }
+

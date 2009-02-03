@@ -14,7 +14,9 @@ Button::Button( int inX, int inY, char *inString )
           mString( stringDuplicate( inString ) ),
           mSpace( inX, inY ),
           mVisible( false ),
-          mFadeProgress( 0 ) {
+          mFadeProgress( 0 ),
+          mLastString( NULL ),
+          mStringTransitionProgress( 1 ) {
 
     }
 
@@ -22,13 +24,24 @@ Button::Button( int inX, int inY, char *inString )
     
 Button::~Button() {
     delete [] mString;
+
+    if( mLastString != NULL ) {
+        delete [] mLastString;
+        }
+    
     }
 
 
 
 void Button::setString( char *inString ) {
-    delete [] mString;
+    if( mLastString != NULL ) {
+        delete [] mLastString;
+        }
+    mLastString = mString;
+        
     mString = stringDuplicate( inString );
+    
+    mStringTransitionProgress = 0;
     }
 
 
@@ -84,6 +97,14 @@ void Button::step() {
             mFadeProgress = 0;
             }
         }
+    
+    if( mStringTransitionProgress < 1 ) {
+        mStringTransitionProgress += 0.2;
+        if( mStringTransitionProgress > 1 ) {
+            mStringTransitionProgress = 1;
+            }
+        }
+    
     }
 
     
@@ -97,19 +118,45 @@ void Button::draw() {
 
         mSpace.drawGrid( mFadeProgress );
 
-
+        // additive to support smooth cross-blending
         glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
         
-        if( strlen( mString ) < 3 ) {
-            drawStringBig( mString, center, mSpace.mX, mSpace.mY,  
-                           &buttonStringColor, mFadeProgress );
-            }
-        else {
-            drawString( mString, center, mSpace.mX, mSpace.mY,  
-                        &buttonStringColor, mFadeProgress );
-            }
 
+        float alpha;
+        
+        if( mStringTransitionProgress > 0 ) {
+            
+            alpha = mFadeProgress * mStringTransitionProgress;
+            
+            if( strlen( mString ) < 3 ) {
+                drawStringBig( mString, center, mSpace.mX, mSpace.mY,  
+                               &buttonStringColor, 
+                           alpha );
+                }
+            else {
+                drawString( mString, center, mSpace.mX, mSpace.mY,  
+                            &buttonStringColor, 
+                            alpha );
+                }
+            }
+        
+
+        if( mStringTransitionProgress < 1 ) {
+            alpha = mFadeProgress * ( 1 - mStringTransitionProgress );
+            
+            if( strlen( mString ) < 3 ) {
+                drawStringBig( mLastString, center, mSpace.mX, mSpace.mY,  
+                               &buttonStringColor, 
+                               alpha );
+                }
+            else {
+                drawString( mLastString, center, mSpace.mX, mSpace.mY,  
+                            &buttonStringColor, 
+                            alpha );
+                }
+            }
+        
         glDisable( GL_BLEND );
         }
     
