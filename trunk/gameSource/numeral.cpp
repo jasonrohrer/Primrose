@@ -401,7 +401,12 @@ void drawScoreBig( int inScore,
 
 
 
-void drawCounter( int inCount,
+// internal 
+void drawCounter( int inColSep, int inNumeralWidth,
+                 void (*inNumeralDrawingFunction)( 
+                     int, float, float,
+                     Color *, float ), 
+                  int inCount,
                   float inCenterX, float inCenterY,
                   Color *inColor, float inAlpha ) {
     
@@ -421,11 +426,11 @@ void drawCounter( int inCount,
         numDigits = 2;
         }
     
-    int colSep = 6;
+    int numeralRadius = inNumeralWidth / 2;
     
     int centerOffsetsX[2] = { 
-        6,
-        -( 6 + colSep ) };
+        numeralRadius,
+        -( numeralRadius + inColSep ) };
         
     // find center of mass for all digits together
 
@@ -445,12 +450,36 @@ void drawCounter( int inCount,
         int number = ( inCount / ( (int)( pow( 10, i ) ) ) ) % 10;
         
 
-        drawNumeralBig( number,
-                     inCenterX - cX + centerOffsetsX[i], 
-                     inCenterY,
-                     inColor, inAlpha );
+        (*inNumeralDrawingFunction)( number,
+                                     inCenterX - cX + centerOffsetsX[i], 
+                                     inCenterY,
+                                     inColor, inAlpha );
         }
     
+    }
+
+
+
+void drawCounter( int inCount,
+                  float inCenterX, float inCenterY,
+                  Color *inColor, float inAlpha ) {
+    
+    drawCounter( 3, 6, drawNumeral,
+                 inCount,
+                 inCenterX, inCenterY,
+                 inColor, inAlpha );
+    }
+
+
+
+void drawCounterBig( int inCount,
+                  float inCenterX, float inCenterY,
+                  Color *inColor, float inAlpha ) {
+    
+    drawCounter( 6, 12, drawNumeralBig,
+                 inCount,
+                 inCenterX, inCenterY,
+                 inColor, inAlpha );
     }
 
 

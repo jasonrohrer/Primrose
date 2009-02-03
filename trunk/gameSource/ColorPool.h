@@ -66,6 +66,9 @@ class ColorPool {
         int mLastStepCount;
         float mStepCountTransitionProgress;
         
+        // if in the middle of deregistering a move
+        char mRewinding;
+        
 
         int mLevel;
         
