@@ -33,7 +33,7 @@ CustomRandomSource randSource( gameSeed );
 int screenW, screenH;
 
 
-float pointerX, pointerY;
+int pointerX, pointerY;
 
 
 #define gridW 7
@@ -921,14 +921,14 @@ void undoMove() {
 
 
 void pointerDown( float inX, float inY ) {
-    pointerX = inX;
-    pointerY = inY;
+    pointerX = (int)inX;
+    pointerY = (int)inY;
     }
 
 
 void pointerMove( float inX, float inY ) {
-    pointerX = inX;
-    pointerY = inY;
+    pointerX = (int)inX;
+    pointerY = (int)inY;
     
     
     }
@@ -939,8 +939,8 @@ void pointerMove( float inX, float inY ) {
 
 
 void pointerUp( float inX, float inY ) {
-    pointerX = inX;
-    pointerY = inY;
+    pointerX = (int)inX;
+    pointerY = (int)inY;
     
     //printf( "Pointer Up at %f,%f\n", pointerX, pointerY );
     
@@ -957,7 +957,7 @@ void pointerUp( float inX, float inY ) {
             allPanels[i]->isSubPanelVisible() ) {
             
             somePanelVisible = true;
-            allPanels[i]->pointerUp( (int)pointerX, (int)pointerY );
+            allPanels[i]->pointerUp( pointerX, pointerY );
             }
         }
 
@@ -966,10 +966,14 @@ void pointerUp( float inX, float inY ) {
         return;
         }
 
+    char someButtonPressed = false;
+    
 
     for( i=0; i<numButtons; i++ ) {
         if( allButtons[i]->isVisible() && 
-            allButtons[i]->isInside( (int)pointerX, (int)pointerY ) ) {
+            allButtons[i]->isInside( pointerX, pointerY ) ) {
+            
+            someButtonPressed = true;
             
             if( allButtons[i] == undoButton ) {
                 undoMove();
@@ -1011,6 +1015,12 @@ void pointerUp( float inX, float inY ) {
         }
 
 
+    if( someButtonPressed ) {
+        // don't pass click to grid
+        return;
+        }
+    
+        
     
     if( gameToPlayback != NULL ) {
         // don't pass click to grid
@@ -1024,6 +1034,16 @@ void pointerUp( float inX, float inY ) {
         return;
         }
     
+    // don't count clicks below a certain point as grid clicks
+    // (don't want player to miss clicking a button and place a piece by
+    // accident)
+
+    if( pointerY > spaces[6][0]->mY + 29 ) {
+        // no grid clicks this far down
+        return;
+        }
+    
+
 
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
@@ -1034,29 +1054,49 @@ void pointerUp( float inX, float inY ) {
     unsigned int x;
     unsigned int y;
     
-    for( y=0; y<gridH; y++ ) {
-        for( x=0; x<gridW; x++ ) {
+
+    // sloppy pointing:
+    // if none hit, look for closest space
+    char noneHit = true;
+
+    int closestIndex = -1;
+    float closestDistance = 99999999;
+    
+
+    for( y=0; y<gridH && noneHit; y++ ) {
+        for( x=0; x<gridW && noneHit; x++ ) {
         
 
             GridSpace *space = spaces[y][x];
             
-            if( space->isInside( (int)pointerX, (int)pointerY )
-                &&
-                space->isEmpty()
+            if( space->isEmpty()
                 && 
                 ( considerNonActive || space->mActive ) ) {
                 
                 unsigned int i = y * gridW + x;
-                
-                placeNextPieceAt( i );
+
+                if( space->isInside( pointerX, pointerY ) ) {
+                    closestIndex = i;
+                    noneHit = false;
+                    }
+                else {
+                    float distance = 
+                        (space->mX - pointerX) * (space->mX - pointerX) +
+                        (space->mY - pointerY) * (space->mY - pointerY);
+                    
+                    if( distance < closestDistance ) {
+                        closestDistance = distance;
+                        closestIndex = i;
+                        }
+                    }
                 }
             }
-        
-        
         }
 
+    if( closestIndex > 0 ) {
+        placeNextPieceAt( closestIndex );
+        }
     
-
     
     
     }
