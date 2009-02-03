@@ -983,7 +983,9 @@ void pointerUp( float inX, float inY ) {
                 }
             else if( allButtons[i] == doneButton ) {
                 // end game
-                gameOver = true;
+                // actuall, wait for score to be successfully posted
+                // this allows them to try posting again later
+                // gameOver = true;
                 
                 char *moveString = moveHistory.getElementString();
                 
@@ -1060,7 +1062,9 @@ void pointerUp( float inX, float inY ) {
     char noneHit = true;
 
     int closestIndex = -1;
-    float closestDistance = 99999999;
+    float closestDistanceSquared = 99999999;
+    float closestXDeltaSquared = 99999999;
+    float closestYDeltaSquared = 99999999;
     
 
     for( y=0; y<gridH && noneHit; y++ ) {
@@ -1080,20 +1084,40 @@ void pointerUp( float inX, float inY ) {
                     noneHit = false;
                     }
                 else {
-                    float distance = 
-                        (space->mX - pointerX) * (space->mX - pointerX) +
+                    
+                    
+                    float xDeltaSquared = 
+                        (space->mX - pointerX) * (space->mX - pointerX);
+                    float yDeltaSquare =
                         (space->mY - pointerY) * (space->mY - pointerY);
                     
-                    if( distance < closestDistance ) {
-                        closestDistance = distance;
+                    float distanceSquared = xDeltaSquared + yDeltaSquare;
+                    
+                    if( distanceSquared < closestDistanceSquared ) {
+                        closestDistanceSquared = distanceSquared;
                         closestIndex = i;
+
+                        closestXDeltaSquared = xDeltaSquared;
+                        closestYDeltaSquared = yDeltaSquare;
                         }
                     }
                 }
             }
         }
 
-    if( closestIndex > 0 ) {
+    // ignore clicks more than a 3/4 space-width away from 
+    // closest space center (space width is 40)
+    float limit = 30 * 30;
+    
+    // of course, if piece hit directly, ignore distance
+    if( ( closestXDeltaSquared < limit
+          &&
+          closestYDeltaSquared < limit 
+          &&
+          closestIndex >= 0 )
+        ||
+        ! noneHit ) {
+        
         placeNextPieceAt( closestIndex );
         }
     
