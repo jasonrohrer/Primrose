@@ -113,10 +113,22 @@ ColorPool::~ColorPool() {
 
 
 
+// for generating a nice tile icon graphic
+int index = 0;
+int fixedSet[15] = {2,2,1,1,1,1,0,0,1,1,2,0,0,1,0};
+
+
+
 Color *ColorPool::pickColor() {
     int colorIndex = randSource.getRandomBoundedInt( mColorsToSkip, 
                                                      mNumActiveColors - 1 );
-    
+    /*
+      // turn on to generate title image color sequence
+    if( index < 15 ) {
+        colorIndex = fixedSet[index];
+        index ++;
+        }
+    */
     return pieceColors[ colorIndex ].copy();
     }
 
