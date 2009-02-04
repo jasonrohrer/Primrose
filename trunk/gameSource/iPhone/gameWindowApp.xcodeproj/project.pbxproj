@@ -65,6 +65,8 @@
 		DA9F43C40F231E7F005574AF /* TutorialPanelC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */; };
 		DA9F43C50F231E7F005574AF /* TutorialPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */; };
 		DA9F43C60F231E7F005574AF /* TutorialPanelB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */; };
+		DAA232010F3A2D5D00083EC4 /* FinishedSignalThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAA231FF0F3A2D5D00083EC4 /* FinishedSignalThread.cpp */; };
+		DAA232640F3A34BE00083EC4 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DAA232630F3A34BE00083EC4 /* Entitlements.plist */; };
 		DAD088FD0F34A037007CAF68 /* BringNetworkUpThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */; };
 		DAD089060F34BC07007CAF68 /* encodingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD089050F34BC07007CAF68 /* encodingUtils.cpp */; };
 		DAD0890B0F34BC49007CAF68 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAD0890A0F34BC49007CAF68 /* sha1.cpp */; };
@@ -155,6 +157,9 @@
 		DA9F43C10F231E7F005574AF /* TutorialPanelC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelC.cpp; path = ../TutorialPanelC.cpp; sourceTree = SOURCE_ROOT; };
 		DA9F43C20F231E7F005574AF /* TutorialPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanel.cpp; path = ../TutorialPanel.cpp; sourceTree = SOURCE_ROOT; };
 		DA9F43C30F231E7F005574AF /* TutorialPanelB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TutorialPanelB.cpp; path = ../TutorialPanelB.cpp; sourceTree = SOURCE_ROOT; };
+		DAA231FF0F3A2D5D00083EC4 /* FinishedSignalThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FinishedSignalThread.cpp; path = ../../../../minorGems/system/FinishedSignalThread.cpp; sourceTree = SOURCE_ROOT; };
+		DAA232000F3A2D5D00083EC4 /* FinishedSignalThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FinishedSignalThread.h; path = ../../../../minorGems/system/FinishedSignalThread.h; sourceTree = SOURCE_ROOT; };
+		DAA232630F3A34BE00083EC4 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		DAD088F80F34A037007CAF68 /* networkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = networkInterface.h; path = ../networkInterface.h; sourceTree = SOURCE_ROOT; };
 		DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BringNetworkUpThread.cpp; path = ../BringNetworkUpThread.cpp; sourceTree = SOURCE_ROOT; };
 		DAD088FB0F34A037007CAF68 /* BringNetworkUpThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BringNetworkUpThread.h; path = ../BringNetworkUpThread.h; sourceTree = SOURCE_ROOT; };
@@ -206,6 +211,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				DAA232630F3A34BE00083EC4 /* Entitlements.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -349,6 +355,8 @@
 				DA9F42800F224AEF005574AF /* SocketClientLinux.cpp */,
 				DA9F42810F224AEF005574AF /* SocketLinux.cpp */,
 				DA9F42900F224C10005574AF /* NetworkFunctionLocks.cpp */,
+				DAA231FF0F3A2D5D00083EC4 /* FinishedSignalThread.cpp */,
+				DAA232000F3A2D5D00083EC4 /* FinishedSignalThread.h */,
 			);
 			name = minorGems;
 			sourceTree = "<group>";
@@ -416,6 +424,7 @@
 				DA9F42B90F224D4E005574AF /* yzplus_big.tga in Resources */,
 				DA9F42BA0F224D4E005574AF /* yzplus.tga in Resources */,
 				DA9F42BB0F224D4E005574AF /* abcdefghijkl_big.tga in Resources */,
+				DAA232640F3A34BE00083EC4 /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +488,7 @@
 				DAD089060F34BC07007CAF68 /* encodingUtils.cpp in Sources */,
 				DAD0890B0F34BC49007CAF68 /* sha1.cpp in Sources */,
 				DAD089340F34CEC2007CAF68 /* networkInterfaceIPhone.mm in Sources */,
+				DAA232010F3A2D5D00083EC4 /* FinishedSignalThread.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,6 +615,48 @@
 			};
 			name = Distribution;
 		};
+		DAA232340F3A338A00083EC4 /* Distribution Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_CFLAGS = "-DBSD";
+				PREBINDING = NO;
+				SDKROOT = iphoneos2.2;
+			};
+			name = "Distribution Ad Hoc";
+		};
+		DAA232350F3A338A00083EC4 /* Distribution Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jason Rohrer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = gameWindowApp_Prefix.pch;
+				HEADER_SEARCH_PATHS = (
+					.,
+					/Users/jasonrohrer/cpp,
+				);
+				INFOPLIST_FILE = Info.plist;
+				OTHER_CFLAGS = (
+					"-DBSD",
+					"-DIPHONE",
+				);
+				PRODUCT_NAME = Primrose;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5B60B20B-1465-447B-A37B-A8DB5DBC1BD8";
+			};
+			name = "Distribution Ad Hoc";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -614,6 +666,7 @@
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
 				DA9E30CC0EFC240700DFACC7 /* Distribution */,
+				DAA232350F3A338A00083EC4 /* Distribution Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -624,6 +677,7 @@
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
 				DA9E30CB0EFC240700DFACC7 /* Distribution */,
+				DAA232340F3A338A00083EC4 /* Distribution Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

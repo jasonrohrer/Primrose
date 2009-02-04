@@ -228,6 +228,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -264,26 +266,23 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
+								<string>080E96DDFE201D6D7F000001</string>
 								<string>29B97315FDCFA39411CA2CEA</string>
-								<string>DA12F31E0EF6E84900A40C6D</string>
-								<string>DA8C9E030EF80930002FCA67</string>
-								<string>DA12F31D0EF6E83D00A40C6D</string>
-								<string>29B97323FDCFA39411CA2CEA</string>
+								<string>19C28FACFE9D520D11CA2CBB</string>
 								<string>1C37FBAC04509CD000000102</string>
-								<string>DAD089540F34D52F007CAF68</string>
 								<string>1C37FAAC04509CD000000102</string>
 								<string>1C37FABC05509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>68</integer>
-									<integer>2</integer>
+									<integer>13</integer>
+									<integer>12</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 836}, {270, 482}}</string>
+							<string>{{0, 0}, {270, 482}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -313,14 +312,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>networkInterfaceIPhone.mm</string>
+								<string>Entitlements.plist</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -328,11 +325,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>networkInterfaceIPhone.mm</string>
+										<string>Entitlements.plist</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>DAD0899A0F34E935007CAF68</string>
+										<string>DAA2328F0F3A394200083EC4</string>
 										<key>history</key>
 										<array>
 											<string>DA12F3600EF6EB5E00A40C6D</string>
@@ -366,7 +363,6 @@
 											<string>DA34BD560F1E8B4700126D0F</string>
 											<string>DA34BD580F1E8B4700126D0F</string>
 											<string>DA34BD5C0F1E8B4700126D0F</string>
-											<string>DA34BDBD0F1E8C0B00126D0F</string>
 											<string>DA34BDBE0F1E8C0B00126D0F</string>
 											<string>DA34BE270F1E94F400126D0F</string>
 											<string>DA9F42360F224937005574AF</string>
@@ -394,7 +390,9 @@
 											<string>DAD089780F34E0E6007CAF68</string>
 											<string>DAD089790F34E0E6007CAF68</string>
 											<string>DAD0898D0F34E757007CAF68</string>
-											<string>DAD0898E0F34E757007CAF68</string>
+											<string>DAA232770F3A362900083EC4</string>
+											<string>DAA232780F3A362900083EC4</string>
+											<string>DAA232790F3A362900083EC4</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -456,22 +454,11 @@
 											<string>DA9F43A60F231E3D005574AF</string>
 											<string>DA7BDE020F342B35006F5F24</string>
 											<string>DA7BDE030F342B35006F5F24</string>
-											<string>DAD0895B0F34D52F007CAF68</string>
-											<string>DAD0895C0F34D52F007CAF68</string>
-											<string>DAD0895D0F34D52F007CAF68</string>
 											<string>DAD0895E0F34D52F007CAF68</string>
-											<string>DAD0895F0F34D52F007CAF68</string>
-											<string>DAD089600F34D52F007CAF68</string>
-											<string>DAD089610F34D52F007CAF68</string>
 											<string>DAD089620F34D52F007CAF68</string>
-											<string>DAD089630F34D52F007CAF68</string>
-											<string>DAD089640F34D52F007CAF68</string>
-											<string>DAD0897C0F34E0E6007CAF68</string>
-											<string>DAD0897D0F34E0E6007CAF68</string>
-											<string>DAD0897E0F34E0E6007CAF68</string>
-											<string>DAD0897F0F34E0E6007CAF68</string>
-											<string>DAD089840F34E1AE007CAF68</string>
-											<string>DAD0898F0F34E757007CAF68</string>
+											<string>DAA2327A0F3A362900083EC4</string>
+											<string>DAA2327B0F3A362900083EC4</string>
+											<string>DAA2327C0F3A362900083EC4</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -529,9 +516,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>DAD089660F34D52F007CAF68</string>
+				<string>DAA2327E0F3A362900083EC4</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>DAD089670F34D52F007CAF68</string>
+				<string>DAA2327F0F3A362900083EC4</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -665,9 +652,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>DAD089700F34D52F007CAF68</string>
-		<string>DAD089710F34D52F007CAF68</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>DA86AEC00EF53C5800054E6B</string>
 		<string>/Users/jasonrohrer/cpp/tilePlacementGames/game1/gameSource/iPhone/gameWindowApp.xcodeproj</string>
@@ -694,7 +678,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>HighScoreLoadingPanel.cpp</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -754,7 +738,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>DA86AEC00EF53C5800054E6B</string>
-				<string>DAD089680F34D52F007CAF68</string>
+				<string>DAA232800F3A362900083EC4</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -874,13 +858,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>DAD089690F34D52F007CAF68</string>
+				<string>DAA232810F3A362900083EC4</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>DAD0896A0F34D52F007CAF68</string>
-				<string>DAD0896B0F34D52F007CAF68</string>
-				<string>DAD0896C0F34D52F007CAF68</string>
-				<string>DAD0896D0F34D52F007CAF68</string>
-				<string>DAD0896E0F34D52F007CAF68</string>
+				<string>DAA232820F3A362900083EC4</string>
+				<string>DAA232830F3A362900083EC4</string>
+				<string>DAA232840F3A362900083EC4</string>
+				<string>DAA232850F3A362900083EC4</string>
+				<string>DAA232860F3A362900083EC4</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -999,8 +983,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1036,7 +1018,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>DAD0896F0F34D52F007CAF68</string>
+				<string>DAA2320C0F3A30C100083EC4</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
