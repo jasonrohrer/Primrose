@@ -9,7 +9,6 @@ $databasePassword = "testPassword";
 $databaseName = "test";
 
 // used to generate a hash of posted values
-// this file is NOT included with the distribution
 // must be a file containing:
 //
 //      < ? php   $secureSalt = "change_me";   ? >
