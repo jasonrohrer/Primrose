@@ -1,1 +1,1 @@
-< ? php   $secureSalt = "secret_path";   ? >
+<?php   $secureSalt = "secret_path";   ?>
