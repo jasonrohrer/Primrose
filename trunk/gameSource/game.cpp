@@ -42,6 +42,9 @@ int pointerX, pointerY;
 
 Color scoreColor( 255/255.0, 255/255.0, 160/255.0 );
 
+// fade title out when app launches
+float titleFade = 1.0;
+
 
 GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
@@ -664,6 +667,14 @@ void drawFrame() {
             }
         }
 
+
+    if( titleFade > 0 ) {
+        titleFade -= 0.02;
+        
+        if( titleFade < 0 ) {
+            titleFade = 0;
+            }
+        }
     
     
     char animDone = true;
@@ -887,6 +898,7 @@ void drawFrame() {
             allSpaces[i]->drawPieceHalo();
             }
 
+        
         nextPiece->draw();
         
         colorPool->draw();
@@ -906,13 +918,20 @@ void drawFrame() {
         
         drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
                       scoreTransitionProgress );
+
+
         
-        /*
-        drawStringBig( "primrose", left, 
-                       spaces[5][2]->mX,
-                       spaces[5][2]->mY,
-                       &scoreColor ); 
-        */
+        if( titleFade > 0 ) {
+            
+            drawStringBig( "primrose", left, 
+                           spaces[5][2]->mX,
+                           spaces[5][2]->mY,
+                           &scoreColor,
+                           titleFade );
+            }
+        
+        
+        
 
         glDisable( GL_BLEND );
     
