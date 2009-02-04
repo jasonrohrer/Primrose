@@ -1,5 +1,7 @@
 #include "ScoreBundle.h"
 
+#include "minorGems/system/FinishedSignalThread.h"
+#include "minorGems/graphics/Color.h"
 
 
 // add to global game score
@@ -46,3 +48,11 @@ void playbackGame( ScoreBundle *inBundle );
 
 // clears scores that have been saved across HighScorePanel destroys
 void clearSavedScores();
+
+
+
+// adds a thread that we wait until it is finished to destroy
+// this prevents other modules from blocking and waiting to destroy them
+// in the run loop (causing app to hang until they are done).
+void addThreadToDestroy( FinishedSignalThread *inThread );
+

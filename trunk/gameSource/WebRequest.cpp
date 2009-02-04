@@ -1,6 +1,7 @@
 #include "WebRequest.h"
 
 #include "networkInterface.h"
+#include "gameControl.h"
 
 #include "minorGems/util/stringUtils.h"
 #include "minorGems/util/StringBufferOutputStream.h"
@@ -135,12 +136,13 @@ WebRequest::WebRequest( char *inMethod, char *inURL,
 
 WebRequest::~WebRequest() {
 
+    // pass these to global thread destroyer, so we don't block here
     if( mNetworkUpThread != NULL ) {
-        delete mNetworkUpThread;
+        addThreadToDestroy( mNetworkUpThread );
         }
 
     if( mLookupThread != NULL ) {    
-        delete mLookupThread;
+        addThreadToDestroy( mLookupThread );
         }
     
     delete mSuppliedAddress;
@@ -182,6 +184,7 @@ int WebRequest::step() {
                 
                 if( mNetworkUpThread->isNetworkUp() ) {
                     
+                    // delete directly, because it is already finished
                     delete mNetworkUpThread;
                     
                     mNetworkUpThread = NULL;

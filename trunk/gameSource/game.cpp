@@ -119,6 +119,17 @@ char manualStep = false;
 char *savedServerURL = NULL;
 
 
+// we'll destroy these when they're finished (instead of blocking on them
+// with a join)
+SimpleVector<FinishedSignalThread *> threadsToDestory;
+
+void addThreadToDestroy( FinishedSignalThread *inThread ) {
+    threadsToDestory.push_back( inThread );
+    }
+
+
+
+
 // used to keep high score panel consisten across the destroys that
 // happen to it when a new game is triggered
 SimpleVector<ScoreBundle*> savedAllTimeScores;
@@ -478,6 +489,22 @@ void freeFrameDrawer() {
         }
     
     clearSavedScores();
+
+
+    // what about any threads?
+
+    for( int i=0; i<threadsToDestory.size(); i++ ) {
+        FinishedSignalThread *thread = *( threadsToDestory.getElement(i) );
+        
+        if( !thread->isFinished() ) {
+            printf( "Warning:  Thread not finished at freeFrameDrawer.\n"
+                    "          Letting it leak instead of blocking.\n" );
+            }
+        else {
+            delete thread;
+            }
+        
+        }
     }
 
 
@@ -621,9 +648,24 @@ void drawFrame() {
 
         mustRestart = false;
         }
-    
+
 
     int i;
+
+    
+    // look for threads that are finished
+    for( int i=0; i<threadsToDestory.size(); i++ ) {
+        FinishedSignalThread *thread = *( threadsToDestory.getElement(i) );
+        
+        if( thread->isFinished() ) {
+            printf( "Destroying finished thread\n" );
+            delete thread;
+            threadsToDestory.deleteElement( i );
+            i--;
+            }
+        }
+
+    
     
     char animDone = true;
     
