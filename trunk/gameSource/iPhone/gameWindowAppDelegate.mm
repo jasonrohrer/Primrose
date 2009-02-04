@@ -289,14 +289,21 @@ int appFrameCount = 0;
 // Handles the start of a touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	CGRect				bounds = [self bounds];
-    UITouch*	touch = [[event touchesForView:self] anyObject];
-	
-    //Convert touch point from UIView referential to OpenGL one (upside-down flip)
-	CGPoint	location = [touch locationInView:self];
-	//location.y = bounds.size.height - location.y;
     
-    pointerDown( location.x, location.y );
+    for( UITouch *touch in touches ){
+        // ignore touches that aren't part of this phase
+        // all active touches are in the set
+        if( [touch phase] == UITouchPhaseBegan ) {
+            
+            CGPoint	location = [touch locationInView:self];
+            
+            //Convert touch point from UIView referential to OpenGL one (upside-down flip)
+            //CGRect				bounds = [self bounds];
+            //location.y = bounds.size.height - location.y;
+            
+            pointerDown( location.x, location.y );
+        }
+    }
 }
 
 
@@ -304,28 +311,41 @@ int appFrameCount = 0;
 // Handles touch motion
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	CGRect				bounds = [self bounds];
-    UITouch*	touch = [[event touchesForView:self] anyObject];
-	
-    //Convert touch point from UIView referential to OpenGL one (upside-down flip)
-	CGPoint	location = [touch locationInView:self];
-	//location.y = bounds.size.height - location.y;
-    
-    pointerMove( location.x, location.y );
+	for( UITouch *touch in touches ) {
+        // ignore touches that aren't part of this phase
+        // all active touches are in the set
+        if( [touch phase] == UITouchPhaseMoved ) {
+            
+            CGPoint	location = [touch locationInView:self];
+            
+            //Convert touch point from UIView referential to OpenGL one (upside-down flip)
+            //CGRect				bounds = [self bounds];
+            //location.y = bounds.size.height - location.y;
+            
+            pointerMove( location.x, location.y );
+        }
+    }
 }
 
 
 // Handles touch end
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-	CGRect				bounds = [self bounds];
-    UITouch*	touch = [[event touchesForView:self] anyObject];
 	
-    //Convert touch point from UIView referential to OpenGL one (upside-down flip)
-	CGPoint	location = [touch locationInView:self];
-	//location.y = bounds.size.height - location.y;
-    
-    pointerUp( location.x, location.y );
+	for( UITouch *touch in touches ) {
+        // ignore touches that aren't part of this phase
+        // all active touches are in the set
+        if( [touch phase] == UITouchPhaseEnded ) {
+            
+            CGPoint	location = [touch locationInView:self];
+            
+            //Convert touch point from UIView referential to OpenGL one (upside-down flip)
+            //CGRect				bounds = [self bounds];
+            //location.y = bounds.size.height - location.y;
+            
+            pointerUp( location.x, location.y );
+        }
+    }
 }
 
 
