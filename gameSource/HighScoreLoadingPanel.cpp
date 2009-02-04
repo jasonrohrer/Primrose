@@ -7,7 +7,6 @@
 
 
 // defines a secret string shared with server
-// this file is NOT included with the distribution
 // must contain:
 //
 //    #define  secureSalt  "change_me"
