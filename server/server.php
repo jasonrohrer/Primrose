@@ -179,25 +179,6 @@ function ps_setupDatabase() {
     global $tableNamePrefix;
 
 
-    $tableName = $tableNamePrefix . "server_globals";
-    if( ! ps_doesTableExist( $tableName ) ) {
-
-        // this table contains general info about the server
-        // use INNODB engine so table can be locked
-        $query =
-            "CREATE TABLE $tableName(" .
-            "next_player_id CHAR(7) NOT NULL, ".
-            "last_flush_time DATETIME NOT NULL ) ENGINE = INNODB;";
-
-        $result = ps_queryDatabase( $query );
-
-        echo "<B>$tableName</B> table created<BR>";
-        }
-    else {
-        echo "<B>$tableName</B> table already exists<BR>";
-        }
-
-
     $tableName = $tableNamePrefix . "log";
     if( ! ps_doesTableExist( $tableName ) ) {
 
