@@ -658,7 +658,6 @@ void drawFrame() {
         FinishedSignalThread *thread = *( threadsToDestory.getElement(i) );
         
         if( thread->isFinished() ) {
-            printf( "Destroying finished thread\n" );
             delete thread;
             threadsToDestory.deleteElement( i );
             i--;
@@ -730,8 +729,7 @@ void drawFrame() {
             if( full ) {
                 if( gameToPlayback == NULL ) {
                     // game over
-                    // but wait to set flag until after they press DONE
-                    // gameOver = true;
+                    gameOver = true;
                     
                     doneButton->setVisible( true );
                     }
@@ -1031,11 +1029,6 @@ void pointerUp( float inX, float inY ) {
                 menuPanel->setVisible( true );
                 }
             else if( allButtons[i] == doneButton ) {
-                // end game
-                // actuall, wait for score to be successfully posted
-                // this allows them to try posting again later
-                // gameOver = true;
-                
                 char *moveString = moveHistory.getElementString();
                 
                 ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,

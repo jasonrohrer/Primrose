@@ -30,8 +30,6 @@ Color scoreLoadingRed( 1, 0, 0 );
 
 extern char *savedServerURL;
 
-extern char gameOver;
-
 
 
 void HighScoreLoadingPanel::startConnectionTry() {
