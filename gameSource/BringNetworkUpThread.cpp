@@ -54,4 +54,6 @@ void BringNetworkUpThread::run() {
     mNetworkCheckDone = true;
     mResult = result;
     mLock.unlock();
+
+    setFinished();
     }

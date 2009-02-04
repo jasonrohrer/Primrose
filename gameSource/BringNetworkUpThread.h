@@ -1,7 +1,7 @@
 #ifndef BRING_NETWORK_UP_THREAD_CLASS_INCLUDED
 #define BRING_NETWORK_UP_THREAD_CLASS_INCLUDED
 
-#include "minorGems/system/Thread.h"
+#include "minorGems/system/FinishedSignalThread.h"
 #include "minorGems/system/MutexLock.h"
 
 
@@ -11,7 +11,7 @@
  *
  * @author Jason Rohrer
  */
-class BringNetworkUpThread : public Thread {
+class BringNetworkUpThread : public FinishedSignalThread {
 	
 	public:
 		/**
