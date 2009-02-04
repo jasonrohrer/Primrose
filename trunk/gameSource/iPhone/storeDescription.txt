@@ -1,26 +1,35 @@
 Primrose is an addictive tile clearing puzzle game by world-renowned designer Jason Rohrer.
 
-If you find the glut of match-3 puzzle games to be mindless and boring...
+If you find the herd of copycat match-3 (Bejeweled) puzzle games to be mindless and boring...
 
 If you think Tetris is interesting, except for the for the fact that it is over 20 years old...
 
-If you're ready for something that is more challenging than Tetris...
-
-If you're looking for an elegant puzzle game that's completely novel...
+If you're looking for an elegant, deep puzzle game that's completely novel...
 
 
-Then you should take a look at Primrose, which you can download for free on Mac, PC, and GNU/Linux here:  http://primrose.sf.net
+Then you should take a look at Primrose, which you can test for free (full version) on Mac, Windows, and GNU/Linux here:  http://primrose.sf.net
 
 
-Includes the following features:
+Primrose's gameplay is incredibly simple:  Place randomly chosen pairs of colored tiles on a 7x7 grid.  Surround a group of tiles with another color to remove the group.  The surrounding tiles flip to the color of the group that was removed.  When tiles flip color, chain reactions are possible.  Larger clears and longer chain reactions are awarded more points.
 
---Live world-wide high score boards.
+As the game progresses, more colors are added to the pool, making the grid more and more constrained.  Pressure builds until the grid finally fills up, and the game ends.
 
---Instant replay, move-by-move, of all games on the high score boards.
+But the game doesn't have a frantic feel, because you have as much time as you want to make each move.  Whereas Tetris depends on getting faster and faster to be challenging, Primrose derives deep challenge from inherent properties of its mechanics.
 
---Comprehensive instruction pages with animated examples.
+
+Primrose includes the following features:
+
+--Live, networked high score boards.  Compete against the world wherever you are.
+
+--Instant replay, move-by-move, of all games on the high score boards.  Wondering how other players got those unbelievable scores?  Just touch Play and watch how they did it.
+
+--Comprehensive instruction pages with realtime, animated examples.
+
+--Glowing, pulsating, retro graphics.  Polished to perfection.
+
+--Colorblind mode.
+
+Press the [P] button on the main screen to access the menu.
 
 
 You can read an in-depth profile of Jason Rohrer in Esquire Magazine's December 2008 "Genius" issue.
-
-
