@@ -564,7 +564,8 @@ char checkAndClear() {
                             (int)( pow( score, 2 ) )
                             *
                             (int)( pow( chainLength, 4 ) )
-                            * levelOfPlacement;
+                            * 
+                            (int)( pow( levelOfPlacement, 2 ) );
                         }
                     }
                 
