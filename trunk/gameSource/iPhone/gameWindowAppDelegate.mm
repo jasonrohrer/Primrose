@@ -8,6 +8,8 @@
 
 #import "gameWindowAppDelegate.h"
 
+char renderingPaused = false;
+
 
 @implementation gameWindowAppDelegate
 
@@ -34,6 +36,33 @@
 
 
 }
+
+
+
+- (void)applicationWillTerminate:(UIApplication *)application {    
+	
+	printf( "App terminating\n" );
+    
+    printf( "Calling stop anim\n" );
+	[view stopAnimation];
+}
+
+
+
+- (void)applicationWillResignActive:(UIApplication *)application {    
+    printf( "App resigning active\n" );
+	renderingPaused = true;
+}
+
+
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    printf( "App becoming active\n" );
+	renderingPaused = false;
+}
+
+
+
 
 
 // UIAccelerometerDelegate method, called when the device accelerates.
@@ -170,6 +199,8 @@ int appFrameCount = 0;
 }
 
 - (void)startAnimation {
+    renderingPaused = false;
+    
 	NSTimeInterval animationInterval = 1 / 25.0;
 	
     self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
@@ -181,8 +212,12 @@ int appFrameCount = 0;
 }
 
 
+
 - (void)stopAnimation {
 	printf( "Stop anim called\n" );
+    
+    renderingPaused = true;
+    
     self.animationTimer = nil;
 	
     
@@ -199,6 +234,10 @@ int appFrameCount = 0;
 
 
 - (void)drawFrame {
+    if( renderingPaused ) {
+        return;
+    }
+    
     //printf( "draw frame called\n" );
     
     [EAGLContext setCurrentContext:context];
