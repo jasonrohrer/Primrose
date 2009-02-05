@@ -35,7 +35,6 @@ GridSpace::GridSpace( int inX, int inY )
          mScoreFade( 0 ),
          mScoreSent( false ),
          mSavedColor( NULL ),
-         mSavedInvertedColor( NULL ),
          mSavedActive( false ),
          // no pause to start... set counter way over limit
          mPauseStepsAfterAnimationDone( 999 ) {
@@ -66,9 +65,6 @@ GridSpace::~GridSpace() {
         }
     if( mPieceInvertedColor != NULL ) {
         delete mPieceInvertedColor;
-        }
-    if( mSavedInvertedColor != NULL ) {
-        delete mSavedInvertedColor;
         }
     
     }
@@ -137,15 +133,12 @@ void GridSpace::setColor( Color *inColor ) {
 void GridSpace::saveState() {
     if( mSavedColor != NULL ) {
         delete mSavedColor;
-        delete mSavedInvertedColor;
         }
     if( mPieceColor != NULL ) {
         mSavedColor = mPieceColor->copy();
-        mSavedInvertedColor = mPieceInvertedColor->copy();
         }
     else {
         mSavedColor = NULL;
-        mSavedInvertedColor = NULL;
         }
             
     mSavedActive = mActive;
@@ -162,6 +155,12 @@ void GridSpace::rewindState() {
     else {
         setColor( NULL );
         }
+    }
+
+
+
+Color *GridSpace::getSavedColor() {
+    return mSavedColor;
     }
 
 

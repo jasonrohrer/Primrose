@@ -5,6 +5,10 @@
 
 
 void initFrameDrawer( int inWidth, int inHeight );
+
+
+// called at application termination
+// good time to save state for next launch
 void freeFrameDrawer();
 
 

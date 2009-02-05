@@ -16,10 +16,28 @@ class ColorPool {
         
 
         // gets a color from the pool
-        Color *pickColor();
+        // set index of -1 (default) to pick a random color
+        // color is copied
+        Color *pickColor( int inIndex = -1 );
         
         // gets the symbol for a color
         char getColorblindSymbol( Color *inColor );
+        
+
+        // gets the index number of a given color
+        // returns -1 if not found or if color NULL
+        int getColorIndex( Color *inColor );
+        
+
+        void saveState();
+        
+        // gets state that can be saved to disk
+        // can be NULL if no saved state
+        // copied to caller
+        char *getSavedState();
+        
+        void restoreFromSavedState( char *inSavedState );
+        
         
 
         void registerMove();
@@ -53,6 +71,9 @@ class ColorPool {
         
         GridSpace *mSpaces[7];
         
+        char mSomeMovesMade;
+        
+        int mStartingActiveColors;
         int mNumActiveColors;
         int mColorsToSkip;
         
@@ -73,6 +94,7 @@ class ColorPool {
         int mLevel;
         
         
+        char *mSavedState;
         
                         
     };

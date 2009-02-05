@@ -87,6 +87,11 @@ int lastGridY = -1;
 
 int score = 0;
 
+int moveCount = 0;
+
+char savedStateAvailable = false;
+
+
 // for smooth transition between scores
 int lastScore = 0;
 float scoreTransitionProgress = 1;
@@ -222,6 +227,11 @@ void newGame() {
     lastGridX = -1;
     lastGridY = -1;
     score = 0;
+    
+    moveCount = 0;
+    
+    savedStateAvailable = false;
+    
 
     lastScore = 0;
     scoreTransitionProgress = 1;
@@ -470,12 +480,168 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
 
     newGame();
+
+
+    // should we restore from disk?
+        
+    int wasSaved = SettingsManager::getIntSetting( "saved", &found );
+    
+    if( found && wasSaved ) {
+        
+        char *state = 
+            SettingsManager::getStringSetting( "nextPieceDisplaySaved" );
+        
+        if( state != NULL ) {
+            nextPiece->restoreFromSavedState( state );
+            delete [] state;
+            }
+
+        state = 
+            SettingsManager::getStringSetting( "colorPoolSaved" );
+        
+        if( state != NULL ) {
+            colorPool->restoreFromSavedState( state );
+            delete [] state;
+            }
+        
+        state = 
+            SettingsManager::getStringSetting( "randStateSaved" );
+        
+        if( state != NULL ) {
+            unsigned int randState;
+            
+            int numRead = sscanf( state, "%u", &randState );
+            
+            if( numRead == 1 ) {
+                randSource.restoreFromSavedState( randState );
+                }
+            
+            delete [] state;
+            }
+
+        score = SettingsManager::getIntSetting( "scoreSaved", &found );
+        
+        if( !found ) {
+            score = 0;
+            }
+        
+        gameOver = (char)( 
+            SettingsManager::getIntSetting( "gameOverSaved", &found ) );
+        
+        if( !found ) {
+            gameOver = 0;
+            }
+        
+        state = SettingsManager::getStringSetting( "gridSaved" );
+
+        if( state != NULL ) {
+        
+            int numParts;
+            char **parts = split( state, "#", &numParts );
+            
+            if( numParts == numGridSpaces ) {
+            
+                for( int i=0; i<numParts; i++ ) {
+                    int index;
+                    
+                    int numRead = sscanf( parts[i], "%d", &index );
+                    
+                    if( numRead == 1 ) {
+                        Color *c = NULL;
+                        
+                        if( index >= 0 ) {
+                            c = colorPool->pickColor( index );
+                            }
+                        allSpaces[i]->setColor( c );
+                        }
+                    }
+                }
+            
+            
+            for( int i=0; i<numParts; i++ ) {
+                delete []  parts[i];
+                }
+            delete [] parts;
+            
+            delete [] state;
+            }        
+        
+        }    
     }
 
 
 
 
 void freeFrameDrawer() {
+    
+    if( savedStateAvailable ) {
+        printf( "Saving game state %d moves in\n", moveCount );
+        
+        
+        // save the last saved (known good) state out to disk
+        
+        char *state = nextPiece->getSavedState();
+        
+        SettingsManager::setSetting( "nextPieceDisplaySaved", state );
+        
+        delete [] state;
+        
+        
+        state = colorPool->getSavedState();
+        
+        if( state != NULL ) {
+        
+            SettingsManager::setSetting( "colorPoolSaved", state );
+            
+            delete [] state;
+            }
+    
+        
+        state = autoSprintf( "%u", randSource.getSavedState() );
+        
+        SettingsManager::setSetting( "randStateSaved", state );
+        
+        delete [] state;
+        
+
+        SettingsManager::setSetting( "scoreSaved", savedScore );
+    
+
+        SettingsManager::setSetting( "gameOverSaved", (int)gameOver );
+        
+        
+        int i;
+        SimpleVector<char*> gridState;
+        
+        for( i=0; i<numGridSpaces; i++ ) {
+            Color *c = allSpaces[i]->getSavedColor();
+            
+            int index = colorPool->getColorIndex( c );
+            
+            gridState.push_back( autoSprintf( "%d", index ) );
+            }
+
+        char **gridStateArray = gridState.getElementArray();
+        
+        state = join( gridStateArray, gridState.size(), "#" );
+    
+        delete [] gridStateArray;
+        
+        for( i=0; i<numGridSpaces; i++ ) {
+            delete [] *( gridState.getElement( i ) );
+            }
+            
+        
+        SettingsManager::setSetting( "gridSaved", state );
+        
+        delete [] state;
+        
+        
+        SettingsManager::setSetting( "saved", "1" );
+        }
+    
+
+
     endGame();
 
     freeSpriteBank();
@@ -591,6 +757,25 @@ char checkAndClear() {
 
 
 
+void saveStateForUndo() {
+    int i;
+    
+    for( i=0; i<numGridSpaces; i++ ) {
+        allSpaces[i]->saveState();
+        }
+    nextPiece->saveState();
+    
+    colorPool->saveState();
+    
+    randSource.saveState();
+    
+    savedScore = score;
+
+    savedStateAvailable = true;
+    }
+
+
+
 
 void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
@@ -603,20 +788,17 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     moveHistory.push_back( encodedMove );
 
-
-    // save previous state for undo
-    int i;
-    
-    for( i=0; i<numGridSpaces; i++ ) {
-        allSpaces[i]->saveState();
+    if( moveCount == 0 ) {
+        // no saved state, because no moves made yet
+        
+        // save starting state here
+        saveStateForUndo();
         }
-    nextPiece->saveState();
+
     
-    randSource.saveState();
+    moveCount ++;
     
-    savedScore = score;
-                
-    
+
     allSpaces[inSpaceNumber]->setColor( nextPiece->getNextPiece() );
     piecePlaced = true;
     levelOfPlacement = colorPool->getLevel();
@@ -636,7 +818,7 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
         
         
         // all to non-active
-        for( i=0; i<numGridSpaces; i++ ) {
+        for( int i=0; i<numGridSpaces; i++ ) {
             allSpaces[i]->mActive = false;
             }
         }
@@ -743,6 +925,9 @@ void drawFrame() {
                     // game over
                     gameOver = true;
                     
+                    // don't save final state yet
+                    // need to update nextPiece first.
+
                     doneButton->setVisible( true );
                     }
                 else {
@@ -758,7 +943,17 @@ void drawFrame() {
             
 
             nextPiece->update();
+
             
+            if( gameOver ) {
+                // save state again incase game terminated after
+                // game ends
+                // can't undo back beyond this point anyway,
+                // now that game is over!
+                saveStateForUndo();
+                }
+            
+
             piecePlaced = false;
 
         
@@ -810,6 +1005,10 @@ void drawFrame() {
             else {
                 // placing new first piece
                 undoButton->setVisible( false );
+
+                // save state here to support undoing back to it after
+                // next move
+                saveStateForUndo();
                 }
             }
         
@@ -967,6 +1166,8 @@ void undoMove() {
     
     randSource.rewindState();
 
+    moveCount--;
+    
 
     if( moveHistory.size() > 0 ) {
         moveHistory.deleteElement( moveHistory.size() - 1 );

@@ -36,12 +36,12 @@ int h = 480;
 
 
 // 25 fps
-int frameMS = 40;
-//int frameMS = 500;
+//int frameMS = 40;
+int frameMS = 500;
 
 // s and f keys to slow down and speed up for testing
-char enableSlowdownKeys = false;
-//char enableSlowdownKeys = true;
+//char enableSlowdownKeys = false;
+char enableSlowdownKeys = true;
 
 
 
