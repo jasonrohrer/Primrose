@@ -44,6 +44,14 @@ class NextPieceDisplay {
         void rewindState();
 
 
+        // gets state that can be saved to disk
+        // can be NULL if no saved state
+        // copied
+        char *getSavedState();
+        
+        void restoreFromSavedState( char *inSavedState );
+        
+
         // steps animations
         void step();
         

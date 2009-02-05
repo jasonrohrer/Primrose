@@ -13,6 +13,7 @@
 
 
 #include "minorGems/util/random/CustomRandomSource.h"
+#include "minorGems/util/stringUtils.h"
 
 extern CustomRandomSource randSource;
 
@@ -71,7 +72,9 @@ char colorblindSymbols[ numColors ] = { 'z', 'b', 'j', 'm', 'i', 'u', 'p' };
 //#define minSteps 2
 
 ColorPool::ColorPool( int inX, int inY )
-        : mX( inX ), mY( inY ), 
+        : mX( inX ), mY( inY ),
+          mSomeMovesMade( false ),
+          mStartingActiveColors( 3 ),
           mNumActiveColors( 3 ), mColorsToSkip( 0 ),
           mEndPhase( false ),
           mStepsBetweenUpdates( startingSteps ),
@@ -79,7 +82,8 @@ ColorPool::ColorPool( int inX, int inY )
           mLastStepCount( startingSteps ),
           mStepCountTransitionProgress( 1 ),
           mRewinding( false ),
-          mLevel( 1 ) {
+          mLevel( 1 ),
+          mSavedState( NULL ) {
 
     int i;
     
@@ -109,24 +113,37 @@ ColorPool::~ColorPool() {
     for( int i=0; i<7; i++ ) {
         delete mSpaces[i];
         }
+    if( mSavedState != NULL ) {
+        delete [] mSavedState;
+        }
     }
 
 
 
 // for generating a nice tile icon graphic
-int index = 0;
+int fixedSetIndex = 0;
 int fixedSet[15] = {2,2,1,1,1,1,0,0,1,1,2,0,0,1,0};
 
 
 
-Color *ColorPool::pickColor() {
-    int colorIndex = randSource.getRandomBoundedInt( mColorsToSkip, 
+Color *ColorPool::pickColor( int inIndex ) {
+
+    int colorIndex;
+
+    if( inIndex >= 0 ) {
+        colorIndex = inIndex;
+        }
+    else {
+        // random pick
+        colorIndex = randSource.getRandomBoundedInt( mColorsToSkip, 
                                                      mNumActiveColors - 1 );
+        }
+    
     /*
       // turn on to generate title image color sequence
     if( index < 15 ) {
-        colorIndex = fixedSet[index];
-        index ++;
+        colorIndex = fixedSet[fixedSetIndex];
+        fixedSetIndex ++;
         }
     */
     return pieceColors[ colorIndex ].copy();
@@ -135,18 +152,38 @@ Color *ColorPool::pickColor() {
 
 
 char ColorPool::getColorblindSymbol( Color *inColor ) {
-    for( int i=0; i<numColors; i++ ) {
-        if( pieceColors[ i ].equals( inColor ) ) {
-            return colorblindSymbols[ i ];
-            }
+    int index = getColorIndex( inColor );
+    
+    if( index >= 0 ) {
+        return colorblindSymbols[ index ];
         }
+    
+    // not found
     return ' ';
     }
 
+
+
+int ColorPool::getColorIndex( Color *inColor ) {
+    
+    if( inColor != NULL ) {
         
+        for( int i=0; i<numColors; i++ ) {
+            if( pieceColors[ i ].equals( inColor ) ) {
+                return i;
+                }
+            }
+        }
+    
+    // not found or NULL
+    return -1;    
+    }
+
 
 
 void ColorPool::registerMove() {
+    mSomeMovesMade = true;
+    
     mStepsUntilUpdate --;
     
     mStepCountTransitionProgress = 0;
@@ -349,7 +386,9 @@ void ColorPool::draw( float inAlpha ) {
         
         
         if( mStepCountTransitionProgress < 1 && 
-            ( mLastStepCount > 1 || mRewinding ) ) {
+            ( mLastStepCount > 1 || mRewinding )
+            &&
+            mSomeMovesMade ) {
             
             // skip drawing if counter moving to next space 
             // (when last count 1 and not rewinding)
@@ -383,7 +422,9 @@ void ColorPool::draw( float inAlpha ) {
             
             
         
-            if( mStepCountTransitionProgress < 1 && mLastStepCount > 1 ) {
+            if( mStepCountTransitionProgress < 1 && 
+                ( mLastStepCount > 1 || mRewinding ) 
+                && mSomeMovesMade ) {
                 
                 // skip drawing if counter moving to next space 
                 // (when last count 0)
@@ -422,10 +463,13 @@ void ColorPool::draw( float inAlpha ) {
         
             
         
-        // skip this at beginning, when there are first 3 colors
-        // only (otherwise, a 1 fades out on 3rd color)
-        if( ( mNumActiveColors > 3 || mEndPhase )
-            &&
+        // skip this at beginning, when there are first active colors
+        // only (otherwise, a 1 fades out on last starting active color)
+        // we know we are at the beginning when no moves made yet
+        if( mSomeMovesMade 
+            && 
+            //mEndPhase 
+            //&&
             lastSpaceIndex >= 0 
             && 
             ( mSpaces[lastSpaceIndex]->mDrawColor == NULL 
@@ -484,7 +528,7 @@ void ColorPool::draw( float inAlpha ) {
 
 
 
-        if( mEndPhase ) {
+        if( mEndPhase && mSomeMovesMade ) {
             lastSpaceIndex ++;
             
             if( lastSpaceIndex >= numColors ) {
@@ -545,4 +589,107 @@ void ColorPool::step() {
     
     }
 
+
+
+
+void ColorPool::saveState() {
+    if( mSavedState != NULL ) {
+        delete [] mSavedState;
+        }
+    
+    /*
+    int mNumActiveColors;
+    int mColorsToSkip;
+    
+    char mEndPhase;
+    
+
+    int mStepsBetweenUpdates;
+    
+    int mStepsUntilUpdate;
+    
+    int mLastStepCount;
+    
+    int mLevel;
+    */  
+    mSavedState = autoSprintf( "%d#"
+                               "%d#"
+                               "%d#"
+                               "%d#"
+                               "%d#"
+                               "%d#"
+                               "%d",
+                               mNumActiveColors,
+                               mColorsToSkip,
+                               (int)mEndPhase,
+                               mStepsUntilUpdate,
+                               mStepsBetweenUpdates,
+                               mLastStepCount,
+                               mLevel );
+    printf( "ColorPool state saved to:  %s\n", mSavedState );
+    
+    }
+
+    
+        
+char *ColorPool::getSavedState() {
+    if( mSavedState != NULL ) {
+        return stringDuplicate( mSavedState );
+        }
+    else {
+        return NULL;
+        }
+    
+    }
+
+
+        
+void ColorPool::restoreFromSavedState( char *inSavedState ) {
+    
+    int endPhaseInt;
+    
+    int numRead = sscanf( inSavedState,
+                          "%d#"
+                          "%d#"
+                          "%d#"
+                          "%d#"
+                          "%d#"
+                          "%d#"
+                          "%d",
+                          &mNumActiveColors,
+                          &mColorsToSkip,
+                          &endPhaseInt,
+                          &mStepsUntilUpdate,
+                          &mStepsBetweenUpdates,
+                          &mLastStepCount,
+                          &mLevel );
+    
+    if( numRead != 7 ) {
+        printf( "Error resoring ColorPool state\n" );
+        }
+    else {
+        mEndPhase = endPhaseInt;
+
+        int i;
+        
+        for( i=0; i<numColors; i++ ) {
+            // set all to NULL first
+            // forces them to fade in together (even though 3 of them
+            // were already set in constructor above)
+            mSpaces[i]->setColor( NULL );
+
+            if( i >= mColorsToSkip && i < mNumActiveColors ) {
+                mSpaces[i]->setColor( pieceColors[i].copy() );
+                }
+            else {
+                // set to NULL again to make sure they don't fade
+                // out from some other color
+                mSpaces[i]->setColor( NULL );
+                }
+            }
+        
+        mStartingActiveColors = mNumActiveColors;
+        }
+    
+    }
 

@@ -5,6 +5,9 @@
 #include "spriteBank.h"
 
 
+#include "minorGems/util/stringUtils.h"
+
+
 
 #include <math.h>
 
@@ -219,6 +222,66 @@ void NextPieceDisplay::step() {
         }
 
     mBlinkTime += 0.2;
+    }
+
+
+    
+        
+char *NextPieceDisplay::getSavedState() {
+    int spaceColorIndices[2];
+    
+    for( int i=0; i<2; i++ ) {
+        Color *c = mSpaces[i]->getSavedColor();
+        
+        spaceColorIndices[i] = mPool->getColorIndex( c );
+        }
+    
+
+
+    char *savedState = autoSprintf( "%d#"
+                                    "%d",
+                                    spaceColorIndices[0],
+                                    spaceColorIndices[1] );
+    
+    printf( "NextPieceDisplay state saved to:  %s\n", savedState );
+
+    return savedState;
+    }
+
+
+        
+void NextPieceDisplay::restoreFromSavedState( char *inSavedState ) {
+    
+    int spaceColorIndices[2];
+    
+    int numRead = sscanf( inSavedState,
+                          "%d#"
+                          "%d",
+                          &spaceColorIndices[0],
+                          &spaceColorIndices[1] );
+    
+    if( numRead != 2 ) {
+        printf( "Error resoring NextPieceDisplay state\n" );
+        }
+    else {
+
+        for( int i=0; i<2; i++ ) {
+            int index = spaceColorIndices[i];
+
+            // set both to NULL first so they fade in properly
+            mSpaces[i]->setColor( NULL );
+            
+
+            if( index >= 0 ) {    
+                mSpaces[i]->setColor( mPool->pickColor( index ) );
+                }
+            else {
+                // set to NULL again to make sure it starts fully empty
+                mSpaces[i]->setColor( NULL );
+                }
+            }
+        }
+    
     }
 
 

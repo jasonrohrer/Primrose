@@ -61,6 +61,11 @@ class GridSpace {
         
         void rewindState();
         
+
+        // returns saved color, or NULL
+        // not a copy
+        Color *getSavedColor();
+        
         
         
             
@@ -137,7 +142,6 @@ class GridSpace {
         char mScoreSent;
 
         Color *mSavedColor;
-        Color *mSavedInvertedColor;
         char mSavedActive;
         
         
