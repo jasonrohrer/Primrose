@@ -278,10 +278,6 @@ int mainFunction( int inNumArgs, char **inArgs ) {
         }
 
 
-
-    //    glutMainLoop();
-
-
     return 0;    
     }
 
@@ -307,29 +303,9 @@ void callbackDisplay() {
     
 	
     SDL_GL_SwapBuffers();
-	//glutSwapBuffers();
 	}
 
 
-/*
-void callbackIdle() {
-	glutPostRedisplay();
-	}
-*/
-/*
-void callbackTimer( int inValue ) {
-    glutTimerFunc( frameMS, callbackTimer, 0 );
-    
-    
-    if( glutGet( GLUT_WINDOW_WIDTH ) != w ||
-        glutGet( GLUT_WINDOW_HEIGHT ) != h ) {
-        
-        glutReshapeWindow( w, h );
-        }
-    
-    glutPostRedisplay();
-	}
-*/
 
 
 void callbackMotion( int inX, int inY ) {
@@ -373,18 +349,6 @@ void callbackKeyboard( unsigned char inKey, int inX, int inY ) {
     
     
 	}
-
-/*
-void callbackReshape( int inW, int inH ) {
-    // force original size
-    glutReshapeWindow( w, h );
-
-    // note that we also need to check this in the main loop above
-    // because sometimes callbackReshape isn't getting called (maybe
-    // after releasing the mouse near the end of a resize)
-    }
-*/
-
 
 
 /*
