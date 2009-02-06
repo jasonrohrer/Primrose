@@ -1,5 +1,6 @@
 #include "game.h"
 #include "spriteBank.h"
+#include "sound.h"
 
 #include "GridSpace.h"
 #include "NextPieceDisplay.h"
@@ -12,6 +13,7 @@
 #include "MenuPanel.h"
 
 #include "ScoreBundle.h"
+
 
 
 
@@ -477,6 +479,10 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         }
     
     
+    initSound();
+    
+    setSoundPlaying( true );
+    
 
 
     newGame();
@@ -646,6 +652,8 @@ void freeFrameDrawer() {
 
     freeSpriteBank();
     
+    freeSound();
+    
 
     // we don't do this in endGame because sometimes we're ending
     // last game before starting a new playback
@@ -779,6 +787,7 @@ void saveStateForUndo() {
 
 void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
+    
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
         considerNonActive = false;
@@ -798,8 +807,11 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     moveCount ++;
     
+    Color *c = nextPiece->getNextPiece();
+    
+    playPlacementSound( colorPool->getColorIndex( c ) );
 
-    allSpaces[inSpaceNumber]->setColor( nextPiece->getNextPiece() );
+    allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;
     levelOfPlacement = colorPool->getLevel();
                 
