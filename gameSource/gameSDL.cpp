@@ -59,9 +59,19 @@ char mapSDLKeyToASCII( int inSDLKey );
 
 void cleanUpAtExit() {
     printf( "Exiting...\n" );
+
+    SDL_CloseAudio();
     
     freeFrameDrawer();    
     }
+
+
+
+void audioCallback( void *inUserData, Uint8 *inStream, int inLengthToFill ) {
+    getSoundSamples( inStream, inLengthToFill );
+    }
+
+
 
 
 int w = 320;
@@ -139,14 +149,36 @@ int mainFunction( int inNumArgs, char **inArgs ) {
 
 
 
+    
+
+
+
+    SDL_AudioSpec audioFormat;
+
+    /* Set 16-bit stereo audio at 22Khz */
+    audioFormat.freq = gameSoundSampleRate;
+    audioFormat.format = AUDIO_S16;
+    audioFormat.channels = 2;
+    audioFormat.samples = 512;        /* A good value for games */
+    //audioFormat.samples = 1024;        
+    //audioFormat.samples = 2048;        
+    audioFormat.callback = audioCallback;
+    audioFormat.userdata = NULL;
+
+    /* Open the audio device and start playing sound! */
+    if( SDL_OpenAudio( &audioFormat, NULL ) < 0 ) {
+        printf( "Unable to open audio: %s\n", SDL_GetError() );
+        }
+
+    // set pause to 0 to start audio
+    //SDL_PauseAudio(0);
 
 
     initFrameDrawer( w, h );
-
-    // to free frame drawer
+    
+    // to free frame drawer, stop audio, etc
     atexit( cleanUpAtExit );
 
-    
 
     Uint32 lastFrameDoneTime = SDL_GetTicks();
 
@@ -279,6 +311,14 @@ int mainFunction( int inNumArgs, char **inArgs ) {
 
 
     return 0;    
+    }
+
+
+
+void setSoundPlaying( char inPlaying ) {
+    printf( "Setting audio playing to %d\n", inPlaying );
+    
+    SDL_PauseAudio( !inPlaying );
     }
 
 
