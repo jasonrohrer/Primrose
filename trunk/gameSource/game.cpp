@@ -116,6 +116,10 @@ char playerName[9];
 char colorblindMode = false;
 
 
+float colorVolumes[7];
+
+
+
 ScoreBundle *gameToPlayback = NULL;
 int gamePlaybackStep = 0;
 char gamePlaybackDone = false;
@@ -438,8 +442,10 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         SettingsManager::setDirectoryName( "../Documents" );
     #endif
 
+
+    int i;
         
-    for( int i=0; i<10; i++ ) {
+    for( i=0; i<10; i++ ) {
         //printf( "Rand output: %u\n", randSource.getRandomInt() );
         }
     
@@ -476,6 +482,11 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
     if( !found ) {
         colorblindMode = false;
+        }
+    
+
+    for( i=0; i<7; i++ ) {
+        colorVolumes[i] = 0;
         }
     
     
@@ -809,7 +820,7 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     Color *c = nextPiece->getNextPiece();
     
-    playPlacementSound( colorPool->getColorIndex( c ) );
+    //playPlacementSound( colorPool->getColorIndex( c ) );
 
     allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;
@@ -869,6 +880,14 @@ void drawFrame() {
         if( titleFade < 0 ) {
             titleFade = 0;
             }
+        }
+    
+
+
+    // start new color volume accumulation
+    // any grid spaces drawn with color will add to this
+    for( i=0; i<7; i++ ) {
+        colorVolumes[i] = 0;
         }
     
     
@@ -1162,6 +1181,12 @@ void drawFrame() {
         allPanels[i]->draw();
         }
     
+
+
+    // now that these have accumulated
+    // pass to sound layer
+    setColorVolumes( colorVolumes );
+    
     }
 
 
@@ -1447,5 +1472,19 @@ void setColorblindMode( char inOn ) {
 
 char getColorblindSymbol( Color *inColor ) {
     return colorPool->getColorblindSymbol( inColor );
+    }
+
+
+
+int getColorIndex( Color *inColor ) {
+    return colorPool->getColorIndex( inColor );
+    }
+
+
+
+float oneColorVolume = 1.0f / 58.0f;
+
+void accumulateColorVolume( int inColorIndex ) {
+    colorVolumes[ inColorIndex ] += oneColorVolume;
     }
 

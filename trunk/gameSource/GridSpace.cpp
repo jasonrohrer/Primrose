@@ -26,7 +26,9 @@ GridSpace::GridSpace( int inX, int inY )
          mScore( 0 ),
          mAddToGlobalScore( true ),
          mDrawColor( NULL ),
-         mPieceColor( NULL ), mLastColor( NULL ),
+         mPieceColor( NULL ), 
+         mPieceColorIndex( -1 ),
+         mLastColor( NULL ),
          mPieceInvertedColor( NULL ), mLastInvertedColor( NULL ),
          mColorShiftProgress( 0 ),
          mBrightHalo( false ), 
@@ -95,6 +97,7 @@ void GridSpace::setColor( Color *inColor ) {
     mLastInvertedColor = mPieceInvertedColor;
     
     mPieceColor = inColor;
+    mPieceColorIndex = getColorIndex( mPieceColor );
     
 
     mPieceInvertedColor = NULL;
@@ -253,6 +256,12 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
 
 
     mPauseStepsAfterAnimationDone++;
+
+
+    if( mPieceColor != NULL ) {
+        accumulateColorVolume( mPieceColorIndex );
+        }
+
     }
 
 

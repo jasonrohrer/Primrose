@@ -40,6 +40,9 @@ void setColorblindMode( char inOn );
 char getColorblindSymbol( Color *inColor );
 
 
+int getColorIndex( Color *inColor );
+
+
 
 // start playback of a new game
 // will be destroyed by game framework
@@ -55,4 +58,8 @@ void clearSavedScores();
 // this prevents other modules from blocking and waiting to destroy them
 // in the run loop (causing app to hang until they are done).
 void addThreadToDestroy( FinishedSignalThread *inThread );
+
+
+
+void accumulateColorVolume( int inColorIndex );
 

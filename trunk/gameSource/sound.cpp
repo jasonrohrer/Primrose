@@ -1,6 +1,7 @@
 #include "minorGems/util/SimpleVector.h"
 
 #include "game.h"
+#include "Timbre.h"
 
 
 #include <math.h>
@@ -26,6 +27,16 @@ class SoundSample {
 
 SoundSample sampleBank[ numSamplesInBank ];
 
+// timbre with 7 notes in it
+Timbre *timbre;
+
+float currentNoteVolumes[ numSamplesInBank ];
+float targetNoteVolumes[ numSamplesInBank ];
+
+int currentWaveTablesPos[ numSamplesInBank ];
+
+
+
 
 class ActiveSound {
     public:
@@ -47,7 +58,7 @@ SimpleVector<ActiveSound*> activeSounds;
 
 
 
-double twelthRootOfTwo = pow( 2, 1.0/12 );
+//double twelthRootOfTwo = pow( 2, 1.0/12 );
 
 // for major scale
 // W, W, H, W, W, W, H
@@ -62,7 +73,7 @@ double twelthRootOfTwo = pow( 2, 1.0/12 );
 int halfstepMap[ 7 ] = { 0, 3, 7, 10, 12, 17, 22 };
 
 
-
+/*
 // gets frequency of note in our scale
 double getFrequency( double inBaseFrequency, int inScaleNoteNumber ) {
     int octavesUp = inScaleNoteNumber / 7;
@@ -71,15 +82,15 @@ double getFrequency( double inBaseFrequency, int inScaleNoteNumber ) {
     
     return inBaseFrequency * pow( twelthRootOfTwo, numHalfsteps );
     }
-
+*/
 
 
 // some primitive wave functions
 
 // This produces fine results (almost perfect square wave)
 //int nLimit = 40;
-int nLimit = 80;
-
+//int nLimit = 80;
+int nLimit = 10;
 
 // square wave with period of 2pi
 double squareWave( double inT ) {
@@ -110,7 +121,9 @@ double sawWave( double inT ) {
 
 
 void initSound() {
-    float baseFreq = 60;
+    float baseFreq = 220;
+
+    /*
     
     for( int i=0; i<numSamplesInBank; i++ ) {
         
@@ -146,19 +159,45 @@ void initSound() {
             //printf( "Value = %f\n", value );
             }
         }
+    */
+
+    timbre = new Timbre( gameSoundSampleRate,
+                         1.0,
+                         baseFreq,
+                         7,
+                         &squareWave );
+    
+    for( int i=0; i<numSamplesInBank; i++ ) {
+        currentNoteVolumes[i] = 0;
+        targetNoteVolumes[i] = 0;
+
+        currentWaveTablesPos[i] = 0;
+        }
     
     }
 
 
 
 void freeSound() {
+    /*
     for( int i=0; i<activeSounds.size(); i++ ) {
         delete *( activeSounds.getElement( i ) );
         }
+    */
+    delete timbre;
     }
 
 
 
+void setColorVolumes( float inVolumes[7] ) {
+    for( int i=0; i<numSamplesInBank; i++ ) {
+        targetNoteVolumes[i] = inVolumes[i];
+        }
+
+    }
+
+
+/*
 void playPlacementSound( int inColor ) {
     printf( "Playing sound\n" );
     
@@ -180,7 +219,7 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
 
     // nothing, yet
     }
-    
+*/  
 
 
 // implements getSoundSamples from game.h
@@ -194,13 +233,68 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
     float *leftMix = new float[ numFrames ];
     float *rightMix = new float[ numFrames ];
     
-    for( int f=0; f<numFrames; f++ ) {
+    int f;
+
+    for( f=0; f!=numFrames; f++ ) {
         leftMix[f] = 0;
         rightMix[f] = 0;
         }
     
+    // max piece volume is 1/58, and we want the on/off volume change
+    // to happen in 1/5 of a second (so 5 per second)
+    float volumeChangeDelta = 5.0f /58.0f;
+    
+    volumeChangeDelta /= gameSoundSampleRate;
+    
 
 
+    for( int i=0; i<numSamplesInBank; i++ ) {
+        Sint16 *waveTable = timbre->mWaveTable[i];
+        int waveTableLength = timbre->mWaveTableLengths[i];
+    
+
+        int waveTablePos = currentWaveTablesPos[i];
+        
+        float currVol = currentNoteVolumes[i];
+        float volTarget = targetNoteVolumes[i];
+        
+        float volDelta = - volumeChangeDelta;
+        if( currVol < volTarget ) {
+            volDelta = - volDelta;
+            }
+        int stepsUntilVolTargetMet = (int)( (volTarget - currVol) / volDelta );
+
+
+        for( f=0; f!=numFrames; f++ ) {
+            
+            float sample = currVol * waveTable[ waveTablePos ]; 
+            leftMix[f] += sample;
+            rightMix[f] += sample;
+            
+                
+
+            waveTablePos++;
+            if( waveTablePos >= waveTableLength ) {
+                waveTablePos = 0;
+                }
+            
+            if( stepsUntilVolTargetMet != 0  ) {
+                currVol += volDelta;
+                stepsUntilVolTargetMet--;
+                }
+            }
+
+        if( stepsUntilVolTargetMet == 0 && currVol != volTarget ) {
+            // undershot a bit
+            currVol = volTarget;
+            }
+        
+        currentNoteVolumes[i] = currVol;
+        currentWaveTablesPos[i] = waveTablePos;
+        }
+    
+
+        /*
     int i = 0;
     
     // we may be removing sounds from the buffer as we use them up
@@ -245,14 +339,15 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             i++;
             }
         }
+        */
 
-    #define Sint16Max 32767
+        //#define Sint16Max 32767
 
     // now copy samples into Uint8 buffer (converting them to Sint16s)
     int streamPosition = 0;
-    for( i=0; i != numFrames; i++ ) {
-        Sint16 intSampleL = (Sint16)( leftMix[i] * 32767 );
-        Sint16 intSampleR = (Sint16)( rightMix[i] * 32767 );
+    for( f=0; f != numFrames; f++ ) {
+        Sint16 intSampleL = (Sint16)( leftMix[f] );
+        Sint16 intSampleR = (Sint16)( rightMix[f] );
         //printf( "Outputting samples %d, %d\n", intSampleL, intSampleR );
 
         inBuffer[ streamPosition ] = (Uint8)( intSampleL & 0xFF );

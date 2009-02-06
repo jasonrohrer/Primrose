@@ -119,6 +119,7 @@ class GridSpace {
     private:
         
         Color *mPieceColor;
+        int mPieceColorIndex;
         
         Color *mLastColor;
         
