@@ -820,7 +820,7 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     Color *c = nextPiece->getNextPiece();
     
-    //playPlacementSound( colorPool->getColorIndex( c ) );
+    playPlacementSound( colorPool->getColorIndex( c ) );
 
     allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;
@@ -1185,7 +1185,7 @@ void drawFrame() {
 
     // now that these have accumulated
     // pass to sound layer
-    setColorVolumes( colorVolumes );
+    //setColorVolumes( colorVolumes );
     
     }
 

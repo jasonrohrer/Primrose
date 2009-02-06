@@ -41,7 +41,7 @@ TutorialPanelC.cpp \
 networkInterfaceGeneric.cpp \
 BringNetworkUpThread.cpp \
 sound.cpp \
-Timbre.cpp \
+
 
 LAYER_OBJECTS = ${LAYER_SOURCE:.cpp=.o}
 
