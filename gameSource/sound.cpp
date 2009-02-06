@@ -51,11 +51,15 @@ double twelthRootOfTwo = pow( 2, 1.0/12 );
 
 // for major scale
 // W, W, H, W, W, W, H
-int halfstepMap[ 7 ] = { 0, 2, 4, 5, 7, 9, 11 };
+//int halfstepMap[ 7 ] = { 0, 2, 4, 5, 7, 9, 11 };
 
 // minor scale
 // W,H,W,W,H,W,W
 //int halfstepMap[ 7 ] = { 0, 2, 3, 5, 7, 8, 10 };
+
+
+// our haunting chord
+int halfstepMap[ 7 ] = { 0, 3, 7, 10, 12, 17, 22 };
 
 
 
@@ -73,7 +77,8 @@ double getFrequency( double inBaseFrequency, int inScaleNoteNumber ) {
 // some primitive wave functions
 
 // This produces fine results (almost perfect square wave)
-int nLimit = 40;
+//int nLimit = 40;
+int nLimit = 80;
 
 
 // square wave with period of 2pi
@@ -105,11 +110,12 @@ double sawWave( double inT ) {
 
 
 void initSound() {
-    float baseFreq = 55;
+    float baseFreq = 60;
     
     for( int i=0; i<numSamplesInBank; i++ ) {
         
         float freq = baseFreq * pow( twelthRootOfTwo, halfstepMap[i] );
+        //float freq = baseFreq * pow( twelthRootOfTwo, i );
         
 
         SoundSample *s = &( sampleBank[i] );
@@ -129,7 +135,8 @@ void initSound() {
         float envSinFactor = 1.0f / numSamples * M_PI;
         
         for( int i=0; i<numSamples; i++ ) {
-            float value = squareWave( i * sinFactor );
+            //float value = sawWave( i * sinFactor );
+            float value = sin( i * sinFactor );
 
             // apply another sin as an envelope
             value *= sin( i * envSinFactor );
