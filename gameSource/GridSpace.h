@@ -80,6 +80,11 @@ class GridSpace {
                 }
             }
         
+        
+        int getColorIndex() {
+            return mPieceColorIndex;
+            }
+        
 
 
         char colorMatches( Color *inColor );

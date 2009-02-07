@@ -11,6 +11,20 @@
 
 class SoundSample {
     public:
+        SoundSample() 
+                : mNumSamples( -1 ), 
+                  mLeftChannel( NULL ), mRightChannel( NULL ) {
+            }
+        
+        ~SoundSample() {
+            if( mLeftChannel != NULL ) {
+                delete [] mLeftChannel;
+                }
+            if( mRightChannel != NULL ) {
+                delete [] mRightChannel;
+                }
+            }
+        
         int mNumSamples;
         
         // samples in [-1, +1]
@@ -21,8 +35,11 @@ class SoundSample {
 
 
 
-
-#define numSamplesInBank 7
+// 7, one for each placement
+// +
+// 10 for each color clearing (for chain lengths up to 10)
+// = 77 
+#define numSamplesInBank 77
 
 
 SoundSample sampleBank[ numSamplesInBank ];
@@ -47,7 +64,8 @@ class ActiveSound {
             }
         
 
-        int mBankIndex;        int mSamplesPlayed;
+        int mBankIndex;        
+        int mSamplesPlayed;
         float mLoundness;
     };
 
@@ -116,6 +134,36 @@ double sawWave( double inT ) {
 
 
 
+void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples ) {
+    SoundSample *s = inSample;
+    
+    s->mNumSamples = inNumSamples;
+    
+    float *l = new float[ inNumSamples ];
+    float *r = new float[ inNumSamples ];
+        
+    s->mLeftChannel = l;
+    s->mRightChannel = r;
+    
+
+    float sinFactor = (1.0f / gameSoundSampleRate) * inFrequency * 2 * M_PI;
+    
+    float envSinFactor = 1.0f / inNumSamples * M_PI;
+        
+    for( int i=0; i<inNumSamples; i++ ) {
+        float value = sawWave( i * sinFactor );
+        //float value = sin( i * sinFactor );
+        
+        // apply another sin as an envelope
+        value *= sin( i * envSinFactor );
+        
+        l[i] = value;
+        r[i] = value;
+        //printf( "Value = %f\n", value );
+        }
+    }
+
+
 
 
 
@@ -123,42 +171,100 @@ double sawWave( double inT ) {
 void initSound() {
     float baseFreq = 60;
 
+    int i;
     
-    
-    for( int i=0; i<numSamplesInBank; i++ ) {
+    // for each color
+    for( i=0; i<7; i++ ) {
         
+        // placement sounds
         float freq = baseFreq * pow( twelthRootOfTwo, halfstepMap[i] );
         //float freq = baseFreq * pow( twelthRootOfTwo, i );
         
-
+        printf( "Filling sound bank %d\n", i );
+        
         SoundSample *s = &( sampleBank[i] );
         
         int numSamples = (int)( 0.2 * gameSoundSampleRate );
-        s->mNumSamples = numSamples;
-    
-        float *l = new float[ numSamples ];
-        float *r = new float[ numSamples ];
-        
-        s->mLeftChannel = l;
-        s->mRightChannel = r;
-    
 
-        float sinFactor = (1.0f / gameSoundSampleRate) * freq * 2 * M_PI;
-    
-        float envSinFactor = 1.0f / numSamples * M_PI;
+        fillTone( s, freq, numSamples );
         
-        for( int i=0; i<numSamples; i++ ) {
-            float value = sawWave( i * sinFactor );
-            //float value = sin( i * sinFactor );
-
-            // apply another sin as an envelope
-            value *= sin( i * envSinFactor );
+        
+        
+        int o;
+        
+        // construct octaves for clearing sounds
+        SoundSample octaves[5];
+        for( o=0; o<5; o++ ) {
+            SoundSample *s = &( octaves[o] );
+        
+            float octFreq = freq * pow( 2, o );
+            int numSamples = (int)( 0.4 * gameSoundSampleRate );
             
-            l[i] = value;
-            r[i] = value;
-            //printf( "Value = %f\n", value );
+            fillTone( s, octFreq, numSamples );
             }
+        
+
+        // now clearing sounds
+        int baseClearIndex = 7 + i * 10;
+        
+
+        for( int j=0; j<10; j++ ) {
+            int bankIndex = baseClearIndex + j;
+            
+            printf( "Filling sound bank %d\n", bankIndex );
+
+            SoundSample *s = &( sampleBank[ bankIndex ] );
+            
+            int numSamples = (int)( 0.4 * gameSoundSampleRate );
+            
+            s->mNumSamples = numSamples;
+            
+            float *l = new float[ numSamples ];
+            float *r = new float[ numSamples ];
+            
+            s->mLeftChannel = l;
+            s->mRightChannel = r;
+            
+            char onMap[5] = 
+                { true,
+                  j != 1 && j != 3 && j != 6,
+                  j == 1 || j == 2 || j == 5 || j == 8 || j == 9,
+                  j == 3 || j == 4 || j == 5 || j == 9,
+                  j > 5 };
+
+            int numOn = 0;
+            for( o=0; o<5; o++ ) {
+                if( onMap[o] ) {
+                    numOn++;
+                    }
+                }
+            
+            float loudness = 1.0f / numOn;
+            
+
+            for( int k=0; k<numSamples; k++ ) {
+                l[k] = 0;
+                r[k] = 0;
+                
+
+                
+                for( o=0; o<5; o++ ) {
+                    SoundSample *sO = &( octaves[o] );
+
+                    if( onMap[o] ) {
+                        l[k] += loudness * sO->mLeftChannel[k];
+                        r[k] += loudness * sO->mRightChannel[k];
+                        }
+                    }
+                }
+            
+            }
+        
         }
+    
+
+    // now clearing sounds
+    
     
     /*
     timbre = new Timbre( gameSoundSampleRate,
@@ -218,6 +324,15 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
         0.75 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
 
     // nothing, yet
+    if( inChainLength > 10 ) {
+        inChainLength = 10;
+        }
+    
+    int index = 7 + inColor * 10 + (inChainLength - 1 );
+    
+    printf( "playing sound from bank %d with loudness %f\n", index, loudness );
+    
+    activeSounds.push_back( new ActiveSound( index, loudness ) );
     }
   
 
@@ -305,11 +420,11 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
 
         int samplesToSkip = a->mSamplesPlayed;
 
-        // read-only here, so we can access a copy
-        SoundSample s = sampleBank[ a->mBankIndex ];
+        
+        SoundSample *s = &( sampleBank[ a->mBankIndex ] );
         
 
-        int mixLength = s.mNumSamples - samplesToSkip;
+        int mixLength = s->mNumSamples - samplesToSkip;
 
         if( mixLength > numFrames ) {
             mixLength = numFrames;
@@ -318,15 +433,18 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
         
         float loudness = a->mLoundness;
 
+        float *sampleLeft = s->mLeftChannel;
+        float *sampleRight = s->mRightChannel;
+        
 
         for( int j=0; j != mixLength; j++ ) {
-            leftMix[j] += loudness * s.mLeftChannel[j + samplesToSkip];
-            rightMix[j] += loudness * s.mRightChannel[j + samplesToSkip];
+            leftMix[j] += loudness * sampleLeft[j + samplesToSkip];
+            rightMix[j] += loudness * sampleRight[j + samplesToSkip];
             }
         
         a->mSamplesPlayed += mixLength;
         
-        if( a->mSamplesPlayed >= s.mNumSamples ) {
+        if( a->mSamplesPlayed >= s->mNumSamples ) {
             // sound done playing
         
             delete a;
