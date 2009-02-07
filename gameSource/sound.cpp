@@ -37,12 +37,32 @@ class SoundSample {
 
 // 7, one for each placement
 // +
-// 10 for each color clearing (for chain lengths up to 10)
-// = 77 
-#define numSamplesInBank 77
+// 15 for each color clearing (for chain lengths up to 15)
+// = 112 
+#define numSamplesInBank 112
 
 
 SoundSample sampleBank[ numSamplesInBank ];
+
+// which octaves are on for each of 15 supported chain lengths
+char onMap[15][6] = 
+{ { 1, 1, 0, 0, 0, 0 },
+  { 1, 0, 1, 0, 0, 0 },
+  { 1, 1, 1, 0, 0, 0 },
+  { 1, 0, 0, 1, 0, 0 },
+  { 1, 1, 0, 1, 0, 0 },
+  { 1, 1, 1, 1, 0, 0 },
+  { 1, 0, 0, 0, 1, 0 },
+  { 1, 1, 0, 0, 1, 0 },
+  { 1, 1, 1, 0, 1, 0 },
+  { 1, 1, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 0, 1 },
+  { 1, 1, 0, 0, 0, 1 },
+  { 1, 1, 1, 0, 0, 1 },
+  { 1, 1, 1, 1, 0, 1 },
+  { 1, 1, 1, 1, 1, 1 } };
+
+
 
 // timbre with 7 notes in it
 //Timbre *timbre;
@@ -107,8 +127,10 @@ double getFrequency( double inBaseFrequency, int inScaleNoteNumber ) {
 
 // This produces fine results (almost perfect square wave)
 //int nLimit = 40;
+int nLimit = 20;
+//int nLimit = 10;
 //int nLimit = 80;
-int nLimit = 5;
+//int nLimit = 5;
 
 // square wave with period of 2pi
 double squareWave( double inT ) {
@@ -151,7 +173,8 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples ) {
     float envSinFactor = 1.0f / inNumSamples * M_PI;
         
     for( int i=0; i<inNumSamples; i++ ) {
-        float value = sawWave( i * sinFactor );
+        //float value = sawWave( i * sinFactor );
+        float value = squareWave( i * sinFactor );
         //float value = sin( i * sinFactor );
         
         // apply another sin as an envelope
@@ -180,7 +203,7 @@ void initSound() {
         float freq = baseFreq * pow( twelthRootOfTwo, halfstepMap[i] );
         //float freq = baseFreq * pow( twelthRootOfTwo, i );
         
-        printf( "Filling sound bank %d\n", i );
+        //printf( "Filling sound bank %d\n", i );
         
         SoundSample *s = &( sampleBank[i] );
         
@@ -193,8 +216,8 @@ void initSound() {
         int o;
         
         // construct octaves for clearing sounds
-        SoundSample octaves[5];
-        for( o=0; o<5; o++ ) {
+        SoundSample octaves[6];
+        for( o=0; o<6; o++ ) {
             SoundSample *s = &( octaves[o] );
         
             float octFreq = freq * pow( 2, o );
@@ -205,13 +228,13 @@ void initSound() {
         
 
         // now clearing sounds
-        int baseClearIndex = 7 + i * 10;
+        int baseClearIndex = 7 + i * 15;
         
 
-        for( int j=0; j<10; j++ ) {
+        for( int j=0; j<15; j++ ) {
             int bankIndex = baseClearIndex + j;
             
-            printf( "Filling sound bank %d\n", bankIndex );
+            //printf( "Filling sound bank %d\n", bankIndex );
 
             SoundSample *s = &( sampleBank[ bankIndex ] );
             
@@ -223,23 +246,12 @@ void initSound() {
             float *r = new float[ numSamples ];
             
             s->mLeftChannel = l;
-            s->mRightChannel = r;
-            
-            char onMap[5] = 
-                { true,
-                  j != 1 && j != 3 && j != 6,
-                  j == 1 || j == 2 || j == 5 || j == 8 || j == 9,
-                  j == 3 || j == 4 || j == 5 || j == 9,
-                  j > 5 };
+            s->mRightChannel = r;            
 
-            int numOn = 0;
-            for( o=0; o<5; o++ ) {
-                if( onMap[o] ) {
-                    numOn++;
-                    }
-                }
+
+            char *thisOnMap = onMap[j];
             
-            float loudness = 1.0f / numOn;
+            float loudness = 1.0f / 6;
             
 
             for( int k=0; k<numSamples; k++ ) {
@@ -248,10 +260,10 @@ void initSound() {
                 
 
                 
-                for( o=0; o<5; o++ ) {
+                for( o=0; o<6; o++ ) {
                     SoundSample *sO = &( octaves[o] );
 
-                    if( onMap[o] ) {
+                    if( thisOnMap[o] ) {
                         l[k] += loudness * sO->mLeftChannel[k];
                         r[k] += loudness * sO->mRightChannel[k];
                         }
@@ -308,7 +320,7 @@ void playPlacementSound( int inColor ) {
     printf( "Playing sound\n" );
     
     // same as for group size of 1
-    float loudness = 0.25;
+    float loudness = 0.25 / 6;
     
     activeSounds.push_back( new ActiveSound( inColor, loudness ) );
     }
@@ -324,11 +336,11 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
         0.75 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
 
     // nothing, yet
-    if( inChainLength > 10 ) {
-        inChainLength = 10;
+    if( inChainLength > 15 ) {
+        inChainLength = 15;
         }
     
-    int index = 7 + inColor * 10 + (inChainLength - 1 );
+    int index = 7 + inColor * 15 + (inChainLength - 1 );
     
     printf( "playing sound from bank %d with loudness %f\n", index, loudness );
     
