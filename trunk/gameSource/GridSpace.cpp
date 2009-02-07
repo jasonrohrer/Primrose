@@ -97,7 +97,7 @@ void GridSpace::setColor( Color *inColor ) {
     mLastInvertedColor = mPieceInvertedColor;
     
     mPieceColor = inColor;
-    mPieceColorIndex = getColorIndex( mPieceColor );
+    mPieceColorIndex = ::getColorIndex( mPieceColor );
     
 
     mPieceInvertedColor = NULL;

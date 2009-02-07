@@ -733,20 +733,31 @@ char checkAndClear() {
                 // all visited spaces part of group
                 
                 // tally score
-                int score = 0;
+                int groupSize = 0;
+                
+                int groupColorIndex = -1;
                 
                 for( i=0; i<numGridSpaces; i++ ) {
                     if( allSpaces[i]->mVisited ) {
                         allSpaces[i]->mMarkedForClearing = true;
-                        score ++;
+                        
+                        groupColorIndex = allSpaces[i]->getColorIndex();
+                        
+                        groupSize ++;
                         }
                     }
+
+
+                // start sounds
+                playClearingSound( groupColorIndex, groupSize,
+                                   chainLength );
+                
                 
                 // set score for them all
                 for( i=0; i<numGridSpaces; i++ ) {
                     if( allSpaces[i]->mVisited ) {
                         allSpaces[i]->mScore = 
-                            (int)( pow( score, 2 ) )
+                            (int)( pow( groupSize, 2 ) )
                             *
                             (int)( pow( chainLength, 4 ) )
                             * 
