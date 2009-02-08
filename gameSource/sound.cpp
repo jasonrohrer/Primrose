@@ -37,31 +37,41 @@ class SoundSample {
 
 // 7, one for each placement
 // +
-// 15 for each color clearing (for chain lengths up to 15)
-// = 112 
-#define numSamplesInBank 112
+// 5 for each color clearing (for chain lengths up to 5)
+// = 42
+#define numSamplesInBank 42
 
 
 SoundSample sampleBank[ numSamplesInBank ];
 
 // which octaves are on for each of 15 supported chain lengths
 char onMap[15][6] = 
-{ { 1, 1, 0, 0, 0, 0 },
-  { 1, 0, 1, 0, 0, 0 },
-  { 1, 1, 1, 0, 0, 0 },
-  { 1, 0, 0, 1, 0, 0 },
-  { 1, 1, 0, 1, 0, 0 },
-  { 1, 1, 1, 1, 0, 0 },
-  { 1, 0, 0, 0, 1, 0 },
-  { 1, 1, 0, 0, 1, 0 },
-  { 1, 1, 1, 0, 1, 0 },
-  { 1, 1, 1, 1, 1, 0 },
-  { 1, 0, 0, 0, 0, 1 },
-  { 1, 1, 0, 0, 0, 1 },
-  { 1, 1, 1, 0, 0, 1 },
-  { 1, 1, 1, 1, 0, 1 },
-  { 1, 1, 1, 1, 1, 1 } };
+{ { 0, 1, 0, 0, 0, 0 },
+  { 0, 0, 1, 0, 0, 0 },
+  { 0, 1, 1, 0, 0, 0 },
+  { 0, 0, 0, 1, 0, 0 },
+  { 0, 1, 0, 1, 0, 0 },
+  { 0, 1, 1, 1, 0, 0 },
+  { 0, 0, 0, 0, 1, 0 },
+  { 0, 1, 0, 0, 1, 0 },
+  { 0, 1, 1, 0, 1, 0 },
+  { 0, 1, 1, 1, 1, 0 },
+  { 0, 0, 0, 0, 0, 1 },
+  { 0, 1, 0, 0, 0, 1 },
+  { 0, 1, 1, 0, 0, 1 },
+  { 0, 1, 1, 1, 0, 1 },
+  { 0, 1, 1, 1, 1, 1 } };
 
+
+
+// indexed as  [chainLength % 5][octave]
+float octaveVolMap[5][5] = 
+{ { 0.0, 0.6, 1.0, 0.0, 0.3 },
+  { 0.3, 0.0, 1.0, 0.6, 0.0 },
+  { 0.0, 0.6, 0.0, 0.6, 0.3 },
+  { 0.3, 0.0, 1.0, 0.0, 0.3 },
+  { 0.3, 0.6, 0.0, 0.6, 0.0 } };
+ 
 
 
 // timbre with 7 notes in it
@@ -108,7 +118,13 @@ double twelthRootOfTwo = pow( 2, 1.0/12 );
 
 
 // our haunting chord
-int halfstepMap[ 7 ] = { 0, 3, 7, 10, 12, 17, 22 };
+//int halfstepMap[ 7 ] = { 0, 3, 7, 10, 12, 17, 22 };
+
+
+// packed into one octave (and not in order!
+int halfstepMap[ 7 ] = { 3, 6, 11, 8, 4, 10, 1 };
+
+
 
 
 /*
@@ -228,10 +244,10 @@ void initSound() {
         
 
         // now clearing sounds
-        int baseClearIndex = 7 + i * 15;
+        int baseClearIndex = 7 + i * 5;
         
 
-        for( int j=0; j<15; j++ ) {
+        for( int j=0; j<5; j++ ) {
             int bankIndex = baseClearIndex + j;
             
             //printf( "Filling sound bank %d\n", bankIndex );
@@ -249,7 +265,8 @@ void initSound() {
             s->mRightChannel = r;            
 
 
-            char *thisOnMap = onMap[j];
+            //char *thisOnMap = onMap[j];
+            float *thisVolMap = octaveVolMap[j];
             
             float loudness = 1.0f / 6;
             
@@ -263,9 +280,11 @@ void initSound() {
                 for( o=0; o<6; o++ ) {
                     SoundSample *sO = &( octaves[o] );
 
-                    if( thisOnMap[o] ) {
-                        l[k] += loudness * sO->mLeftChannel[k];
-                        r[k] += loudness * sO->mRightChannel[k];
+                    if( thisVolMap[o] > 0 ) {
+                        l[k] += 
+                            loudness * sO->mLeftChannel[k] * thisVolMap[o];
+                        r[k] += 
+                            loudness * sO->mRightChannel[k] * thisVolMap[o];
                         }
                     }
                 }
@@ -335,18 +354,26 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     float loudness =
         0.75 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
 
-    // nothing, yet
+    inChainLength -= 1;
+    
+    inChainLength = inChainLength % 5;
+    
+    /*
     if( inChainLength > 15 ) {
         inChainLength = 15;
         }
-    
-    int index = 7 + inColor * 15 + (inChainLength - 1 );
+    */
+    int index = 7 + inColor * 5 + inChainLength;
     
     printf( "playing sound from bank %d with loudness %f\n", index, loudness );
     
     activeSounds.push_back( new ActiveSound( index, loudness ) );
     }
   
+
+
+int numTestSoundsPlayed = 0;
+int stepsBetweenTestPlays = 0;
 
 
 // implements getSoundSamples from game.h
@@ -469,6 +496,29 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             i++;
             }
         }
+
+    if( activeSounds.size() == 0 && numTestSoundsPlayed < numSamplesInBank ) {
+        if( stepsBetweenTestPlays > 10 ) {
+            stepsBetweenTestPlays = 0;
+            
+            // play next test sound
+            printf( "Test play of bank sound %d\n", numTestSoundsPlayed );
+            
+            /*
+            activeSounds.push_back( 
+                new ActiveSound( numTestSoundsPlayed, 0.25 / 6 ) );
+            */
+            playClearingSound( 0, 1, numTestSoundsPlayed );
+            
+            numTestSoundsPlayed ++;
+            }
+        else {
+            stepsBetweenTestPlays++;
+            }
+        
+        }
+    
+        
 
     #define Sint16Max 32767
 
