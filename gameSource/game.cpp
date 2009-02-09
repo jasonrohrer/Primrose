@@ -837,6 +837,12 @@ char checkAndClear() {
 
 
 void saveStateForUndo() {
+    if( gameToPlayback != NULL ) {
+        // don't allow undo state saves during playback
+        return;
+        }
+    
+        
     int i;
     
     for( i=0; i<numGridSpaces; i++ ) {
