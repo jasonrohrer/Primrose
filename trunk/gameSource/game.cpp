@@ -699,6 +699,28 @@ void freeFrameDrawer() {
 
 
 
+
+void computeEarVolume( int inPieceX, 
+                       float *outLeftVolume, float *outRightVolume ) {
+    float rightEarX = 4;
+    float leftEarX = 2;
+    
+    float screenDistance = 5;
+    
+    // use triangles
+    float vLeft = 
+        sqrt( pow( screenDistance, 2 ) + pow( leftEarX - inPieceX, 2 ) );
+    float vRight = 
+        sqrt( pow( screenDistance, 2 ) + pow( rightEarX - inPieceX, 2 ) );
+
+
+    *outLeftVolume = pow( screenDistance, 2 ) / pow( vLeft, 2 );
+    *outRightVolume = pow( screenDistance, 2 ) / pow( vRight, 2 );    
+    }
+
+
+
+
 // one round of non-chained clearing
 // returns true if some pieces cleared
 char checkAndClear() {
@@ -739,6 +761,11 @@ char checkAndClear() {
                 
                 int groupColorIndex = -1;
                 
+                // accumulate average volume
+                float leftEarWeight = 0;
+                float rightEarWeight = 0;
+                
+
                 for( i=0; i<numGridSpaces; i++ ) {
                     if( allSpaces[i]->mVisited ) {
                         allSpaces[i]->mMarkedForClearing = true;
@@ -746,16 +773,26 @@ char checkAndClear() {
                         groupColorIndex = allSpaces[i]->getColorIndex();
                         
                         groupSize ++;
+
+                        float lV, rV;
+                        int x = i % gridW;
+                        
+                        computeEarVolume( x, &lV, &rV );
+                        leftEarWeight += lV;
+                        rightEarWeight += rV;
                         }
                     }
 
+                
                 
                 // play at most one per round
                 if( !playingClearingSound ) {
                     
                     // start sounds
                     playClearingSound( groupColorIndex, groupSize,
-                                       chainLength );
+                                       chainLength,
+                                       leftEarWeight / groupSize,
+                                       rightEarWeight / groupSize );
                     playingClearingSound = true;
                     }
                 
@@ -838,24 +875,16 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     Color *c = nextPiece->getNextPiece();
     
+
     int x = inSpaceNumber % gridW;
     
-    float rightEarX = 4;
-    float leftEarX = 2;
+    float leftVolume, rightVolume;
     
-    float screenDistance = 5;
-    
-    // use triangles
-    float vLeft = sqrt( pow( screenDistance, 2 ) + pow( leftEarX - x, 2 ) );
-    float vRight = sqrt( pow( screenDistance, 2 ) + pow( rightEarX - x, 2 ) );
-
-
-    float leftVolume = pow( screenDistance, 2 ) / pow( vLeft, 2 );
-    float rightVolume = pow( screenDistance, 2 ) / pow( vRight, 2 );
-        
+    computeEarVolume( x, &leftVolume, &rightVolume );
 
     playPlacementSound( colorPool->getColorIndex( c ),
                         leftVolume, rightVolume );
+
 
     allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;

@@ -15,7 +15,8 @@ void playPlacementSound( int inColor,
                          float inLeftLoudness, float inRightLoudness );
 
 
-void playClearingSound( int inColor, int inGroupSize, int inChainLength );
+void playClearingSound( int inColor, int inGroupSize, int inChainLength,
+                        float inLeftLoudness, float inRightLoudness );
 
 
 
