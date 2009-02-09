@@ -712,7 +712,8 @@ char checkAndClear() {
         allSpaces[i]->mMarkedForClearing =  false;
         }
 
-
+    char playingClearingSound = false;
+    
     for( j=0; j<numGridSpaces; j++ ) {
         // clear visited flags so that they only mark one group
         // at a time
@@ -747,10 +748,15 @@ char checkAndClear() {
                         }
                     }
 
-
-                // start sounds
-                playClearingSound( groupColorIndex, groupSize,
-                                   chainLength );
+                
+                // play at most one per round
+                if( !playingClearingSound ) {
+                    
+                    // start sounds
+                    playClearingSound( groupColorIndex, groupSize,
+                                       chainLength );
+                    playingClearingSound = true;
+                    }
                 
                 
                 // set score for them all
