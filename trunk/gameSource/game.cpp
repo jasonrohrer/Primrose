@@ -128,6 +128,9 @@ char autoPlay = false;
 int stepsSinceLastAutoMove = 0;
 int stepsBetweenAutoMoves = 25;
 char manualStep = false;
+// for save/restore
+int savedPlaybackStep = 0;
+
 
 
 // only fetch once per app run
@@ -631,6 +634,44 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             
             delete [] state;
             }        
+
+
+
+        int playingBackGame = 
+            SettingsManager::getIntSetting( "playingBackGameSaved", &found );
+        
+        if( found && playingBackGame ) {
+        
+            state = SettingsManager::getStringSetting( "gameToPlaybackSaved" );
+            
+            if( state != NULL ) {
+                gameToPlayback = new ScoreBundle( state );
+
+                delete [] state;
+
+                if( !gameOver ) {
+                    
+                    playStopButton->setVisible( true );
+                    stepButton->setVisible( true );
+                    }
+                else {
+                    gamePlaybackDone = true;
+                    }
+                
+
+                // never allow sending score on a playback game
+                doneButton->setVisible( false );
+                }
+                    
+            gamePlaybackStep = SettingsManager::getIntSetting( 
+                "gamePlaybackStepSaved", &found );
+            
+            if( !found ) {
+                gamePlaybackStep = 0;
+                }
+            }
+        
+        
         
         }    
     }
@@ -715,6 +756,28 @@ void freeFrameDrawer() {
         
         delete [] state;
         
+
+        if( gameToPlayback != NULL ) {
+        
+            state = autoSprintf( "%s#%u#%u#%s",
+                                 gameToPlayback->mName,
+                                 gameToPlayback->mScore,
+                                 gameToPlayback->mSeed,
+                                 gameToPlayback->mMoveHistory );
+            
+            SettingsManager::setSetting( "gameToPlaybackSaved", state );
+            delete [] state;
+            
+            SettingsManager::setSetting( "gamePlaybackStepSaved", 
+                                         savedPlaybackStep );
+            
+            SettingsManager::setSetting( "playingBackGameSaved", 1 );
+            }
+        else {
+            SettingsManager::setSetting( "playingBackGameSaved", 0 );
+            }
+        
+
         
         SettingsManager::setSetting( "saved", "1" );
         }
@@ -903,12 +966,6 @@ char checkAndClear() {
 
 
 void saveStateForUndo() {
-    if( gameToPlayback != NULL ) {
-        // don't allow undo state saves during playback
-        return;
-        }
-    
-        
     int i;
     
     for( i=0; i<numGridSpaces; i++ ) {
@@ -926,6 +983,9 @@ void saveStateForUndo() {
         delete [] savedMoveHistory;
         }
     savedMoveHistory = moveHistory.getElementString();
+    
+
+    savedPlaybackStep = gamePlaybackStep;
     
 
     savedStateAvailable = true;
@@ -1098,10 +1158,9 @@ void drawFrame() {
                 }
             
             if( full ) {
+                gameOver = true;
+                
                 if( gameToPlayback == NULL ) {
-                    // game over
-                    gameOver = true;
-                    
                     // don't save final state yet
                     // need to update nextPiece first.
 
