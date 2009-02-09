@@ -191,8 +191,10 @@ void ColorPool::registerMove() {
     if( mStepsUntilUpdate == 0 ) {
         
 
-
+        char firstRoundOfEndPhase = false;
+        
         if( ! mEndPhase ) {
+            firstRoundOfEndPhase = true;
             
             if( mNumActiveColors < numColors ) {
                 mNumActiveColors ++;
@@ -265,6 +267,12 @@ void ColorPool::registerMove() {
             mStepsBetweenUpdates = randSource.getRandomBoundedInt( minSteps,
                                                                    48 );
             
+            if( firstRoundOfEndPhase ) {
+                // force 48 steps of gray pieces
+                mStepsBetweenUpdates = 48;
+                }
+            
+
             if( mStepsBetweenUpdates % 2 != 0 ) {
                 mStepsBetweenUpdates ++;
                 }

@@ -37,9 +37,8 @@ class SoundSample {
 
 // 7, one for each placement
 // +
-// 5 for each color clearing (for chain lengths up to 5)
-// = 42
-#define numSamplesInBank 42
+// 7 for chain steps
+#define numSamplesInBank 14
 
 
 SoundSample sampleBank[ numSamplesInBank ];
@@ -65,13 +64,33 @@ char onMap[15][6] =
 
 
 // indexed as  [chainLength % 5][octave]
+/*
 float octaveVolMap[5][5] = 
 { { 0.0, 0.6, 1.0, 0.0, 0.3 },
   { 0.3, 0.0, 1.0, 0.6, 0.0 },
   { 0.0, 0.6, 0.0, 0.6, 0.3 },
   { 0.3, 0.0, 1.0, 0.0, 0.3 },
   { 0.3, 0.6, 0.0, 0.6, 0.0 } };
- 
+*/
+float octaveVolMap[5][5] = 
+{ { 3.0, 0.0, 0.0, 1.0, 0.0 },
+  { 0.0, 1.0, 0.0, 0.0, 3.0 },
+  { 3.0, 0.0, 1.0, 0.0, 0.0 },
+  { 0.0, 1.0, 0.0, 1.0, 0.0 },
+  { 0.0, 0.0, 1.0, 0.0, 3.0 } };
+
+/*
+// 6 octave version
+float octaveVolMap[3][5] = 
+{ { 0.3, 0.0, 0.0, 1.0, 0.0, 0.0 },
+  { 0.0, 0.6, 0.0, 0.0, 0.6, 0.0 },
+  { 0.0, 0.0, 1.0, 0.0, 0.0, 0.3 } };
+
+float octaveVolMap[3][5] = 
+{ { 0.3, 0.0, 1.0, 0.0, 0.6, 0.0 },
+  { 0.0, 0.6, 0.0, 1.0, 0.0, 0.3 },
+  { 0.0, 0.6, 1.0, 0.0, 0.0, 0.3 } };
+ */
 
 
 // timbre with 7 notes in it
@@ -122,7 +141,14 @@ double twelthRootOfTwo = pow( 2, 1.0/12 );
 
 
 // packed into one octave (and not in order!
-int halfstepMap[ 7 ] = { 3, 6, 11, 8, 4, 10, 1 };
+//int halfstepMap[ 7 ] = { 3, 6, 11, 8, 4, 10, 1 };
+
+// new minor scale, not in order
+int placementStepMap[ 7 ] = { 0, 3, 7, 10, 8, 5, 2 };
+
+
+// major scale
+int clearingStepMap[ 7 ] = { 0, 2, 4, 5, 7, 9, 11 };
 
 
 
@@ -172,23 +198,36 @@ double sawWave( double inT ) {
 
 
 
-void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples ) {
+void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
+               int inNumSamplesToSkip = 0, int inTotalSamples = -1 ) {
+
     SoundSample *s = inSample;
     
-    s->mNumSamples = inNumSamples;
+    if( inTotalSamples == -1 ) {
+        inTotalSamples = inNumSamples + inNumSamplesToSkip;
+        }
     
-    float *l = new float[ inNumSamples ];
-    float *r = new float[ inNumSamples ];
+
+    if( s->mNumSamples == -1 ) {
         
-    s->mLeftChannel = l;
-    s->mRightChannel = r;
+        s->mNumSamples = inTotalSamples;    
+        
+        s->mLeftChannel = new float[ inTotalSamples ];
+        s->mRightChannel = new float[ inTotalSamples ];
+        }
+
+    float *l = s->mLeftChannel;
+    float *r = s->mRightChannel;
+        
     
 
     float sinFactor = (1.0f / gameSoundSampleRate) * inFrequency * 2 * M_PI;
     
     float envSinFactor = 1.0f / inNumSamples * M_PI;
-        
-    for( int i=0; i<inNumSamples; i++ ) {
+    
+    int limit = inNumSamplesToSkip + inNumSamples;
+    
+    for( int i=inNumSamplesToSkip; i<limit; i++ ) {
         //float value = sawWave( i * sinFactor );
         float value = squareWave( i * sinFactor );
         //float value = sin( i * sinFactor );
@@ -216,7 +255,7 @@ void initSound() {
     for( i=0; i<7; i++ ) {
         
         // placement sounds
-        float freq = baseFreq * pow( twelthRootOfTwo, halfstepMap[i] );
+        float freq = baseFreq * pow( twelthRootOfTwo, placementStepMap[i] );
         //float freq = baseFreq * pow( twelthRootOfTwo, i );
         
         //printf( "Filling sound bank %d\n", i );
@@ -227,90 +266,89 @@ void initSound() {
 
         fillTone( s, freq, numSamples );
         
-        
-        
-        int o;
-        
-        // construct octaves for clearing sounds
-        SoundSample octaves[6];
-        for( o=0; o<6; o++ ) {
-            SoundSample *s = &( octaves[o] );
-        
-            float octFreq = freq * pow( 2, o );
-            int numSamples = (int)( 0.4 * gameSoundSampleRate );
-            
-            fillTone( s, octFreq, numSamples );
-            }
-        
-
-        // now clearing sounds
-        int baseClearIndex = 7 + i * 5;
-        
-
-        for( int j=0; j<5; j++ ) {
-            int bankIndex = baseClearIndex + j;
-            
-            //printf( "Filling sound bank %d\n", bankIndex );
-
-            SoundSample *s = &( sampleBank[ bankIndex ] );
-            
-            int numSamples = (int)( 0.4 * gameSoundSampleRate );
-            
-            s->mNumSamples = numSamples;
-            
-            float *l = new float[ numSamples ];
-            float *r = new float[ numSamples ];
-            
-            s->mLeftChannel = l;
-            s->mRightChannel = r;            
-
-
-            //char *thisOnMap = onMap[j];
-            float *thisVolMap = octaveVolMap[j];
-            
-            float loudness = 1.0f / 6;
-            
-
-            for( int k=0; k<numSamples; k++ ) {
-                l[k] = 0;
-                r[k] = 0;
-                
-
-                
-                for( o=0; o<6; o++ ) {
-                    SoundSample *sO = &( octaves[o] );
-
-                    if( thisVolMap[o] > 0 ) {
-                        l[k] += 
-                            loudness * sO->mLeftChannel[k] * thisVolMap[o];
-                        r[k] += 
-                            loudness * sO->mRightChannel[k] * thisVolMap[o];
-                        }
-                    }
-                }
-            
-            }
-        
         }
     
-
     // now clearing sounds
-    
-    
-    /*
-    timbre = new Timbre( gameSoundSampleRate,
-                         1.0,
-                         baseFreq,
-                         7,
-                         &squareWave );
-    
-    for( int i=0; i<numSamplesInBank; i++ ) {
-        currentNoteVolumes[i] = 0;
-        targetNoteVolumes[i] = 0;
+    // shepard tones
 
-        currentWaveTablesPos[i] = 0;
+    
+    for( i=0; i<7; i++ ) {
+        float freqA = baseFreq * pow( twelthRootOfTwo, clearingStepMap[i] );
+        // second, 7 steps up
+        float freqB = baseFreq * pow( twelthRootOfTwo, 
+                                      clearingStepMap[i] + 7 );
+        //freqB = 0;
+        
+
+        #define numShepParts 4
+        int t;
+        
+        SoundSample shepardParts[numShepParts];
+        int numSamples = (int)( 0.4 * gameSoundSampleRate );
+
+        for( t=0; t<numShepParts; t++ ) {
+            // first note in sequence
+            fillTone( &shepardParts[t], freqA, 
+                      numSamples / 2, 0, numSamples );
+            
+            // second
+            fillTone( &shepardParts[t], freqB, 
+                      numSamples/2, numSamples/2, numSamples );
+            
+            // raise for next shep part
+            freqA *= 2;
+            freqB *= 2;
+            }
+        
+
+        float partWeights[4];
+        
+        // 0.0 .. 0.5
+        partWeights[0] = i / 12.0f;
+
+        // 0.5 .. 1.0
+        partWeights[1] = 0.5 + partWeights[0];
+        
+        // 1.0 .. 0.5
+        partWeights[2] = 1 - partWeights[0];
+        
+        // 0.5 .. 0.0
+        partWeights[3] = 0.5 - partWeights[0];
+        
+
+        // vol sum at any point = 2
+        
+        // weight so sum = 1
+        for( int t=0; t<numShepParts; t++ ) {
+            //partWeights[t] *= 0.5;
+            printf( "Step %d, part weight %d = %f\n", i, t, partWeights[t] );
+            
+            }
+        
+        int index = i+7;
+        
+        SoundSample *s = &( sampleBank[index] );
+
+        s->mNumSamples = numSamples;
+
+        s->mLeftChannel = new float[ numSamples ];
+        s->mRightChannel = new float[ numSamples ];
+        
+
+        float *l = s->mLeftChannel;
+        float *r = s->mRightChannel;
+        
+
+        for( int j=0; j<numSamples; j++ ) {
+            l[j] = 0;
+            r[j] = 0;
+
+            for( t=0; t<numShepParts; t++ ) {
+                l[j] += partWeights[t] * shepardParts[t].mLeftChannel[j];
+                r[j] += partWeights[t] * shepardParts[t].mRightChannel[j];
+                }
+            }
         }
-    */
     }
 
 
@@ -338,8 +376,8 @@ void setColorVolumes( float inVolumes[7] ) {
 void playPlacementSound( int inColor ) {
     printf( "Playing sound\n" );
     
-    // same as for group size of 1
-    float loudness = 0.25 / 6;
+    // same as for clearing group size of 1
+    float loudness = 0.25;
     
     activeSounds.push_back( new ActiveSound( inColor, loudness ) );
     }
@@ -354,16 +392,17 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     float loudness =
         0.75 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
 
+
     inChainLength -= 1;
     
-    inChainLength = inChainLength % 5;
+    inChainLength = inChainLength % 7;
     
     /*
     if( inChainLength > 15 ) {
         inChainLength = 15;
         }
     */
-    int index = 7 + inColor * 5 + inChainLength;
+    int index = 7 + inChainLength;
     
     printf( "playing sound from bank %d with loudness %f\n", index, loudness );
     
@@ -497,7 +536,7 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             }
         }
 
-    if( activeSounds.size() == 0 && numTestSoundsPlayed < numSamplesInBank ) {
+    if(  false && activeSounds.size() == 0 && numTestSoundsPlayed < 100 ) {
         if( stepsBetweenTestPlays > 10 ) {
             stepsBetweenTestPlays = 0;
             
@@ -508,7 +547,7 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             activeSounds.push_back( 
                 new ActiveSound( numTestSoundsPlayed, 0.25 / 6 ) );
             */
-            playClearingSound( 0, 1, numTestSoundsPlayed );
+            playClearingSound( 0, 1, numTestSoundsPlayed + 1 );
             
             numTestSoundsPlayed ++;
             }
