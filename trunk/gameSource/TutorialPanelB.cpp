@@ -3,6 +3,7 @@
 #include "numeral.h"
 
 #include "gameControl.h"
+#include "sound.h"
 
 
 #include <GL/gl.h>
@@ -76,6 +77,12 @@ TutorialPanelB::TutorialPanelB( int inW, int inH )
     mInnerSpaces[2] = mGridDemo[2][3];
     mInnerSpaces[3] = mGridDemo[2][4];
     
+    mInnerSpacesX[0] = 2;
+    mInnerSpacesX[1] = 3;
+    mInnerSpacesX[2] = 3;
+    mInnerSpacesX[3] = 4;
+    
+
     mOuterSpaces[0] = mGridDemo[0][3];
     mOuterSpaces[1] = mGridDemo[1][4];
     mOuterSpaces[2] = mGridDemo[2][5];
@@ -202,12 +209,46 @@ void TutorialPanelB::step() {
             }
         else if( mDemoStage == 2 ) {
             mKeySpace->setColor( nextPieceDemoColors[1].copy() );
+
+            if( getSoundOn() ) {
+                
+                int x = 2;
+                
+                float leftVolume, rightVolume;
+                
+                computeEarLoudness( x, &leftVolume, &rightVolume );
+                
+                playPlacementSound( mKeySpace->getColorIndex(), 
+                                    leftVolume, rightVolume );
+                }
+
             }
         else if( mDemoStage == 3 ) {
+            // accumulate average volume
+            float leftEarWeight = 0;
+            float rightEarWeight = 0;
+            
+            int oldColorIndex = mInnerSpaces[0]->getColorIndex();
+
             for( i=0; i<4; i++ ) {
                 mInnerSpaces[i]->mScore = 16;
                 mInnerSpaces[i]->flipToClear();
+                
+                float lV, rV;
+                
+                computeEarLoudness( mInnerSpacesX[i], &lV, &rV );
+                leftEarWeight += lV;
+                rightEarWeight += rV;        
                 }
+
+            if( getSoundOn() ) {
+                
+                playClearingSound( oldColorIndex, 4,
+                                   1,
+                                   leftEarWeight / 4,
+                                   rightEarWeight / 4 );
+                }
+                
             }
         else if( mDemoStage == 4 ) {
             // hold stage 2 for extra step

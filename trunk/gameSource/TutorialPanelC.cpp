@@ -3,6 +3,7 @@
 #include "numeral.h"
 
 #include "gameControl.h"
+#include "sound.h"
 
 
 #include <GL/gl.h>
@@ -72,6 +73,16 @@ TutorialPanelC::TutorialPanelC( int inW, int inH )
     mInnerSpacesB[1] = mGridDemo[1][5];
     mInnerSpacesB[2] = mGridDemo[1][6];
     mInnerSpacesB[3] = mGridDemo[2][6];
+
+
+    mInnerSpacesAX[0] = 2;
+
+    mInnerSpacesBX[0] = 4;
+    mInnerSpacesBX[1] = 5;
+    mInnerSpacesBX[2] = 6;
+    mInnerSpacesBX[3] = 6;
+    
+
 
     mOuterSpacesA[0] = mGridDemo[0][2];
     mOuterSpacesA[1] = mGridDemo[1][3];
@@ -217,17 +228,70 @@ void TutorialPanelC::step() {
             }
         else if( mDemoStage == 2 ) {
             mKeySpace->setColor( nextPieceDemoColors[0].copy() );
+
+            if( getSoundOn() ) {
+                
+                int x = 1;
+                
+                float leftVolume, rightVolume;
+                
+                computeEarLoudness( x, &leftVolume, &rightVolume );
+                
+                playPlacementSound( mKeySpace->getColorIndex(), 
+                                    leftVolume, rightVolume );
+                }
             }
         else if( mDemoStage == 3 ) {
+            // accumulate average volume
+            float leftEarWeight = 0;
+            float rightEarWeight = 0;
+            
+            int oldColorIndex = mInnerSpacesA[0]->getColorIndex();
+            
             for( i=0; i<1; i++ ) {
                 mInnerSpacesA[i]->mScore = 1;
                 mInnerSpacesA[i]->flipToClear();
+                
+                float lV, rV;
+                                
+                computeEarLoudness( mInnerSpacesAX[i], &lV, &rV );
+                leftEarWeight += lV;
+                rightEarWeight += rV;
                 }
+
+            if( getSoundOn() ) {
+                
+                playClearingSound( oldColorIndex, 1,
+                                   1,
+                                   leftEarWeight / 1,
+                                   rightEarWeight / 1 );
+                }
+
             }
         else if( mDemoStage == 4 ) {
+            // accumulate average volume
+            float leftEarWeight = 0;
+            float rightEarWeight = 0;
+            
+            int oldColorIndex = mInnerSpacesB[0]->getColorIndex();
+            
             for( i=0; i<4; i++ ) {
                 mInnerSpacesB[i]->mScore = 256;
                 mInnerSpacesB[i]->flipToClear();
+            
+                float lV, rV;
+                                
+                computeEarLoudness( mInnerSpacesBX[i], &lV, &rV );
+                leftEarWeight += lV;
+                rightEarWeight += rV;
+                }
+
+            if( getSoundOn() ) {
+                
+                playClearingSound( oldColorIndex, 4,
+                                   2,
+                                   leftEarWeight / 4,
+                                   rightEarWeight / 4 );
                 }
             }
         else if( mDemoStage == 5 ) {

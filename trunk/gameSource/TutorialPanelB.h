@@ -55,6 +55,8 @@ class TutorialPanelB : public Panel {
         // final to complete
         GridSpace *mKeySpace;
         
+        int mInnerSpacesX[4];
+        
             
         int mDemoStage;
         
