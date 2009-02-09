@@ -46,6 +46,19 @@ void Button::setString( char *inString ) {
 
 
 
+void Button::forceString( char *inString ) {
+    if( mLastString != NULL ) {
+        delete [] mLastString;
+        }
+    mLastString = mString;
+        
+    mString = stringDuplicate( inString );
+    
+    mStringTransitionProgress = 1;
+    }
+
+
+
 char Button::isInside( int inX, int inY ) {
     // slightly bigger than underlying grid
     // to make it easier to press

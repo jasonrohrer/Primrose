@@ -63,3 +63,7 @@ void addThreadToDestroy( FinishedSignalThread *inThread );
 
 void accumulateColorVolume( int inColorIndex );
 
+
+char getSoundOn();
+
+void setSoundOn( char inOn );

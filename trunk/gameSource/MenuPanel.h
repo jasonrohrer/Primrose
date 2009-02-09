@@ -47,6 +47,7 @@ class MenuPanel : public Panel {
         Button mHighScoreButton;
         Button mEditNameButton;
         Button mColorblindButton;
+        Button mSoundButton;
         
         
         HighScoreLoadingPanel mHighScoreLoadingPanel;
