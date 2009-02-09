@@ -115,6 +115,8 @@ char playerName[9];
 
 char colorblindMode = false;
 
+char soundOn = true;
+
 
 float colorVolumes[7];
 
@@ -484,6 +486,13 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         colorblindMode = false;
         }
     
+    soundOn = SettingsManager::getIntSetting( "soundOn",
+                                              &found );
+
+    if( !found ) {
+        soundOn = true;
+        }
+    
 
     for( i=0; i<7; i++ ) {
         colorVolumes[i] = 0;
@@ -493,7 +502,9 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     initSound();
     //exit( 0 );
     
-    setSoundPlaying( true );
+    if( soundOn ) {    
+        setSoundPlaying( true );
+        }
     
 
 
@@ -786,7 +797,7 @@ char checkAndClear() {
                 
                 
                 // play at most one per round
-                if( !playingClearingSound ) {
+                if( !playingClearingSound && soundOn ) {
                     
                     // start sounds
                     playClearingSound( groupColorIndex, groupSize,
@@ -876,15 +887,18 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     Color *c = nextPiece->getNextPiece();
     
 
-    int x = inSpaceNumber % gridW;
+    if( soundOn ) {
+        
+        int x = inSpaceNumber % gridW;
+        
+        float leftVolume, rightVolume;
+        
+        computeEarVolume( x, &leftVolume, &rightVolume );
+        
+        playPlacementSound( colorPool->getColorIndex( c ),
+                            leftVolume, rightVolume );
+        }
     
-    float leftVolume, rightVolume;
-    
-    computeEarVolume( x, &leftVolume, &rightVolume );
-
-    playPlacementSound( colorPool->getColorIndex( c ),
-                        leftVolume, rightVolume );
-
 
     allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;
@@ -1529,7 +1543,7 @@ char getColorblindMode() {
 void setColorblindMode( char inOn ) {
     colorblindMode = inOn;
     
-    SettingsManager::setSetting( "colorblindMode", colorblindMode );
+    SettingsManager::setSetting( "colorblindMode", (int)colorblindMode );
     }
 
 
@@ -1552,3 +1566,17 @@ void accumulateColorVolume( int inColorIndex ) {
     colorVolumes[ inColorIndex ] += oneColorVolume;
     }
 
+
+
+char getSoundOn() {
+    return soundOn;
+    }
+
+
+void setSoundOn( char inOn ) {
+    soundOn = inOn;
+    
+    SettingsManager::setSetting( "soundOn", (int)soundOn );
+
+    setSoundPlaying( soundOn );
+    }

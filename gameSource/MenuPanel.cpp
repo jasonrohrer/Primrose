@@ -12,10 +12,11 @@
 MenuPanel::MenuPanel( int inW, int inH )
         : Panel( inW, inH ),
           mNewButton( inW - 21 - 19, 100, "+" ),
-          mTutorialButton( inW - 21 - 19, 175, "+" ),
-          mHighScoreButton( inW - 21 - 19, 250, "+" ),
-          mEditNameButton( inW - 21 - 19, 325, "+" ),
-          mColorblindButton( inW - 21 - 19, 400, "off" ),
+          mTutorialButton( inW - 21 - 19, 165, "+" ),
+          mHighScoreButton( inW - 21 - 19, 230, "+" ),
+          mEditNameButton( inW - 21 - 19, 295, "+" ),
+          mColorblindButton( inW - 21 - 19, 360, "off" ),
+          mSoundButton( inW - 21 - 19, 425, " on " ),
           mHighScoreLoadingPanel( inW, inH ),
           mEditNamePanel( inW, inH ),
           mTutorialPanel( inW, inH ) {
@@ -27,9 +28,13 @@ MenuPanel::MenuPanel( int inW, int inH )
     mEditNameButton.setVisible( false );
     mEditNameButton.setVisible( false );
     mColorblindButton.setVisible( false );
-
+    mSoundButton.setVisible( false );
+    
     if( getColorblindMode() ) {
-        mColorblindButton.setString( " on " );
+        mColorblindButton.forceString( " on " );
+        }
+    if( ! getSoundOn() ) {
+        mSoundButton.forceString( "off" );
         }
     
     
@@ -39,6 +44,7 @@ MenuPanel::MenuPanel( int inW, int inH )
     addButton( &mHighScoreButton );
     addButton( &mEditNameButton );
     addButton( &mColorblindButton );
+    addButton( &mSoundButton );
     
     mHighScoreLoadingPanel.setVisible( false );
     mEditNamePanel.setVisible( false );
@@ -130,6 +136,22 @@ char MenuPanel::pointerUp( int inX, int inY ) {
             
             return true;
             }
+        if( mSoundButton.isInside( inX, inY ) ) {
+            // flip
+            char oldMode = getSoundOn();
+            char *newString;
+            
+            if( oldMode ) {
+                newString = "off";
+                }
+            else {
+                newString = " on ";
+                }
+            mSoundButton.setString( newString );
+            setSoundOn( !oldMode );
+            
+            return true;
+            }
         
         } 
     
@@ -173,6 +195,11 @@ void MenuPanel::drawBase() {
         drawStringBig( "colorblind", right, 
                        mColorblindButton.mX - 21 - 19,
                        mColorblindButton.mY,
+                       &menuItemColor, mFadeProgress );
+
+        drawStringBig( "sound", right, 
+                       mSoundButton.mX - 21 - 19,
+                       mSoundButton.mY,
                        &menuItemColor, mFadeProgress );
         
 

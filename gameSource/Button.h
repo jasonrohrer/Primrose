@@ -16,8 +16,12 @@ class Button {
         ~Button();
         
         // resets string
+        // smooth transition
         void setString( char *inString );
-        
+
+        // instant transtition
+        void forceString( char *inString );
+
 
         char isInside( int inX, int inY );
         
