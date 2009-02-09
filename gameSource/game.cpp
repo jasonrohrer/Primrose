@@ -834,7 +834,7 @@ void freeFrameDrawer() {
 
 
 
-void computeEarVolume( int inPieceX, 
+void computeEarLoudness( int inPieceX, 
                        float *outLeftVolume, float *outRightVolume ) {
     float rightEarX = 4;
     float leftEarX = 2;
@@ -911,7 +911,7 @@ char checkAndClear() {
                         float lV, rV;
                         int x = i % gridW;
                         
-                        computeEarVolume( x, &lV, &rV );
+                        computeEarLoudness( x, &lV, &rV );
                         leftEarWeight += lV;
                         rightEarWeight += rV;
                         }
@@ -1028,7 +1028,7 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
         
         float leftVolume, rightVolume;
         
-        computeEarVolume( x, &leftVolume, &rightVolume );
+        computeEarLoudness( x, &leftVolume, &rightVolume );
         
         playPlacementSound( colorPool->getColorIndex( c ),
                             leftVolume, rightVolume );

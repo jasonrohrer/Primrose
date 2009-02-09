@@ -64,3 +64,9 @@ void addThreadToDestroy( FinishedSignalThread *inThread );
 char getSoundOn();
 
 void setSoundOn( char inOn );
+
+
+// computes stereo loudness for a given grid x
+void computeEarLoudness( int inPieceX, 
+                         float *outLeftLoudness, float *outRightLoudness );
+

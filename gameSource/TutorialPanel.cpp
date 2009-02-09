@@ -4,6 +4,8 @@
 
 #include "gameControl.h"
 
+#include "sound.h"
+
 
 #include <GL/gl.h>
 
@@ -173,8 +175,23 @@ void TutorialPanel::step() {
         else if( mDemoStage == 1 ) {
             GridSpace *s = mGridDemo[2][2];
             
+            
+
             s->setColor( nextPieceDemoColors[0].copy() );
             
+            if( getSoundOn() ) {
+        
+                int x = 2;
+                
+                float leftVolume, rightVolume;
+                
+                computeEarLoudness( x, &leftVolume, &rightVolume );
+
+                playPlacementSound( s->getColorIndex(), 
+                                    leftVolume, rightVolume );
+                }
+
+
             for( i=0; i<28; i++ ) {
                 GridSpace *other = mAllDemoSpaces[i];
                 
@@ -187,8 +204,25 @@ void TutorialPanel::step() {
                 }
             }
         else if( mDemoStage == 2 ) {
-            mGridDemo[0][2]->setColor( nextPieceDemoColors[1].copy() );
+            GridSpace *s = mGridDemo[0][2];
+            
+            s->setColor( nextPieceDemoColors[1].copy() );
         
+
+            if( getSoundOn() ) {
+                
+                int x = 2;
+                
+                float leftVolume, rightVolume;
+                
+                computeEarLoudness( x, &leftVolume, &rightVolume );
+                
+                playPlacementSound( s->getColorIndex(), 
+                                    leftVolume, rightVolume );
+                }
+
+            
+
             for( i=0; i<28; i++ ) {
                 mAllDemoSpaces[i]->mActive = false;
                 }
