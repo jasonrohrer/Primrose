@@ -329,7 +329,8 @@ void playPlacementSound( int inColor,
 
 
 
-void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
+void playClearingSound( int inColor, int inGroupSize, int inChainLength,
+                        float inLeftLoudness, float inRightLoudness ) {
     // asymptotically approaches 0.5 as inGroupSize grows.
     // very close to 0.5 when inGroupSize is 49
     float loudness =
@@ -342,9 +343,12 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     
     int index = 7 + inChainLength;
     
-    printf( "playing sound from bank %d with loudness %f\n", index, loudness );
+    printf( "playing sound from bank %d with loudness %f, l, r = %f, %f\n", 
+            index, loudness, inLeftLoudness, inRightLoudness );
     
-    activeSounds.push_back( new ActiveSound( index, loudness, loudness ) );
+    activeSounds.push_back( new ActiveSound( index, 
+                                             loudness * inLeftLoudness, 
+                                             loudness * inRightLoudness ) );
     }
   
 
