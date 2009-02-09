@@ -470,7 +470,10 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
         
         streamPosition += 4;
         }
-
+    
+    delete [] leftMix;
+    delete [] rightMix;
+    
     }
 
 
