@@ -106,6 +106,7 @@ int chainLength = 1;
 
 
 char gameOver = false;
+char scoreWasSent = false;
 
 
 // for scheduling a restart
@@ -211,6 +212,8 @@ unsigned int base49Decode( char inLetter ) {
 
 
 SimpleVector<char> moveHistory;
+// for saving game
+char *savedMoveHistory = NULL;
 
 
 
@@ -218,7 +221,13 @@ SimpleVector<char> moveHistory;
 
 void newGame() {
     moveHistory.deleteAll();
+
+    if( savedMoveHistory != NULL ) {
+        delete [] savedMoveHistory;
+        savedMoveHistory = NULL;
+        }
     
+
     if( gameToPlayback == NULL ) {
         
         gameSeed = time( NULL );
@@ -248,7 +257,7 @@ void newGame() {
     chainLength = 1;
     
     gameOver = false;
-    
+    scoreWasSent = false;
     
 
     pointerX = -100;
@@ -406,6 +415,9 @@ char isGameOver() {
 void scoreSent() {
     // don't let them send it again
     doneButton->setVisible( false );
+    scoreWasSent = true;
+
+    SettingsManager::setSetting( "scoreWasSent", 1 );
     }
 
 
@@ -511,7 +523,14 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     
     if( found && wasSaved ) {
         
-        char *state = 
+        char *state = SettingsManager::getStringSetting( "moveHistorySaved" );
+
+        if( state != NULL ) {
+            moveHistory.setElementString( state );
+            delete [] state;
+            }
+        
+        state = 
             SettingsManager::getStringSetting( "nextPieceDisplaySaved" );
         
         if( state != NULL ) {
@@ -542,6 +561,18 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             delete [] state;
             }
 
+        
+        state = 
+            SettingsManager::getStringSetting( "gameSeedSaved" );
+        
+        if( state != NULL ) {
+            sscanf( state, "%u", &gameSeed );
+            
+            delete [] state;
+            }
+
+
+
         score = SettingsManager::getIntSetting( "scoreSaved", &found );
         
         if( !found ) {
@@ -554,7 +585,19 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         if( !found ) {
             gameOver = 0;
             }
+
+        scoreWasSent = (char)( 
+            SettingsManager::getIntSetting( "scoreWasSent", &found ) );
         
+        if( !found ) {
+            scoreWasSent = 0;
+            }
+        
+        if( gameOver && !scoreWasSent ) {
+            doneButton->setVisible( true );
+            }
+        
+
         state = SettingsManager::getStringSetting( "gridSaved" );
 
         if( state != NULL ) {
@@ -602,6 +645,10 @@ void freeFrameDrawer() {
         
         
         // save the last saved (known good) state out to disk
+
+        SettingsManager::setSetting( "moveHistorySaved", savedMoveHistory );
+        
+        
         
         char *state = nextPiece->getSavedState();
         
@@ -625,12 +672,21 @@ void freeFrameDrawer() {
         SettingsManager::setSetting( "randStateSaved", state );
         
         delete [] state;
+
+
+        state = autoSprintf( "%u", gameSeed );
+        
+        SettingsManager::setSetting( "gameSeedSaved", state );
+        
+        delete [] state;
         
 
         SettingsManager::setSetting( "scoreSaved", savedScore );
     
 
         SettingsManager::setSetting( "gameOverSaved", (int)gameOver );
+        
+        SettingsManager::setSetting( "scoreWasSent", (int)scoreWasSent );
         
         
         int i;
@@ -677,10 +733,20 @@ void freeFrameDrawer() {
     if( gameToPlayback != NULL ) {
         delete gameToPlayback;
         }
+    gameToPlayback = NULL;
 
+    
     if( savedServerURL != NULL ) {
         delete [] savedServerURL;
         }
+    savedServerURL = NULL;
+    
+
+    if( savedMoveHistory != NULL ) {
+        delete [] savedMoveHistory;
+        }
+    savedMoveHistory = NULL;
+    
     
     clearSavedScores();
 
@@ -856,6 +922,12 @@ void saveStateForUndo() {
     
     savedScore = score;
 
+    if( savedMoveHistory != NULL ) {
+        delete [] savedMoveHistory;
+        }
+    savedMoveHistory = moveHistory.getElementString();
+    
+
     savedStateAvailable = true;
     }
 
@@ -870,9 +942,6 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
         considerNonActive = false;
         }
 
-    char encodedMove = base49Encode( inSpaceNumber );
-    
-    moveHistory.push_back( encodedMove );
 
     if( moveCount == 0 ) {
         // no saved state, because no moves made yet
@@ -880,6 +949,12 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
         // save starting state here
         saveStateForUndo();
         }
+
+
+    char encodedMove = base49Encode( inSpaceNumber );
+    
+    moveHistory.push_back( encodedMove );
+
 
     
     moveCount ++;
