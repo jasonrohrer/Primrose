@@ -103,12 +103,16 @@ int nLimit = 20;
 //int nLimit = 80;
 //int nLimit = 5;
 
+// precomputed 1/n
+double nCoefficients[20];
+
+
 // square wave with period of 2pi
-double squareWave( double inT ) {
+inline double squareWave( double inT ) {
     double sum = 0;
     
     for( int n=1; n<nLimit; n+=2 ) {
-        sum += 1.0/n * sin( n * inT );
+        sum +=  nCoefficients[n] * sin( n * inT );
         }
     return sum;
     }
@@ -156,15 +160,17 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
     
     int limit = inNumSamplesToSkip + inNumSamples;
     
-    for( int i=inNumSamplesToSkip; i<limit; i++ ) {
+    for( int i=inNumSamplesToSkip; i!=limit; i++ ) {
         float value = squareWave( i * sinFactor );
         
         // apply another sin as an envelope
-        value *= sin( i * envSinFactor );
-        
-        l[i] = value;
-        r[i] = value;
+        l[i] = value * sin( i * envSinFactor );
         }
+
+    // channels identical
+    memcpy( & r[inNumSamplesToSkip], & l[inNumSamplesToSkip ],
+            inNumSamples * sizeof( float ) );
+    
     }
 
 
@@ -173,6 +179,14 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
 
 
 void initSound() {
+    // precomput nCoefficients for square wave
+    
+    for( int n=1; n<nLimit; n++ ) {
+        nCoefficients[n] = 1.0 / n;
+        }
+    
+
+
     float baseFreq = 60;
 
     int i;
@@ -257,16 +271,31 @@ void initSound() {
         float *l = s->mLeftChannel;
         float *r = s->mRightChannel;
         
-
+        // accumulate in left
+        // copy to right at end
         for( int j=0; j<numSamples; j++ ) {
             l[j] = 0;
-            r[j] = 0;
+            }
+        
 
-            for( t=0; t<numShepParts; t++ ) {
-                l[j] += partWeights[t] * shepardParts[t].mLeftChannel[j];
-                r[j] += partWeights[t] * shepardParts[t].mRightChannel[j];
+        for( t=0; t<numShepParts; t++ ) {
+
+            float weight = partWeights[t];
+            
+            // channels identical
+            // use only one
+            float *partChannel = shepardParts[t].mLeftChannel;
+            
+
+            for( int j=0; j<numSamples; j++ ) {
+                l[j] += weight * partChannel[j];
                 }
             }
+
+        // copy to right
+        memcpy( r, l, numSamples * sizeof( float ) );
+        
+        
         }
     }
 

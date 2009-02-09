@@ -491,6 +491,7 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     
     
     initSound();
+    //exit( 0 );
     
     setSoundPlaying( true );
     
