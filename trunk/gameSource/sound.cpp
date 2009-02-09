@@ -376,7 +376,8 @@ void setColorVolumes( float inVolumes[7] ) {
 void playPlacementSound( int inColor ) {
     printf( "Playing sound\n" );
     
-    // same as for clearing group size of 1
+    // louder than that of clearing group size of 1
+    // (clearing sound ends up sounding louder)
     float loudness = 0.25;
     
     activeSounds.push_back( new ActiveSound( inColor, loudness ) );
@@ -390,7 +391,7 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     // asymptotically approaches 1 as inGroupSize grows.
     // very close to 1 when inGroupSize is 49
     float loudness =
-        0.75 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
+        0.92 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.08;
 
 
     inChainLength -= 1;
@@ -536,18 +537,23 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             }
         }
 
-    if(  false && activeSounds.size() == 0 && numTestSoundsPlayed < 100 ) {
+    if(  activeSounds.size() == 0 && numTestSoundsPlayed < numSamplesInBank ) {
         if( stepsBetweenTestPlays > 10 ) {
             stepsBetweenTestPlays = 0;
             
             // play next test sound
             printf( "Test play of bank sound %d\n", numTestSoundsPlayed );
             
-            /*
+         
+            float loudness = 0.25;
+            if( numTestSoundsPlayed >=7 ) {
+                loudness = 0.08;
+                }
+            
             activeSounds.push_back( 
-                new ActiveSound( numTestSoundsPlayed, 0.25 / 6 ) );
-            */
-            playClearingSound( 0, 1, numTestSoundsPlayed + 1 );
+                new ActiveSound( numTestSoundsPlayed, loudness ) );
+            
+            //playClearingSound( 0, 1, numTestSoundsPlayed + 1 );
             
             numTestSoundsPlayed ++;
             }
