@@ -257,11 +257,6 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
 
     mPauseStepsAfterAnimationDone++;
 
-
-    if( mPieceColor != NULL ) {
-        accumulateColorVolume( mPieceColorIndex );
-        }
-
     }
 
 

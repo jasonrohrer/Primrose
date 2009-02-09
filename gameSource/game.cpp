@@ -118,8 +118,6 @@ char colorblindMode = false;
 char soundOn = true;
 
 
-float colorVolumes[7];
-
 
 
 ScoreBundle *gameToPlayback = NULL;
@@ -493,10 +491,6 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         soundOn = true;
         }
     
-
-    for( i=0; i<7; i++ ) {
-        colorVolumes[i] = 0;
-        }
     
     
     initSound();
@@ -959,14 +953,7 @@ void drawFrame() {
             titleFade = 0;
             }
         }
-    
 
-
-    // start new color volume accumulation
-    // any grid spaces drawn with color will add to this
-    for( i=0; i<7; i++ ) {
-        colorVolumes[i] = 0;
-        }
     
     
     char animDone = true;
@@ -1260,11 +1247,6 @@ void drawFrame() {
         }
     
 
-
-    // now that these have accumulated
-    // pass to sound layer
-    //setColorVolumes( colorVolumes );
-    
     }
 
 
@@ -1558,13 +1540,6 @@ int getColorIndex( Color *inColor ) {
     return colorPool->getColorIndex( inColor );
     }
 
-
-
-float oneColorVolume = 1.0f / 58.0f;
-
-void accumulateColorVolume( int inColorIndex ) {
-    colorVolumes[ inColorIndex ] += oneColorVolume;
-    }
 
 
 
