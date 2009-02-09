@@ -46,6 +46,7 @@ Color scoreColor( 255/255.0, 255/255.0, 160/255.0 );
 
 // fade title out when app launches
 float titleFade = 1.0;
+char titleBlocked = false;
 
 
 GridSpace *spaces[gridW][gridH];
@@ -519,7 +520,6 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
     newGame();
 
-
     // should we restore from disk?
         
     int wasSaved = SettingsManager::getIntSetting( "saved", &found );
@@ -673,7 +673,19 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         
         
         
-        }    
+        }
+
+
+
+    if( colorblindMode ) {
+        
+        for( i=0; i<4 && !titleBlocked; i++ ) {
+            if( ! spaces[5][ 2 + i ]->isEmpty() ) {
+                titleBlocked = true;
+                }
+            }
+        }
+
     }
 
 
@@ -1357,8 +1369,7 @@ void drawFrame() {
 
 
         
-        if( titleFade > 0 ) {
-            
+        if( titleFade > 0 && !titleBlocked ) {
             drawStringBig( "primrose", left, 
                            spaces[5][2]->mX,
                            spaces[5][2]->mY,
