@@ -47,15 +47,17 @@ SoundSample sampleBank[ numSamplesInBank ];
 class ActiveSound {
     public:
         
-        ActiveSound( int inBankIndex, float inLoudness ) 
+        ActiveSound( int inBankIndex, 
+                     float inLeftLoudness, float inRightLoudness ) 
                 : mBankIndex( inBankIndex ), mSamplesPlayed( 0 ),
-                  mLoundness( inLoudness ) {
+                  mLeftLoudness( inLeftLoudness ),
+                  mRightLoudness( inRightLoudness ) {
             }
         
 
         int mBankIndex;        
         int mSamplesPlayed;
-        float mLoundness;
+        float mLeftLoudness, mRightLoudness;
     };
 
 
@@ -311,14 +313,18 @@ void freeSound() {
 
 
 
-void playPlacementSound( int inColor ) {
+void playPlacementSound( int inColor, 
+                         float inLeftLoudness, float inRightLoudness ) {
+
     printf( "Playing sound\n" );
     
     // louder than that of clearing group size of 1
     // (clearing sound ends up sounding louder)
     float loudness = 0.5;
     
-    activeSounds.push_back( new ActiveSound( inColor, loudness ) );
+    activeSounds.push_back( new ActiveSound( inColor, 
+                                             inLeftLoudness * loudness,
+                                             inRightLoudness * loudness ) );
     }
 
 
@@ -338,7 +344,7 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     
     printf( "playing sound from bank %d with loudness %f\n", index, loudness );
     
-    activeSounds.push_back( new ActiveSound( index, loudness ) );
+    activeSounds.push_back( new ActiveSound( index, loudness, loudness ) );
     }
   
 
@@ -387,15 +393,15 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
             }
 
         
-        float loudness = a->mLoundness;
+        float leftLoudness = a->mLeftLoudness;
+        float rightLoudness = a->mRightLoudness;
 
         float *sampleLeft = s->mLeftChannel;
         float *sampleRight = s->mRightChannel;
-        
 
         for( int j=0; j != mixLength; j++ ) {
-            leftMix[j] += loudness * sampleLeft[j + samplesToSkip];
-            rightMix[j] += loudness * sampleRight[j + samplesToSkip];
+            leftMix[j] += leftLoudness * sampleLeft[j + samplesToSkip];
+            rightMix[j] += rightLoudness * sampleRight[j + samplesToSkip];
             }
         
         a->mSamplesPlayed += mixLength;

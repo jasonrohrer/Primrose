@@ -838,7 +838,24 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
     Color *c = nextPiece->getNextPiece();
     
-    playPlacementSound( colorPool->getColorIndex( c ) );
+    int x = inSpaceNumber % gridW;
+    
+    float rightEarX = 4;
+    float leftEarX = 2;
+    
+    float screenDistance = 5;
+    
+    // use triangles
+    float vLeft = sqrt( pow( screenDistance, 2 ) + pow( leftEarX - x, 2 ) );
+    float vRight = sqrt( pow( screenDistance, 2 ) + pow( rightEarX - x, 2 ) );
+
+
+    float leftVolume = pow( screenDistance, 2 ) / pow( vLeft, 2 );
+    float rightVolume = pow( screenDistance, 2 ) / pow( vRight, 2 );
+        
+
+    playPlacementSound( colorPool->getColorIndex( c ),
+                        leftVolume, rightVolume );
 
     allSpaces[inSpaceNumber]->setColor( c );
     piecePlaced = true;
