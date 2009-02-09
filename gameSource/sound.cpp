@@ -298,7 +298,7 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength ) {
     // asymptotically approaches 0.5 as inGroupSize grows.
     // very close to 0.5 when inGroupSize is 49
     float loudness =
-        0.25 * (1 - pow(10, (-inGroupSize/20) ) ) + 0.25;
+        0.75 * (1 - pow(10, (-inGroupSize/20.0f) ) ) + 0.25;
 
 
     inChainLength -= 1;
