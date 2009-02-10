@@ -25,6 +25,7 @@
 		DA7F11810EF6D77000CB6D50 /* gameWindowAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */; };
 		DA8277840EF9FFE80061079D /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8277830EF9FFE80061079D /* Icon.png */; };
 		DA86AEC90EF53C7100054E6B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		DA8CCA3B0F411B820054EF97 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8CCA3A0F411B820054EF97 /* sound.cpp */; };
 		DA90DD4A0EFADE15001BABB5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA90DD490EFADE15001BABB5 /* AudioToolbox.framework */; };
 		DA9E302E0EFC010300DFACC7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9E302C0EFC010300DFACC7 /* QuartzCore.framework */; };
 		DA9E302F0EFC010300DFACC7 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9E302D0EFC010300DFACC7 /* OpenGLES.framework */; };
@@ -105,6 +106,8 @@
 		DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameWindowAppDelegate.h; sourceTree = "<group>"; };
 		DA7F11800EF6D77000CB6D50 /* gameWindowApp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gameWindowApp_Prefix.pch; sourceTree = "<group>"; };
 		DA8277830EF9FFE80061079D /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		DA8CCA390F411B820054EF97 /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sound.h; path = ../sound.h; sourceTree = SOURCE_ROOT; };
+		DA8CCA3A0F411B820054EF97 /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cpp; path = ../sound.cpp; sourceTree = SOURCE_ROOT; };
 		DA90DD490EFADE15001BABB5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DA9E302C0EFC010300DFACC7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DA9E302D0EFC010300DFACC7 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -330,6 +333,8 @@
 				DAD088FA0F34A037007CAF68 /* BringNetworkUpThread.cpp */,
 				DAD088FB0F34A037007CAF68 /* BringNetworkUpThread.h */,
 				DAD089010F34BBD4007CAF68 /* secureSalt.h */,
+				DA8CCA390F411B820054EF97 /* sound.h */,
+				DA8CCA3A0F411B820054EF97 /* sound.cpp */,
 				DA8C9E030EF80930002FCA67 /* minorGems */,
 			);
 			name = Unchanged;
@@ -489,6 +494,7 @@
 				DAD0890B0F34BC49007CAF68 /* sha1.cpp in Sources */,
 				DAD089340F34CEC2007CAF68 /* networkInterfaceIPhone.mm in Sources */,
 				DAA232010F3A2D5D00083EC4 /* FinishedSignalThread.cpp in Sources */,
+				DA8CCA3B0F411B820054EF97 /* sound.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
