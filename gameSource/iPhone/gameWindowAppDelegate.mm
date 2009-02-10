@@ -55,6 +55,7 @@ char renderingPaused = false;
 - (void)applicationWillResignActive:(UIApplication *)application {    
     printf( "App resigning active\n" );
 	renderingPaused = true;
+    //setSoundPlaying( false );
 }
 
 
@@ -62,6 +63,7 @@ char renderingPaused = false;
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     printf( "App becoming active\n" );
 	renderingPaused = false;
+    //setSoundPlaying( true );
 }
 
 
@@ -114,6 +116,7 @@ char renderingPaused = false;
 
 //The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
+    printf( "initWithCoder called for MyView\n" );
     
     if ((self = [super initWithCoder:coder])) {
         
@@ -212,6 +215,10 @@ AudioQueueRef queue;
 char isPlaying = false;
 
 
+void startAudio();
+void stopAudio();
+
+
 void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef inBuffer ) {
     
     // fill it up
@@ -226,50 +233,63 @@ void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef
     }
 
 
+char firstTouch = true;
 
 void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) {
-	
+	OSStatus err;
+     
 	if( interruptionState == kAudioSessionBeginInterruption ) {
         printf( "Audio interrupted\n" );
         if( isPlaying ) {
-            AudioQueuePause( queue );
+            stopAudio();
+            // reset first touch to start audio again at next touch
+            firstTouch = true;
         }
     }
     else if( interruptionState == kAudioSessionEndInterruption ) {
         printf( "Audio interruption over\n" );
         if( isPlaying ) {
+            //startAudio();
+            /*
             // reactivate session
-            UInt32 sessionCategory = kAudioSessionCategory_UserInterfaceSoundEffects;
-            AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
-                                    sizeof(sessionCategory),
-                                    &sessionCategory );
-            AudioSessionSetActive( true );
+            UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+            err = AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
+                                           sizeof(sessionCategory),
+                                           &sessionCategory );
+            if( err ) {
+                printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
+            }
+                
+            err = AudioSessionSetActive( true );
+            if( err ) {
+                printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
+            }
             
-            AudioQueueStart( queue, NULL );
+            err = AudioQueueStart( queue, NULL );
+            if( err ) {
+                printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
+            }
+             */
         }
     }
 }
 
 
-
-- (void)startAnimation {
-    renderingPaused = false;
+// brings audio up and starts it
+void startAudio() {
+    printf( "Starting audio\n" );
     
-	NSTimeInterval animationInterval = 1 / 25.0;
-	
-    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
-
-    
+    OSStatus err;
     
     AudioSessionInitialize( NULL,
-                            NULL,
-                            interruptionListenerCallback,
-                            NULL );
+                           NULL,
+                           interruptionListenerCallback,
+                           NULL );
     
-    UInt32 sessionCategory = kAudioSessionCategory_UserInterfaceSoundEffects;
+    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
     AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
-                             sizeof(sessionCategory),
-                             &sessionCategory );
+                            sizeof(sessionCategory),
+                            &sessionCategory );
     
     
     // create audio queue
@@ -287,12 +307,12 @@ void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) 
     
     
     AudioQueueNewOutput( &audioFormat,
-                         audioCallback,
-                         NULL, 
-                         CFRunLoopGetCurrent(),
-                         kCFRunLoopCommonModes,
-                         0,								// flags for future use
-                         &queue );
+                        audioCallback,
+                        NULL, 
+                        CFRunLoopGetCurrent(),
+                        kCFRunLoopCommonModes,
+                        0,								// flags for future use
+                        &queue );
     
     // setup audio buffers
     AudioQueueBufferRef buffers[ kNumberAudioDataBuffers ];
@@ -301,8 +321,8 @@ void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) 
     
     for( int b=0; b<kNumberAudioDataBuffers; b++) {
         AudioQueueAllocateBuffer( queue,
-                                  bufferByteSize,
-                                  &buffers[ b ] );
+                                 bufferByteSize,
+                                 &buffers[ b ] );
         
         // prime with samples
         // can't call this, because frameDrawer hasn't been inited yet
@@ -315,30 +335,67 @@ void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) 
         memset( buffers[b]->mAudioData, 0, buffers[b]->mAudioDataByteSize );
         
         AudioQueueEnqueueBuffer( queue,
-                                 buffers[b],
-                                 0,
-                                 NULL );
+                                buffers[b],
+                                0,
+                                NULL );
+    } 
+    
+    err = AudioSessionSetActive( true );
+    if( err ) {
+        printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
     }
     
-    // audio queue set up
-    // ready for frame drawer
+    err = AudioQueueStart ( queue, NULL );
+    if( err ) {
+        printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
+    }
+}
+
+
+
+// tears audio down
+void stopAudio() {
+    printf( "Stopping audio\n" );
     
+    AudioQueueStop( queue, true );
+    
+    AudioQueueDispose( queue, true );
+    
+    OSStatus err = AudioSessionSetActive( false );
+    if( err ) {
+        printf( "Error: %s (%s:%d)\n", (char*)&err, __FILE__, __LINE__ );
+    }
+}
+
+
+- (void)startAnimation {
+    renderingPaused = false;
+    
+	NSTimeInterval animationInterval = 1 / 25.0;
+	
+    self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
+
     // these not set yet
     // initFrameDrawer( backingWidth, backingHeight );
     initFrameDrawer( 320, 480 );
 }
 
+
+
 // implement interface back from game engine
 void setSoundPlaying( char inPlaying ) {
-    if( inPlaying ) {
-        AudioSessionSetActive( true );
-        AudioQueueStart ( queue, NULL );
+    OSStatus err;
+    
+    if( inPlaying && ! isPlaying ) {
+        //startAudio();
+        // wait again for first touch to turn audio on again
+        firstTouch = true;
+        isPlaying = true;
     }
-    else {
-        AudioSessionSetActive( false );
-        AudioQueuePause( queue );
+    else if( !inPlaying && isPlaying ) {
+        stopAudio();
+        isPlaying = false;
     }
-    isPlaying = inPlaying;
 }
 
     
@@ -349,9 +406,7 @@ void setSoundPlaying( char inPlaying ) {
     
     self.animationTimer = nil;
 	
-    AudioQueueStop( queue, true );
-    
-    AudioQueueDispose( queue, true );
+    setSoundPlaying( false );
     
 	freeFrameDrawer();
     
@@ -365,11 +420,11 @@ void setSoundPlaying( char inPlaying ) {
 
 
 
-
 - (void)drawFrame {
     if( renderingPaused ) {
         return;
     }
+    
     
     //printf( "draw frame called\n" );
     
@@ -458,9 +513,16 @@ void setSoundPlaying( char inPlaying ) {
 }
 */
 
+
 // Handles the start of a touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if( firstTouch ) {
+        if( isPlaying ) {
+            startAudio();
+        }
+        firstTouch = false;
+    }
     
     for( UITouch *touch in touches ){
         // ignore touches that aren't part of this phase
