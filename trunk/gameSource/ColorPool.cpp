@@ -634,7 +634,7 @@ void ColorPool::saveState() {
                                mStepsBetweenUpdates,
                                mLastStepCount,
                                mLevel );
-    printf( "ColorPool state saved to:  %s\n", mSavedState );
+    //printf( "ColorPool state saved to:  %s\n", mSavedState );
     
     }
 
@@ -673,7 +673,7 @@ void ColorPool::restoreFromSavedState( char *inSavedState ) {
                           &mLevel );
     
     if( numRead != 7 ) {
-        printf( "Error resoring ColorPool state\n" );
+        printf( "Error restoring ColorPool state\n" );
         }
     else {
         mEndPhase = endPhaseInt;

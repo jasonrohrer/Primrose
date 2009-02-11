@@ -222,6 +222,10 @@ void initSound() {
     
     int i;
     
+    int numGenerated = 0;
+    int numCached = 0;
+    
+
     // for each color
     for( i=0; i<7; i++ ) {
         
@@ -236,7 +240,7 @@ void initSound() {
 
         if( ! s->readFromSettingsFile( cacheSettingName ) ) {
             // not cached, generate
-            printf( "Generating sound sample %d\n", bankIndex );
+            //printf( "Generating sound sample %d\n", bankIndex );
             
 
             int numSamples = (int)( 0.2 * gameSoundSampleRate );
@@ -245,9 +249,12 @@ void initSound() {
             
             // cache out to disk
             s->writeToSettingsFile( cacheSettingName );
+
+            numGenerated ++;
             }
         else {
-            printf( "Found sound sample %d cached on disk\n", bankIndex );
+            //printf( "Found sound sample %d cached on disk\n", bankIndex );
+            numCached ++;
             }
         
         delete [] cacheSettingName;
@@ -269,7 +276,7 @@ void initSound() {
 
         if( ! s->readFromSettingsFile( cacheSettingName ) ) {
             // not cached, generate
-            printf( "Generating sound sample %d\n", bankIndex );
+            //printf( "Generating sound sample %d\n", bankIndex );
 
             float freqA = baseFreq * pow( twelthRootOfTwo, 
                                           clearingStepMap[i] );
@@ -358,9 +365,12 @@ void initSound() {
 
             // save out to disk
             s->writeToSettingsFile( cacheSettingName );
+
+            numGenerated++;
             }
         else {
-            printf( "Found sound sample %d cached on disk\n", bankIndex );
+            //printf( "Found sound sample %d cached on disk\n", bankIndex );
+            numCached++;
             }
 
         
@@ -369,6 +379,9 @@ void initSound() {
         
         bankIndex ++;
         }
+
+    printf( "Generated %d sound samples fresh, found %d cached on disk\n", 
+            numGenerated, numCached );
     }
 
 
@@ -386,7 +399,7 @@ void freeSound() {
 void playPlacementSound( int inColor, 
                          float inLeftLoudness, float inRightLoudness ) {
 
-    printf( "Playing sound\n" );
+    //printf( "Playing sound\n" );
     
     // louder than that of clearing group size of 1
     // (clearing sound ends up sounding louder)
@@ -413,8 +426,8 @@ void playClearingSound( int inColor, int inGroupSize, int inChainLength,
     
     int index = 7 + inChainLength;
     
-    printf( "playing sound from bank %d with loudness %f, l, r = %f, %f\n", 
-            index, loudness, inLeftLoudness, inRightLoudness );
+    //printf( "playing sound from bank %d with loudness %f, l, r = %f, %f\n", 
+    //        index, loudness, inLeftLoudness, inRightLoudness );
     
     activeSounds.push_back( new ActiveSound( index, 
                                              loudness * inLeftLoudness, 

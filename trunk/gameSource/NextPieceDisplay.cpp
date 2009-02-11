@@ -243,7 +243,7 @@ char *NextPieceDisplay::getSavedState() {
                                     spaceColorIndices[0],
                                     spaceColorIndices[1] );
     
-    printf( "NextPieceDisplay state saved to:  %s\n", savedState );
+    //printf( "NextPieceDisplay state saved to:  %s\n", savedState );
 
     return savedState;
     }
