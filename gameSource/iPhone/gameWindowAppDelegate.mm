@@ -218,7 +218,7 @@ AudioQueueBufferRef buffersToEnqueueLater[ kNumberAudioDataBuffers ];
 
 
 void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef inBuffer ) {
-    printf( "callback for buffer %d from run loop %d\n", inBuffer, CFRunLoopGetCurrent() );
+    //printf( "callback for buffer %d from run loop %d\n", inBuffer, CFRunLoopGetCurrent() );
     
     // fill it up
     inBuffer->mAudioDataByteSize = inBuffer->mAudioDataBytesCapacity;
@@ -230,7 +230,8 @@ void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef
                              0,
                              NULL );
     if( err ) {
-        printf( "Error on AudioQueueEnqueueBuffer: %4s\n", (char*)&err );
+        printf( "Error on AudioQueueEnqueueBuffer: %d, saving buffer to enqueue later (work-around)\n", 
+                err );
         
         buffersToEnqueueLater[ numBuffersToEnqueueLater ] = inBuffer;
         numBuffersToEnqueueLater++;
@@ -242,16 +243,16 @@ void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef
 void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) {
 	
 	if( interruptionState == kAudioSessionBeginInterruption ) {
-        printf( "Audio interrupted from run loop %d\n", CFRunLoopGetCurrent() );
+        printf( "Audio interrupted\n" );
         if( isPlaying ) {
             
             printf( "pausing audio queue\n" );
             AudioQueuePause( queue );
-            printf( "done pausing audio queue\n" );
+            //printf( "done pausing audio queue\n" );
             
             printf( "deactivating session\n" );
             AudioSessionSetActive( false );
-            printf( "done deactivating session\n" );
+            //printf( "done deactivating session\n" );
             
         }
     }
@@ -272,7 +273,7 @@ void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) 
                                                         0,
                                                         NULL );
                 if( err ) {
-                    printf( "Error on AudioQueueEnqueueBuffer: %4s\n", (char*)&err );
+                    printf( "Error on AudioQueueEnqueueBuffer: %d\n", err );
                 }
             }
             
@@ -388,6 +389,8 @@ void setSoundPlaying( char inPlaying ) {
     self.animationTimer = nil;
 	
     AudioQueueStop( queue, true );
+    
+    AudioSessionSetActive( false );
     
     AudioQueueDispose( queue, true );
     
