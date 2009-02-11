@@ -310,8 +310,6 @@ void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) 
     
     // create audio queue
     int frameCount = 512;
-    // works int frameCount = 4096;
-    //int frameCount = 2048;
     
     AudioStreamBasicDescription audioFormat;
     
