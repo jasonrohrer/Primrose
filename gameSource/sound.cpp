@@ -100,7 +100,11 @@ int clearingStepMap[ 7 ] = { 0, 2, 4, 5, 7, 9, 11 };
 // 40 produces fine results (almost perfect square wave)
 //int nLimit = 40;
 // 20 sounds smoother, less buzzy
-int nLimit = 20;
+
+// note that this is just a maximum value
+// actual value to pass to wave functions depends on nyquist limit and 
+// desired frequency of wave
+int nLimitMax= 20;
 //int nLimit = 10;
 //int nLimit = 80;
 //int nLimit = 5;
@@ -110,10 +114,10 @@ double nCoefficients[20];
 
 
 // square wave with period of 2pi
-inline double squareWave( double inT ) {
+inline double squareWave( double inT, int inNLimit ) {
     double sum = 0;
     
-    for( int n=1; n<nLimit; n+=2 ) {
+    for( int n=1; n<inNLimit; n+=2 ) {
         sum +=  nCoefficients[n] * sin( n * inT );
         }
     return sum;
@@ -122,10 +126,10 @@ inline double squareWave( double inT ) {
 
 
 // sawtoot wave with period of 2pi
-double sawWave( double inT ) {
+double sawWave( double inT, int inNLimit ) {
     double sum = 0;
     
-    for( int n=1; n<nLimit; n++ ) {
+    for( int n=1; n<inNLimit; n++ ) {
         sum += 1.0/n * sin( n * inT );
         }
     return sum;
@@ -155,6 +159,20 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
     float *r = s->mRightChannel;
         
     
+    // nLimit for wave function (limit on number of frequency components)
+    // based on Nyquist
+    int nyquist = gameSoundSampleRate / 2;
+    int nLimit = (int)( nyquist / inFrequency );
+    
+    printf( "nLimit = %d\n", nLimit );
+    
+    if( nLimit > nLimitMax ) {
+        nLimit = nLimitMax;
+        
+        printf( "capping nLimit at %d\n", nLimit );
+        }
+    
+
 
     float sinFactor = (1.0f / gameSoundSampleRate) * inFrequency * 2 * M_PI;
     
@@ -163,7 +181,7 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
     int limit = inNumSamplesToSkip + inNumSamples;
     
     for( int i=inNumSamplesToSkip; i!=limit; i++ ) {
-        float value = squareWave( i * sinFactor );
+        float value = squareWave( i * sinFactor, nLimit );
         
         // apply another sin as an envelope
         l[i] = value * sin( i * envSinFactor );
@@ -183,7 +201,7 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
 void initSound() {
     // precomput nCoefficients for square wave
     
-    for( int n=1; n<nLimit; n++ ) {
+    for( int n=1; n<nLimitMax; n++ ) {
         nCoefficients[n] = 1.0 / n;
         }
     
