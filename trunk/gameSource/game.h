@@ -32,7 +32,9 @@ typedef int16_t Sint16;
 typedef uint8_t Uint8;
 
 // sample rate shared by game engine and sound rendering platform
-#define gameSoundSampleRate 22050
+//#define gameSoundSampleRate 22050
+//#define gameSoundSampleRate 44100
+#define gameSoundSampleRate 11025
 
 // gets the next buffer-full of sound samples from the game engine
 // inBuffer should be filled with stereo Sint16 samples, little endian,
