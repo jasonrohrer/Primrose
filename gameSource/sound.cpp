@@ -1,4 +1,6 @@
 #include "minorGems/util/SimpleVector.h"
+#include "minorGems/util/stringUtils.h"
+#include "minorGems/util/SettingsManager.h"
 
 #include "game.h"
 
@@ -24,6 +26,12 @@ class SoundSample {
                 }
             }
         
+        // returns true on success
+        char readFromSettingsFile( char *inSettingName );
+        
+        void writeToSettingsFile( char *inSettingName );
+        
+
         int mNumSamples;
         
         // samples in [-1, +1]
@@ -164,12 +172,12 @@ void fillTone( SoundSample *inSample, float inFrequency, int inNumSamples,
     int nyquist = gameSoundSampleRate / 2;
     int nLimit = (int)( nyquist / inFrequency );
     
-    printf( "nLimit = %d\n", nLimit );
+    //printf( "nLimit = %d\n", nLimit );
     
     if( nLimit > nLimitMax ) {
         nLimit = nLimitMax;
         
-        printf( "capping nLimit at %d\n", nLimit );
+        //printf( "capping nLimit at %d\n", nLimit );
         }
     
 
@@ -209,6 +217,9 @@ void initSound() {
 
     float baseFreq = 60;
 
+
+    int bankIndex = 0;
+    
     int i;
     
     // for each color
@@ -217,12 +228,32 @@ void initSound() {
         // placement sounds
         float freq = baseFreq * pow( twelthRootOfTwo, placementStepMap[i] );
         
-        SoundSample *s = &( sampleBank[i] );
+        SoundSample *s = &( sampleBank[bankIndex] );
         
-        int numSamples = (int)( 0.2 * gameSoundSampleRate );
+        // check if cached on disk
+        char *cacheSettingName = autoSprintf( "cachedSoundSample_%d",
+                                              bankIndex );
 
-        fillTone( s, freq, numSamples );
+        if( ! s->readFromSettingsFile( cacheSettingName ) ) {
+            // not cached, generate
+            printf( "Generating sound sample %d\n", bankIndex );
+            
+
+            int numSamples = (int)( 0.2 * gameSoundSampleRate );
+            
+            fillTone( s, freq, numSamples );
+            
+            // cache out to disk
+            s->writeToSettingsFile( cacheSettingName );
+            }
+        else {
+            printf( "Found sound sample %d cached on disk\n", bankIndex );
+            }
         
+        delete [] cacheSettingName;
+        
+
+        bankIndex ++;
         }
     
     // now clearing sounds
@@ -230,92 +261,113 @@ void initSound() {
 
     
     for( i=0; i<7; i++ ) {
-        float freqA = baseFreq * pow( twelthRootOfTwo, clearingStepMap[i] );
-        // second, 7 steps up
-        float freqB = baseFreq * pow( twelthRootOfTwo, 
-                                      clearingStepMap[i] + 7 );
+        SoundSample *s = &( sampleBank[ bankIndex ] );
 
-        #define numShepParts 4
-        int t;
-        
-        SoundSample shepardParts[numShepParts];
-        int numSamples = (int)( 0.4 * gameSoundSampleRate );
+        // check if cached on disk
+        char *cacheSettingName = autoSprintf( "cachedSoundSample_%d",
+                                              bankIndex );
 
-        for( t=0; t<numShepParts; t++ ) {
-            // first note in sequence
-            fillTone( &shepardParts[t], freqA, 
-                      numSamples / 2, 0, numSamples );
+        if( ! s->readFromSettingsFile( cacheSettingName ) ) {
+            // not cached, generate
+            printf( "Generating sound sample %d\n", bankIndex );
+
+            float freqA = baseFreq * pow( twelthRootOfTwo, 
+                                          clearingStepMap[i] );
             
-            // second
-            fillTone( &shepardParts[t], freqB, 
-                      numSamples/2, numSamples/2, numSamples );
+            // second, 7 steps up
+            float freqB = baseFreq * pow( twelthRootOfTwo, 
+                                          clearingStepMap[i] + 7 );
+
+            #define numShepParts 4
+            int t;
+        
+            SoundSample shepardParts[numShepParts];
+            int numSamples = (int)( 0.4 * gameSoundSampleRate );
+
+            for( t=0; t<numShepParts; t++ ) {
+                // first note in sequence
+                fillTone( &shepardParts[t], freqA, 
+                          numSamples / 2, 0, numSamples );
             
-            // raise for next shep part
-            freqA *= 2;
-            freqB *= 2;
-            }
-        
-
-        float partWeights[4];
-        
-        // 0.0 .. 0.5
-        partWeights[0] = i / 12.0f;
-
-        // 0.5 .. 1.0
-        partWeights[1] = 0.5 + partWeights[0];
-        
-        // 1.0 .. 0.5
-        partWeights[2] = 1 - partWeights[0];
-        
-        // 0.5 .. 0.0
-        partWeights[3] = 0.5 - partWeights[0];
-        
-
-        // vol sum at any point = 2
-        
-        // weight so sum = 1
-        for( int t=0; t<numShepParts; t++ ) {
-            partWeights[t] *= 0.5;
-            }
-        
-        int index = i+7;
-        
-        SoundSample *s = &( sampleBank[index] );
-
-        s->mNumSamples = numSamples;
-
-        s->mLeftChannel = new float[ numSamples ];
-        s->mRightChannel = new float[ numSamples ];
-        
-
-        float *l = s->mLeftChannel;
-        float *r = s->mRightChannel;
-        
-        // accumulate in left
-        // copy to right at end
-        for( int j=0; j<numSamples; j++ ) {
-            l[j] = 0;
-            }
-        
-
-        for( t=0; t<numShepParts; t++ ) {
-
-            float weight = partWeights[t];
+                // second
+                fillTone( &shepardParts[t], freqB, 
+                          numSamples/2, numSamples/2, numSamples );
             
-            // channels identical
-            // use only one
-            float *partChannel = shepardParts[t].mLeftChannel;
-            
-
-            for( int j=0; j<numSamples; j++ ) {
-                l[j] += weight * partChannel[j];
+                // raise for next shep part
+                freqA *= 2;
+                freqB *= 2;
                 }
+        
+
+            float partWeights[4];
+        
+            // 0.0 .. 0.5
+            partWeights[0] = i / 12.0f;
+
+            // 0.5 .. 1.0
+            partWeights[1] = 0.5 + partWeights[0];
+        
+            // 1.0 .. 0.5
+            partWeights[2] = 1 - partWeights[0];
+        
+            // 0.5 .. 0.0
+            partWeights[3] = 0.5 - partWeights[0];
+        
+
+            // vol sum at any point = 2
+        
+            // weight so sum = 1
+            for( int t=0; t<numShepParts; t++ ) {
+                partWeights[t] *= 0.5;
+                }
+        
+
+            s->mNumSamples = numSamples;
+
+            s->mLeftChannel = new float[ numSamples ];
+            s->mRightChannel = new float[ numSamples ];
+        
+
+            float *l = s->mLeftChannel;
+            float *r = s->mRightChannel;
+        
+            // accumulate in left
+            // copy to right at end
+            for( int j=0; j<numSamples; j++ ) {
+                l[j] = 0;
+                }
+        
+
+            for( t=0; t<numShepParts; t++ ) {
+
+                float weight = partWeights[t];
+            
+                // channels identical
+                // use only one
+                float *partChannel = shepardParts[t].mLeftChannel;
+            
+
+                for( int j=0; j<numSamples; j++ ) {
+                    l[j] += weight * partChannel[j];
+                    }
+                }
+
+            // copy to right
+            memcpy( r, l, numSamples * sizeof( float ) );
+
+
+            // save out to disk
+            s->writeToSettingsFile( cacheSettingName );
+            }
+        else {
+            printf( "Found sound sample %d cached on disk\n", bankIndex );
             }
 
-        // copy to right
-        memcpy( r, l, numSamples * sizeof( float ) );
         
         
+        delete [] cacheSettingName;
+        
+        bankIndex ++;
         }
     }
 
@@ -492,6 +544,106 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes ) {
     delete [] leftMix;
     delete [] rightMix;
     
+    }
+
+
+
+char SoundSample::readFromSettingsFile( char *inSettingName ) {
+    char *lengthSettingName = autoSprintf( "%s_numSamples", inSettingName );
+    
+    char found;
+    int numSamples = SettingsManager::getIntSetting( lengthSettingName, 
+                                                     &found );
+    delete [] lengthSettingName;
+    
+    if( !found ) {
+        return false;
+        }
+    
+    FILE *file = SettingsManager::getSettingsFile( inSettingName, "rb" );
+    
+    if( file == NULL ) {
+        return false;
+        }
+    
+
+    int bytesPerChannel = numSamples * sizeof( float );
+    
+    // read channels
+    float *channels[2];
+
+    int c;
+    
+    char error = false;
+    
+    for( c=0; c<2; c++ ) {
+        
+        channels[c] = new float[ numSamples ];
+        
+        int numRead = 
+            fread( (char *)( channels[c] ), 1, bytesPerChannel, file );
+
+        if( numRead != bytesPerChannel ) {
+            printf( "Error reading from settingsFile %s for channel %d\n",
+                    inSettingName, c );
+            error = true;
+            }
+        }
+
+    fclose( file );
+    
+    if( ! error ) {
+        
+        mLeftChannel = channels[0];
+        mRightChannel = channels[1];
+        mNumSamples = numSamples;
+        return true;
+        }
+    else {
+        for( c=0; c<2; c++ ) {
+            delete [] channels[c];
+            }
+        return false;
+        }
+    
+    }
+
+
+        
+void SoundSample::writeToSettingsFile( char *inSettingName ) {
+    char *lengthSettingName = autoSprintf( "%s_numSamples", inSettingName );
+    
+    SettingsManager::setSetting( lengthSettingName, mNumSamples );
+    
+    delete [] lengthSettingName;
+
+
+    FILE *file = SettingsManager::getSettingsFile( inSettingName, "wb" );
+    
+    if( file == NULL ) {
+        printf( "Error opening settings file %s\n", inSettingName );
+        return;
+        }
+
+    float *channels[2];
+    channels[0] = mLeftChannel;
+    channels[1] = mRightChannel;
+    
+    int bytesPerChannel = mNumSamples * sizeof( float );
+
+
+    for( int c=0; c<2; c++ ) {
+        
+        int numWritten = 
+            fwrite( (char *)( channels[c] ), 1, bytesPerChannel, file );
+
+        if( numWritten != bytesPerChannel ) {
+            printf( "Error writing to settingsFile %s for channel %d\n",
+                    inSettingName, c );
+            }
+        }
+
+    fclose( file );
     }
 
 
