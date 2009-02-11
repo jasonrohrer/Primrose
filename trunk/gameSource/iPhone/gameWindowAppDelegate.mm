@@ -11,215 +11,6 @@
 #include "game.h"
 
 
-
-
-
-
-
-// audio callbacks and other functions
-
-
-#include <AudioToolbox/AudioToolbox.h>
-
-AudioQueueRef queue;
-
-#define kNumberAudioDataBuffers	3
-
-char isPlaying = false;
-
-
-void startAudio();
-void stopAudio();
-
-
-void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef inBuffer ) {
-    
-    // fill it up
-    inBuffer->mAudioDataByteSize = inBuffer->mAudioDataBytesCapacity;
-    
-    getSoundSamples( (Uint8 *)inBuffer->mAudioData, inBuffer->mAudioDataByteSize );
-    
-    AudioQueueEnqueueBuffer( inQueue,
-                            inBuffer,
-                            0,
-                            NULL );
-}
-
-
-char firstTouch = true;
-
-void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) {
-	OSStatus err;
-    
-	if( interruptionState == kAudioSessionBeginInterruption ) {
-        printf( "Audio interrupted\n" );
-        if( isPlaying ) {
-            stopAudio();
-            // reset first touch to start audio again at next touch
-            firstTouch = true;
-        }
-    }
-    else if( interruptionState == kAudioSessionEndInterruption ) {
-        printf( "Audio interruption over\n" );
-        if( isPlaying ) {
-            //startAudio();
-            /*
-             // reactivate session
-             UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-             err = AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
-             sizeof(sessionCategory),
-             &sessionCategory );
-             if( err ) {
-             printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
-             }
-             
-             err = AudioSessionSetActive( true );
-             if( err ) {
-             printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
-             }
-             
-             err = AudioQueueStart( queue, NULL );
-             if( err ) {
-             printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
-             }
-             */
-        }
-    }
-    
-    Float64 hardwareSampleRate;
-    
-    UInt32 propertySize = sizeof(hardwareSampleRate);
-	
-	AudioSessionGetProperty (
-                             kAudioSessionProperty_CurrentHardwareSampleRate,
-                             &propertySize,
-                             &hardwareSampleRate
-                             );
-    printf( "Sample rate = %f\n", hardwareSampleRate );
-}
-
-
-// brings audio up and starts it
-void startAudio() {
-    printf( "Starting audio\n" );
-    
-    OSStatus err;
-    
-    
-    
-    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-    AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
-                            sizeof(sessionCategory),
-                            &sessionCategory );
-    
-    
-    // create audio queue
-    // too short and interrupting audio doesn't work!
-    //int frameCount = 512;
-    int frameCount = 22050;
-    
-    AudioStreamBasicDescription audioFormat;
-    
-    audioFormat.mSampleRate = gameSoundSampleRate;
-    audioFormat.mFormatID = kAudioFormatLinearPCM;
-    audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-    audioFormat.mBytesPerPacket = 4;
-    audioFormat.mFramesPerPacket = 1;
-    audioFormat.mBytesPerFrame = 4;
-    audioFormat.mChannelsPerFrame = 2;
-    audioFormat.mBitsPerChannel = 16;
-    
-    
-    CFRunLoopRef mainLoop = CFRunLoopGetMain();
-    CFRunLoopRef currentLoop = CFRunLoopGetCurrent();
-    
-    printf( "main loop = %u, current loop = %u", (unsigned int)mainLoop, (unsigned int)currentLoop );
-    
-    AudioQueueNewOutput( &audioFormat,
-                        audioCallback,
-                        NULL, 
-                        CFRunLoopGetCurrent(),
-                        kCFRunLoopCommonModes,
-                        0,								// flags for future use
-                        &queue );
-    
-    // setup audio buffers
-    AudioQueueBufferRef buffers[ kNumberAudioDataBuffers ];
-    
-    int bufferByteSize = frameCount * audioFormat.mBytesPerFrame;
-    
-    for( int b=0; b<kNumberAudioDataBuffers; b++) {
-        AudioQueueAllocateBuffer( queue,
-                                 bufferByteSize,
-                                 &buffers[ b ] );
-        
-        // prime with samples
-        // can't call this, because frameDrawer hasn't been inited yet
-        // (and queue must already exist when drawer inited)
-		//audioCallback( NULL, queue, buffers[b] );
-        
-        // instead, fill with silence
-        // fill it up
-        buffers[b]->mAudioDataByteSize = buffers[b]->mAudioDataBytesCapacity;
-        memset( buffers[b]->mAudioData, 0, buffers[b]->mAudioDataByteSize );
-        
-        AudioQueueEnqueueBuffer( queue,
-                                buffers[b],
-                                0,
-                                NULL );
-    } 
-    
-    err = AudioSessionSetActive( true );
-    if( err ) {
-        printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
-    }
-    
-    AudioQueueSetParameter (
-                            queue,
-                            kAudioQueueParam_Volume,
-                            1.0
-                            );
-    
-    err = AudioQueueStart ( queue, NULL );
-    if( err ) {
-        printf( "Error: %d (%s:%d)\n", err, __FILE__, __LINE__ );
-    }
-}
-
-
-
-// tears audio down
-void stopAudio() {
-    printf( "Stopping audio\n" );
-    OSStatus err;
-    
-    err = AudioQueueStop( queue, true );
-    if( err ) {
-        printf( "Error: %s (%s:%d)\n", (char*)&err, __FILE__, __LINE__ );
-    }
-    
-    err = AudioQueueDispose( queue, true );
-    if( err ) {
-        printf( "Error: %s (%s:%d)\n", (char*)&err, __FILE__, __LINE__ );
-    }
-    
-    err = AudioSessionSetActive( false );
-    if( err ) {
-        printf( "Error: %s (%s:%d)\n", (char*)&err, __FILE__, __LINE__ );
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
 char renderingPaused = false;
 
 
@@ -233,25 +24,6 @@ char renderingPaused = false;
 	
 	printf( "App finished launching\n" );
 
-    
-    // audio session for this app
-    AudioSessionInitialize( NULL,
-                           NULL,
-                           interruptionListenerCallback,
-                           NULL );
-    
-    Float64 hardwareSampleRate;
-    
-    UInt32 propertySize = sizeof(hardwareSampleRate);
-	
-	AudioSessionGetProperty (
-                             kAudioSessionProperty_CurrentHardwareSampleRate,
-                             &propertySize,
-                             &hardwareSampleRate
-                             );
-    printf( "Sample rate = %f\n", hardwareSampleRate );
-    
-    
     printf( "Calling start anim\n" );
 	[view startAnimation];
     printf( "Done starting animation\n" );
@@ -283,7 +55,6 @@ char renderingPaused = false;
 - (void)applicationWillResignActive:(UIApplication *)application {    
     printf( "App resigning active\n" );
 	renderingPaused = true;
-    //setSoundPlaying( false );
 }
 
 
@@ -291,7 +62,6 @@ char renderingPaused = false;
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     printf( "App becoming active\n" );
 	renderingPaused = false;
-    //setSoundPlaying( true );
 }
 
 
@@ -328,16 +98,6 @@ char renderingPaused = false;
 
 
 
-
-
-
-
-
-
-
-
-
-
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
 
@@ -354,7 +114,6 @@ char renderingPaused = false;
 
 //The GL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder*)coder {
-    printf( "initWithCoder called for MyView\n" );
     
     if ((self = [super initWithCoder:coder])) {
         
@@ -375,7 +134,6 @@ char renderingPaused = false;
             [self release];
             return nil;
         }
-
         
     }
     return self;
@@ -445,6 +203,88 @@ int appFrameCount = 0;
 
 
 
+#include <AudioToolbox/AudioToolbox.h>
+
+AudioQueueRef queue;
+
+#define kNumberAudioDataBuffers	3
+
+char isPlaying = false;
+
+
+
+int numBuffersToEnqueueLater = 0;
+AudioQueueBufferRef buffersToEnqueueLater[ kNumberAudioDataBuffers ];
+
+
+void audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef inBuffer ) {
+    printf( "callback for buffer %d from run loop %d\n", inBuffer, CFRunLoopGetCurrent() );
+    
+    // fill it up
+    inBuffer->mAudioDataByteSize = inBuffer->mAudioDataBytesCapacity;
+    
+    getSoundSamples( (Uint8 *)inBuffer->mAudioData, inBuffer->mAudioDataByteSize );
+    
+    OSStatus err = AudioQueueEnqueueBuffer( inQueue,
+                             inBuffer,
+                             0,
+                             NULL );
+    if( err ) {
+        printf( "Error on AudioQueueEnqueueBuffer: %4s\n", (char*)&err );
+        
+        buffersToEnqueueLater[ numBuffersToEnqueueLater ] = inBuffer;
+        numBuffersToEnqueueLater++;
+        }
+    }
+
+
+
+void interruptionListenerCallback( void	*inUserData, UInt32	interruptionState ) {
+	
+	if( interruptionState == kAudioSessionBeginInterruption ) {
+        printf( "Audio interrupted from run loop %d\n", CFRunLoopGetCurrent() );
+        if( isPlaying ) {
+            
+            printf( "pausing audio queue\n" );
+            AudioQueuePause( queue );
+            printf( "done pausing audio queue\n" );
+            
+            printf( "deactivating session\n" );
+            AudioSessionSetActive( false );
+            printf( "done deactivating session\n" );
+            
+        }
+    }
+    else if( interruptionState == kAudioSessionEndInterruption ) {
+        printf( "Audio interruption over\n" );
+        if( isPlaying ) {
+            // reactivate session
+            UInt32 sessionCategory = kAudioSessionCategory_UserInterfaceSoundEffects;
+            AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
+                                    sizeof(sessionCategory),
+                                    &sessionCategory );
+            AudioSessionSetActive( true );
+            
+            // any buffers that were sent to audioCallback *after* interrupt happened
+            for( int i=0; i<numBuffersToEnqueueLater; i++ ) {
+                OSStatus err = AudioQueueEnqueueBuffer( queue,
+                                                        buffersToEnqueueLater[ i ],
+                                                        0,
+                                                        NULL );
+                if( err ) {
+                    printf( "Error on AudioQueueEnqueueBuffer: %4s\n", (char*)&err );
+                }
+            }
+            
+            numBuffersToEnqueueLater = 0;
+                
+                
+            
+            AudioQueueStart( queue, NULL );
+        }
+    }
+}
+
 
 
 - (void)startAnimation {
@@ -454,27 +294,89 @@ int appFrameCount = 0;
 	
     self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:animationInterval target:self selector:@selector(drawFrame) userInfo:nil repeats:YES];
 
+    
+    
+    AudioSessionInitialize( NULL,
+                            NULL,
+                            interruptionListenerCallback,
+                            NULL );
+    
+    UInt32 sessionCategory = kAudioSessionCategory_UserInterfaceSoundEffects;
+    AudioSessionSetProperty( kAudioSessionProperty_AudioCategory,
+                             sizeof(sessionCategory),
+                             &sessionCategory );
+    
+    
+    // create audio queue
+    int frameCount = 512;
+    // works int frameCount = 4096;
+    //int frameCount = 2048;
+    
+    AudioStreamBasicDescription audioFormat;
+    
+    audioFormat.mSampleRate = gameSoundSampleRate;
+    audioFormat.mFormatID = kAudioFormatLinearPCM;
+    audioFormat.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+    audioFormat.mBytesPerPacket = 4;
+    audioFormat.mFramesPerPacket = 1;
+    audioFormat.mBytesPerFrame = 4;
+    audioFormat.mChannelsPerFrame = 2;
+    audioFormat.mBitsPerChannel = 16;
+    
+    
+    AudioQueueNewOutput( &audioFormat,
+                         audioCallback,
+                         NULL, 
+                         CFRunLoopGetCurrent(),
+                         kCFRunLoopCommonModes,
+                         0,								// flags for future use
+                         &queue );
+    
+    // setup audio buffers
+    AudioQueueBufferRef buffers[ kNumberAudioDataBuffers ];
+    
+    int bufferByteSize = frameCount * audioFormat.mBytesPerFrame;
+    
+    for( int b=0; b<kNumberAudioDataBuffers; b++) {
+        AudioQueueAllocateBuffer( queue,
+                                  bufferByteSize,
+                                  &buffers[ b ] );
+        
+        // prime with samples
+        // can't call this, because frameDrawer hasn't been inited yet
+        // (and queue must already exist when drawer inited)
+		//audioCallback( NULL, queue, buffers[b] );
+        
+        // instead, fill with silence
+        // fill it up
+        buffers[b]->mAudioDataByteSize = buffers[b]->mAudioDataBytesCapacity;
+        memset( buffers[b]->mAudioData, 0, buffers[b]->mAudioDataByteSize );
+        
+        AudioQueueEnqueueBuffer( queue,
+                                 buffers[b],
+                                 0,
+                                 NULL );
+    }
+    
+    // audio queue set up
+    // ready for frame drawer
+    
     // these not set yet
     // initFrameDrawer( backingWidth, backingHeight );
     initFrameDrawer( 320, 480 );
 }
 
-
-
 // implement interface back from game engine
 void setSoundPlaying( char inPlaying ) {
-    OSStatus err;
-    
-    if( inPlaying && ! isPlaying ) {
-        //startAudio();
-        // wait again for first touch to turn audio on again
-        firstTouch = true;
-        isPlaying = true;
+    if( inPlaying ) {
+        AudioSessionSetActive( true );
+        AudioQueueStart ( queue, NULL );
     }
-    else if( !inPlaying && isPlaying ) {
-        stopAudio();
-        isPlaying = false;
+    else {
+        AudioQueuePause( queue );
+        AudioSessionSetActive( false );
     }
+    isPlaying = inPlaying;
 }
 
     
@@ -485,7 +387,9 @@ void setSoundPlaying( char inPlaying ) {
     
     self.animationTimer = nil;
 	
-    setSoundPlaying( false );
+    AudioQueueStop( queue, true );
+    
+    AudioQueueDispose( queue, true );
     
 	freeFrameDrawer();
     
@@ -499,11 +403,11 @@ void setSoundPlaying( char inPlaying ) {
 
 
 
+
 - (void)drawFrame {
     if( renderingPaused ) {
         return;
     }
-    
     
     //printf( "draw frame called\n" );
     
@@ -592,16 +496,9 @@ void setSoundPlaying( char inPlaying ) {
 }
 */
 
-
 // Handles the start of a touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if( firstTouch ) {
-        if( isPlaying ) {
-            startAudio();
-        }
-        firstTouch = false;
-    }
     
     for( UITouch *touch in touches ){
         // ignore touches that aren't part of this phase
