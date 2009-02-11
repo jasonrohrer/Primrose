@@ -3,8 +3,6 @@ A captivating tile-clearing puzzle game by world-renowned independent designer J
 
 If you find the crowd of copycat match-3 games to be mindless and boring...
 
-If you think Tetris is interesting, even though it is over 20 years old...
-
 If you're looking for an elegant, deep puzzle game that's completely fresh...
 
 
@@ -15,7 +13,9 @@ Primrose's gameplay is deceptively simple:  You're given randomly chosen pairs o
 
 As the game progresses, more colors are added to the pool, making the grid more and more constrained.  Pressure builds until the grid finally fills up, and the game ends.
 
-Despite this mounting pressure, the game doesn't have a frantic feel, because you have as much time as you want to make each move.  Whereas Tetris depends on getting faster and faster to be challenging, Primrose derives deep challenge from inherent properties of its mechanics.
+Despite this mounting pressure, the game doesn't have a frantic feel, because you have as much time as you want to make each move.  Whereas games like Tetris depend on getting faster and faster to be challenging, Primrose derives deep challenge from inherent properties of its mechanics.
+
+But comparisons with Tetris aren't very helpful, because Primrose does not have you dropping tiles down a well.  Primrose also doesn't have you swapping adjacent tiles like so many match-3 games.  So what comparison is useful?  Primrose is a small bit like Go and Othello (if either of those were one-player games), a small bit like Lights Out, and a big bit like nothing you've every played before---and that big bit is a good thing.
 
 
 Primrose includes the following features:
