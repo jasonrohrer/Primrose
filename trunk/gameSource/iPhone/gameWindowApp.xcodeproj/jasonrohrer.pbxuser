@@ -16,9 +16,9 @@
 		);
 		breakpoints = (
 			DA34BDB90F1E8BE200126D0F /* game.cpp:251 */,
-			DA7F32140F41C2C7005B8330 /* gameWindowAppDelegate.mm:489 */,
-			DA7F32180F41C350005B8330 /* gameWindowAppDelegate.mm:489 */,
-			DA7F32450F41CC5A005B8330 /* gameWindowAppDelegate.mm:489 */,
+			DA7F32140F41C2C7005B8330 /* gameWindowAppDelegate.mm:487 */,
+			DA7F32180F41C350005B8330 /* gameWindowAppDelegate.mm:487 */,
+			DA7F32450F41CC5A005B8330 /* gameWindowAppDelegate.mm:487 */,
 		);
 		codeSenseManager = DA86AE940EF5391600054E6B /* Code sense */;
 		executables = (
@@ -226,6 +226,8 @@
 			DA8DBC840F4310A40045CF9A /* PBXTextBookmark */ = DA8DBC840F4310A40045CF9A /* PBXTextBookmark */;
 			DA8DBC850F4310A40045CF9A /* PBXTextBookmark */ = DA8DBC850F4310A40045CF9A /* PBXTextBookmark */;
 			DA8DBC860F4310A40045CF9A /* PBXTextBookmark */ = DA8DBC860F4310A40045CF9A /* PBXTextBookmark */;
+			DA8DBC990F432D0C0045CF9A /* PBXTextBookmark */ = DA8DBC990F432D0C0045CF9A /* PBXTextBookmark */;
+			DA8DBC9B0F432D0C0045CF9A /* PBXTextBookmark */ = DA8DBC9B0F432D0C0045CF9A /* PBXTextBookmark */;
 			DA90DDCE0EFAF5A3001BABB5 = DA90DDCE0EFAF5A3001BABB5 /* PBXTextBookmark */;
 			DA90DDD20EFAF5A3001BABB5 = DA90DDD20EFAF5A3001BABB5 /* PBXTextBookmark */;
 			DA90DDD50EFAF5A3001BABB5 = DA90DDD50EFAF5A3001BABB5 /* PBXTextBookmark */;
@@ -657,16 +659,16 @@
 	};
 	DA34BCCD0F1E7B3B00126D0F /* game.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {641, 798}}";
-			sepNavSelRange = "{647, 0}";
-			sepNavVisRange = "{445, 756}";
+			sepNavIntBoundsRect = "{{0, 0}, {641, 826}}";
+			sepNavSelRange = "{1275, 0}";
+			sepNavVisRange = "{470, 802}";
 		};
 	};
 	DA34BCCE0F1E7B3B00126D0F /* game.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {711, 24136}}";
-			sepNavSelRange = "{10669, 51}";
-			sepNavVisRange = "{10638, 125}";
+			sepNavIntBoundsRect = "{{0, 0}, {641, 24878}}";
+			sepNavSelRange = "{39700, 0}";
+			sepNavVisRange = "{39216, 490}";
 			sepNavWindowFrame = "{{15, 144}, {846, 597}}";
 		};
 	};
@@ -1145,7 +1147,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = tileGame1;
-		modificationTime = 256053416.588969;
+		modificationTime = 256060747.454813;
 		state = 0;
 		symbolName = "game.cpp:251";
 	};
@@ -1240,17 +1242,17 @@
 	};
 	DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {720, 7630}}";
-			sepNavSelRange = "{7658, 0}";
-			sepNavVisRange = "{6464, 1310}";
+			sepNavIntBoundsRect = "{{0, 0}, {924, 7490}}";
+			sepNavSelRange = "{8614, 0}";
+			sepNavVisRange = "{8130, 1015}";
 			sepNavWindowFrame = "{{15, 144}, {846, 597}}";
 		};
 	};
 	DA7F117F0EF6D77000CB6D50 /* gameWindowAppDelegate.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {714, 798}}";
+			sepNavIntBoundsRect = "{{0, 0}, {714, 826}}";
 			sepNavSelRange = "{762, 0}";
-			sepNavVisRange = "{0, 434}";
+			sepNavVisRange = "{0, 763}";
 		};
 	};
 	DA7F11800EF6D77000CB6D50 /* gameWindowApp_Prefix.pch */ = {
@@ -1290,7 +1292,7 @@
 		vrLen = 452;
 		vrLoc = 0;
 	};
-	DA7F32140F41C2C7005B8330 /* gameWindowAppDelegate.mm:489 */ = {
+	DA7F32140F41C2C7005B8330 /* gameWindowAppDelegate.mm:487 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1302,12 +1304,12 @@
 		functionName = "interruptionListenerCallback( void *inUserData, UInt32 interruptionState )";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 489;
+		lineNumber = 487;
 		location = Primrose;
-		modificationTime = 256053415.582064;
+		modificationTime = 256060746.866772;
 		state = 2;
 	};
-	DA7F32180F41C350005B8330 /* gameWindowAppDelegate.mm:489 */ = {
+	DA7F32180F41C350005B8330 /* gameWindowAppDelegate.mm:487 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1319,12 +1321,12 @@
 		functionName = "audioCallback( void *inUserData, AudioQueueRef inQueue, AudioQueueBufferRef inBuffer )";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 489;
+		lineNumber = 487;
 		location = Primrose;
-		modificationTime = 256053415.582217;
+		modificationTime = 256060746.866794;
 		state = 2;
 	};
-	DA7F32450F41CC5A005B8330 /* gameWindowAppDelegate.mm:489 */ = {
+	DA7F32450F41CC5A005B8330 /* gameWindowAppDelegate.mm:487 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1336,9 +1338,9 @@
 		functionName = "interruptionListenerCallback( void *inUserData, UInt32 interruptionState )";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 489;
+		lineNumber = 487;
 		location = Primrose;
-		modificationTime = 256053415.582311;
+		modificationTime = 256060746.866828;
 		state = 2;
 	};
 	DA7F36100F42ACA3005B8330 /* PBXTextBookmark */ = {
@@ -1356,7 +1358,7 @@
 		fRef = DA34BCCD0F1E7B3B00126D0F /* game.h */;
 		name = "game.h: 35";
 		rLen = 0;
-		rLoc = 647;
+		rLoc = 649;
 		rType = 0;
 		vrLen = 757;
 		vrLoc = 446;
@@ -1403,7 +1405,7 @@
 		fRef = DA34BCCD0F1E7B3B00126D0F /* game.h */;
 		name = "game.h: 37";
 		rLen = 0;
-		rLoc = 717;
+		rLoc = 790;
 		rType = 0;
 		vrLen = 693;
 		vrLoc = 510;
@@ -1443,7 +1445,7 @@
 		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
 		name = "gameWindowAppDelegate.mm: 281";
 		rLen = 0;
-		rLoc = 8785;
+		rLoc = 8720;
 		rType = 0;
 		vrLen = 1004;
 		vrLoc = 6701;
@@ -1463,7 +1465,7 @@
 		fRef = DA34BCCD0F1E7B3B00126D0F /* game.h */;
 		name = "game.h: 35";
 		rLen = 0;
-		rLoc = 647;
+		rLoc = 649;
 		rType = 0;
 		vrLen = 757;
 		vrLoc = 446;
@@ -1500,7 +1502,7 @@
 		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
 		name = "gameWindowAppDelegate.mm: 372";
 		rLen = 71;
-		rLoc = 10710;
+		rLoc = 10645;
 		rType = 0;
 		vrLen = 949;
 		vrLoc = 5164;
@@ -1707,7 +1709,7 @@
 		fRef = DA34BCCD0F1E7B3B00126D0F /* game.h */;
 		name = "game.h: 35";
 		rLen = 0;
-		rLoc = 647;
+		rLoc = 649;
 		rType = 0;
 		vrLen = 756;
 		vrLoc = 445;
@@ -1717,7 +1719,7 @@
 		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
 		name = "gameWindowAppDelegate.mm: 394";
 		rLen = 0;
-		rLoc = 11122;
+		rLoc = 11057;
 		rType = 0;
 		vrLen = 368;
 		vrLoc = 10851;
@@ -1727,7 +1729,7 @@
 		fRef = DA7F117E0EF6D77000CB6D50 /* gameWindowAppDelegate.mm */;
 		name = "gameWindowAppDelegate.mm: 394";
 		rLen = 0;
-		rLoc = 11122;
+		rLoc = 11057;
 		rType = 0;
 		vrLen = 368;
 		vrLoc = 10851;
@@ -1737,7 +1739,7 @@
 		fRef = DA34BCCD0F1E7B3B00126D0F /* game.h */;
 		name = "game.h: 35";
 		rLen = 0;
-		rLoc = 647;
+		rLoc = 649;
 		rType = 0;
 		vrLen = 756;
 		vrLoc = 445;
@@ -1751,6 +1753,42 @@
 		rType = 0;
 		vrLen = 1310;
 		vrLoc = 6464;
+	};
+	DA8DBC990F432D0C0045CF9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: 'static FILE* SettingsManager::getSettingsFile(char*, const char*)' is protected";
+		fRef = DA8DBC9A0F432D0C0045CF9A /* SettingsManager.h */;
+		rLen = 1;
+		rLoc = 204;
+		rType = 1;
+	};
+	DA8DBC9A0F432D0C0045CF9A /* SettingsManager.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = SettingsManager.h;
+		path = /Users/jasonrohrer/cpp/minorGems/util/SettingsManager.h;
+		sourceTree = "<absolute>";
+	};
+	DA8DBC9B0F432D0C0045CF9A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DA8DBC9C0F432D0C0045CF9A /* SettingsManager.h */;
+		name = "SettingsManager.h: 255";
+		rLen = 0;
+		rLoc = 6632;
+		rType = 0;
+		vrLen = 264;
+		vrLoc = 5528;
+	};
+	DA8DBC9C0F432D0C0045CF9A /* SettingsManager.h */ = {
+		isa = PBXFileReference;
+		name = SettingsManager.h;
+		path = /Users/jasonrohrer/cpp/minorGems/util/SettingsManager.h;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {711, 3514}}";
+			sepNavSelRange = "{6632, 0}";
+			sepNavVisRange = "{5528, 194}";
+		};
 	};
 	DA90DDCE0EFAF5A3001BABB5 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
