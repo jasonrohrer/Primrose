@@ -32,7 +32,5 @@
 	<true/>
 	<key>UIRequiresPersistentWiFi</key>
 	<true/>
-	<key>SBUsesNetwork</key>
-	<integer>3</integer>
 </dict>
 </plist>
