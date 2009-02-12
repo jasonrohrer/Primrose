@@ -14,6 +14,7 @@
 
 #include "ScoreBundle.h"
 
+#include "secureSalt.h"
 
 
 
@@ -458,6 +459,11 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         SettingsManager::setDirectoryName( "../Documents" );
     #endif
 
+
+    SettingsManager::setHashSalt( secureSalt );
+    SettingsManager::setHashingOn( true );
+    
+    
 
     int i;
         
