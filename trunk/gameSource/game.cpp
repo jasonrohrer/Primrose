@@ -27,6 +27,8 @@
 #include "minorGems/util/random/CustomRandomSource.h"
 #include "minorGems/util/SettingsManager.h"
 
+#include "minorGems/crypto/hashes/sha1.h"
+
 
 unsigned int gameSeed = time( NULL );
 
@@ -422,7 +424,11 @@ void scoreSent() {
     doneButton->setVisible( false );
     scoreWasSent = true;
 
+    SettingsManager::setHashingOn( true );
+    
     SettingsManager::setSetting( "scoreWasSent", 1 );
+    
+    SettingsManager::setHashingOn( false );
     }
 
 
@@ -460,8 +466,32 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     #endif
 
 
-    SettingsManager::setHashSalt( secureSalt );
-    SettingsManager::setHashingOn( true );
+
+
+    // don't use the same salt every time
+
+    // read the last-used salt off the disk
+
+
+    char *lastHashSalt = SettingsManager::getStringSetting( "hashSalt" );
+
+    if( lastHashSalt != NULL ) {
+        
+        // salt used is always saved salt plus internal security salt
+        
+        char *totalSalt = autoSprintf( "%s%s", lastHashSalt, secureSalt );
+
+        delete [] lastHashSalt;
+        
+        SettingsManager::setHashSalt( totalSalt );
+        
+        delete [] totalSalt;
+        }
+    else {
+        SettingsManager::setHashSalt( secureSalt );
+        }
+    
+    SettingsManager::setHashingOn( false );
     
     
 
@@ -526,17 +556,34 @@ void initFrameDrawer( int inWidth, int inHeight ) {
 
     newGame();
 
+
+
     // should we restore from disk?
-        
+
+    // saved games are secure
+
+    // note that I realize this is weak security.
+    // all someone needs to do is figure out the secure salt, which
+    // they can do by looking at the code.  However, it's still
+    // harder than simply editing the settings files with a text
+    // editor.  Strong security is impossible here.
+    SettingsManager::setHashingOn( true );
+
+
     int wasSaved = SettingsManager::getIntSetting( "saved", &found );
     
     if( found && wasSaved ) {
+        char anyFailed = false;
         
+
         char *state = SettingsManager::getStringSetting( "moveHistorySaved" );
 
         if( state != NULL ) {
             moveHistory.setElementString( state );
             delete [] state;
+            }
+        else {
+            anyFailed = true;
             }
         
         state = 
@@ -546,7 +593,10 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             nextPiece->restoreFromSavedState( state );
             delete [] state;
             }
-
+        else {
+            anyFailed = true;
+            }
+        
         state = 
             SettingsManager::getStringSetting( "colorPoolSaved" );
         
@@ -554,6 +604,10 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             colorPool->restoreFromSavedState( state );
             delete [] state;
             }
+        else {
+            anyFailed = true;
+            }
+        
         
         state = 
             SettingsManager::getStringSetting( "randStateSaved" );
@@ -566,9 +620,16 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             if( numRead == 1 ) {
                 randSource.restoreFromSavedState( randState );
                 }
-            
+            else {
+                anyFailed = true;
+                }
+        
             delete [] state;
             }
+        else {
+            anyFailed = true;
+            }
+        
 
         
         state = 
@@ -579,12 +640,16 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             
             delete [] state;
             }
-
+        else {
+            anyFailed = true;
+            }
+        
 
 
         score = SettingsManager::getIntSetting( "scoreSaved", &found );
         
         if( !found ) {
+            anyFailed = true;
             score = 0;
             }
         
@@ -592,6 +657,7 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             SettingsManager::getIntSetting( "gameOverSaved", &found ) );
         
         if( !found ) {
+            anyFailed = true;
             gameOver = 0;
             }
 
@@ -599,7 +665,10 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             SettingsManager::getIntSetting( "scoreWasSent", &found ) );
         
         if( !found ) {
-            scoreWasSent = 0;
+            anyFailed = true;
+
+            // assume score sent if flag not present
+            scoreWasSent = 1;
             }
         
         if( gameOver && !scoreWasSent ) {
@@ -629,9 +698,14 @@ void initFrameDrawer( int inWidth, int inHeight ) {
                             }
                         allSpaces[i]->setColor( c );
                         }
+                    else {
+                        anyFailed = true;
+                        }
                     }
                 }
-            
+            else {
+                anyFailed = true;
+                }
             
             for( int i=0; i<numParts; i++ ) {
                 delete []  parts[i];
@@ -639,47 +713,82 @@ void initFrameDrawer( int inWidth, int inHeight ) {
             delete [] parts;
             
             delete [] state;
-            }        
+            }  
+        else {
+            anyFailed = true;
+            }
 
 
 
         int playingBackGame = 
             SettingsManager::getIntSetting( "playingBackGameSaved", &found );
         
-        if( found && playingBackGame ) {
-        
-            state = SettingsManager::getStringSetting( "gameToPlaybackSaved" );
+        if( found ) {
             
-            if( state != NULL ) {
-                gameToPlayback = new ScoreBundle( state );
+            if( playingBackGame ) {
+        
+                state = 
+                    SettingsManager::getStringSetting( "gameToPlaybackSaved" );
+            
+                if( state != NULL ) {
+                    gameToPlayback = new ScoreBundle( state );
 
-                delete [] state;
+                    delete [] state;
 
-                if( !gameOver ) {
+                    if( !gameOver ) {
                     
-                    playStopButton->setVisible( true );
-                    stepButton->setVisible( true );
-                    }
-                else {
-                    gamePlaybackDone = true;
-                    }
+                        playStopButton->setVisible( true );
+                        stepButton->setVisible( true );
+                        }
+                    else {
+                        gamePlaybackDone = true;
+                        }
                 
 
-                // never allow sending score on a playback game
-                doneButton->setVisible( false );
-                }
+                    // never allow sending score on a playback game
+                    doneButton->setVisible( false );
+                    }
+                else {
+                    anyFailed = true;
+                    }
                     
-            gamePlaybackStep = SettingsManager::getIntSetting( 
-                "gamePlaybackStepSaved", &found );
+                gamePlaybackStep = SettingsManager::getIntSetting( 
+                    "gamePlaybackStepSaved", &found );
             
-            if( !found ) {
-                gamePlaybackStep = 0;
+                if( !found ) {
+                    anyFailed = true;
+                
+                    gamePlaybackStep = 0;
+                    }
                 }
+            }
+        else {
+            anyFailed = true;
             }
         
         
         
+        if( anyFailed ) {
+            // game was supposedly saved, but we failed to load
+            // the whole thing (hash-checked)... 
+            // corrupted, so don't trust any of it
+        
+            // don't want to load only certain parts of a saved game
+            // correctly (like the score, but not the grid)
+
+            printf( "Failed to load part of saved game."
+                    "  Starting new game instead.\n" );
+            
+
+            endGame();
+            newGame();
+            }
+        
         }
+    
+    // back to normal, insecure settings mode
+    SettingsManager::setHashingOn( false );
+    
 
 
 
@@ -703,6 +812,31 @@ void freeFrameDrawer() {
         printf( "Saving game state %d moves in\n", moveCount );
         
         
+        // secure
+
+        // new hash each time
+        char *saltSeed = autoSprintf( "%d%s\n", time( NULL ), secureSalt );
+        char *newSalt = computeSHA1Digest( saltSeed );
+        delete [] saltSeed;
+        
+        // save so that it can be used when loading game next time
+        SettingsManager::setSetting( "hashSalt", newSalt );
+
+
+        // salt used for hashing is always saved salt plus internal 
+        // security salt
+        
+        char *totalSalt = autoSprintf( "%s%s", newSalt, secureSalt );
+        delete [] newSalt;
+
+        
+        SettingsManager::setHashSalt( totalSalt );
+        delete [] totalSalt;
+                
+
+        SettingsManager::setHashingOn( true );
+        
+
         // save the last saved (known good) state out to disk
 
         SettingsManager::setSetting( "moveHistorySaved", savedMoveHistory );
@@ -794,10 +928,12 @@ void freeFrameDrawer() {
         else {
             SettingsManager::setSetting( "playingBackGameSaved", 0 );
             }
-        
+
+
+        SettingsManager::setSetting( "saved", "1" );
 
         
-        SettingsManager::setSetting( "saved", "1" );
+        SettingsManager::setHashingOn( false );
         }
     
 
