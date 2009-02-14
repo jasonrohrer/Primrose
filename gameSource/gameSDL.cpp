@@ -23,7 +23,6 @@ int main( int inArgCount, char **inArgs ) {
 #include <stdlib.h>
 
 #include <GL/gl.h>
-#include <GL/glut.h>
 
 
 
