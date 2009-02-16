@@ -26,7 +26,8 @@ mkdir mac/Primrose/settings
 
 
 cp ../gameSource/graphics/*.tga mac/Primrose/graphics
-cp ../gameSource/settings/*.ini mac/Primrose/settings
+#no default settings
+#cp ../gameSource/settings/*.ini mac/Primrose/settings
 cp ../documentation/Readme.txt mac/Primrose
 
 
