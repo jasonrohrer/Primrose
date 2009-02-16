@@ -17,6 +17,7 @@ Version 2    ???
 
 --Added proper response (game exit) to a press of the window close button.
 
+--Turned off FPS print-out.
 
 
 
