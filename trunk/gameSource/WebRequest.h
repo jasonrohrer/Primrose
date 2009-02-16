@@ -43,6 +43,8 @@ class WebRequest {
     protected:
         char mError;
         
+        char *mURL;
+
         char *mRequest;
         
         int mRequestPosition;

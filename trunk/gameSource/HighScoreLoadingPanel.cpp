@@ -222,6 +222,9 @@ void HighScoreLoadingPanel::step() {
                 savedServerURL = stringDuplicate( mServerURL );
                 }
             else {
+                printf( "Error:  "
+                        "Got bad response when fetching server URL.\n" );
+                
                 setFailed();
                 }
             
@@ -237,6 +240,9 @@ void HighScoreLoadingPanel::step() {
             // error
             delete mServerURLFetchRequest;
             mServerURLFetchRequest = NULL;
+            
+            printf( "Error:  "
+                    "WebRequest failed when fetching server URL.\n" );
             
             setFailed();
             }
@@ -335,6 +341,10 @@ void HighScoreLoadingPanel::step() {
 
 
             if( !goodResult ) {
+
+                printf( "Error:  "
+                        "Got unparsable high score table from server.\n" );
+            
                 setFailed();
                 }
             else {
@@ -359,6 +369,9 @@ void HighScoreLoadingPanel::step() {
             delete mWebRequest;
             mWebRequest = NULL;
             
+            printf( "Error:  "
+                    "WebRequest failed when posting or fetching scores.\n" );
+
             setFailed();
             }
         }

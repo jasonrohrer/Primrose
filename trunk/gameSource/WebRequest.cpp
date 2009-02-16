@@ -12,7 +12,8 @@
 
 WebRequest::WebRequest( char *inMethod, char *inURL,
                         char *inBody )
-        : mError( false ), mRequest( NULL ), mRequestPosition( -1 ),
+        : mError( false ), mURL( stringDuplicate( inURL ) ),
+          mRequest( NULL ), mRequestPosition( -1 ),
           mResultReady( false ), mResult( NULL ),
           mSock( NULL ) {
         
@@ -152,6 +153,8 @@ WebRequest::~WebRequest() {
         }
     
     
+    delete [] mURL;
+    
 
     if( mSock != NULL ) {
         delete mSock;
@@ -193,6 +196,9 @@ int WebRequest::step() {
                     }
                 else {
                     // failed to bring network up
+                    printf( "Error:  "
+                            "WebRequest failed to bring network up.\n" );
+                    
                     return -1;
                     }
                 }
@@ -232,6 +238,20 @@ int WebRequest::step() {
 
             if( mError ) {
                 // lookup or socket construction failed
+                
+                if( mNumericalAddress == NULL ) {
+                    printf( "Error:  "
+                            "WebRequest failed to lookup %s\n",
+                            mSuppliedAddress->mAddressString );
+                    }
+                else {
+                    printf( "Error:  "
+                            "WebRequest failed to construct "
+                            "socket to %s:%d\n",
+                            mNumericalAddress->mAddressString,
+                            mNumericalAddress->mPort );
+                    }
+                
                 return -1;
                 }            
             }
@@ -252,6 +272,11 @@ int WebRequest::step() {
         // failed to connect
         mError = true;
         
+        printf( "Error:  "
+                "WebRequest failed to connect to %s:%d\n",
+                mNumericalAddress->mAddressString,
+                mNumericalAddress->mPort );
+
         return -1;
         }
     else if( connectStatus == 1 ) {
@@ -267,6 +292,11 @@ int WebRequest::step() {
                                        false );
             if( numSent == -1 ) {
                 mError = true;
+                
+                printf( "Error:  "
+                        "WebRequest failed to connect to "
+                        "send full request\n" );
+
                 return -1;
                 }
             if( numSent == -2 ) {
@@ -326,6 +356,11 @@ int WebRequest::step() {
                     
                     mError = true;
                     delete [] responseString;
+
+                    printf( "Error:  "
+                            "WebRequest got 404 Not Found error for URL:  %s",
+                            mURL );
+                    
                     return -1;
                     }
 
@@ -357,7 +392,13 @@ int WebRequest::step() {
                     }
                 else {
                     mError = true;
+
+                    printf( "Error:  "
+                            "WebRequest got badly formatted response:\n%s\n",
+                            responseString );
+
                     delete [] responseString;
+                    
                     return -1;
                     }
                 }
@@ -370,8 +411,13 @@ int WebRequest::step() {
         }
 
 
+
     // should never get here
     // count it as error
+    
+    printf( "Error:  "
+            "WebRequest got out of expected case tree\n" );
+
     return -1;
     }
 
