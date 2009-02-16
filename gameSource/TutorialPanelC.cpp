@@ -346,12 +346,12 @@ void TutorialPanelC::drawBase() {
                     &tutorialTextColor, mFadeProgress );        
 
 
-        drawString( "three colors to start and", left, 
+        drawString( "three colors to start and new", left, 
                     19,
                     mColorPool.mY - 20 - 40,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "next color in ninety six moves", left, 
+        drawString( "color added in ninety six moves", left, 
                     19,
                     mColorPool.mY - 20 - 20,
                     &tutorialTextColor, mFadeProgress );        
