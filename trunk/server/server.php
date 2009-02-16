@@ -431,6 +431,10 @@ function ps_postScore() {
     if( ! $postValid ) {
         ps_log( "Bad score post: $name, $score, $seed, $move_history, $hash" );
         }
+    else {
+        ps_log( "Score of $score posted by $name" );
+        }
+    
     
     
     if( $postValid ) {    
@@ -498,8 +502,8 @@ function ps_postScore() {
                     "WHERE name = '$otherName' ".
                     "AND score = '$otherScore';";
 
-                ps_log(
-                    "Bumping $name from all-time list with score: $score." );
+                ps_log( "Bumping $otherName from all-time list ".
+                        "with score: $otherScore." );
 
             
                 $result = ps_queryDatabase( $query );
