@@ -1160,6 +1160,10 @@ void saveStateForUndo() {
 
 void placeNextPieceAt( unsigned int inSpaceNumber ) {
     
+    // always disable immediately after piece placement
+    // to avoid player trying to undo during animation
+        
+    undoButton->setVisible( false );
     
     char considerNonActive = true;
     if( nextPiece->isSecondPiece() ) {
