@@ -20,6 +20,7 @@ int main( int inArgCount, char **inArgs ) {
 #include "game.h"
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 #include <GL/gl.h>
