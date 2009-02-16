@@ -13,6 +13,10 @@ Version 2    ???
 --Fixed a memory issue in DNS lookup that could cause a crash if high
   score screen loaded and canceled repeatedly in quick sucession.
 
+--Added more verbose error messages for failed network operations.
+
+--Added proper response (game exit) to a press of the window close button.
+
 
 
 
