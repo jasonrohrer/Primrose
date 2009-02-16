@@ -281,12 +281,12 @@ void TutorialPanelB::drawBase() {
         
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-        drawString( "clear a group of tiles by", left, 
+        
+        drawString( "clear a tile group of one color", left, 
                     19,
                     mGridDemo[0][0]->mY - 20 - 60,
                     &tutorialTextColor, mFadeProgress );        
-        drawString( "surrounding it with another", left, 
+        drawString( "by surrounding it with another", left, 
                     19,
                     mGridDemo[0][0]->mY - 20 - 40,
                     &tutorialTextColor, mFadeProgress );        
@@ -295,20 +295,24 @@ void TutorialPanelB::drawBase() {
                     mGridDemo[0][0]->mY - 20 - 20,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "the surrounding tiles flip color", left, 
+        drawString( "the surrounding tiles flip to", left, 
                     19,
                     mGridDemo[3][0]->mY + 20 + 20,
-                    &tutorialTextColor, mFadeProgress );        
+                    &tutorialTextColor, mFadeProgress );
+        drawString( "the color that was cleared", left, 
+                    19,
+                    mGridDemo[3][0]->mY + 20 + 40,
+                    &tutorialTextColor, mFadeProgress );
 
 
         drawString( "clear bigger groups for even", left, 
                     19,
-                    mGridDemo[3][0]->mY + 20 + 71,
+                    mGridDemo[3][0]->mY + 20 + 91,
                     &tutorialTextColor, mFadeProgress );        
 
         drawString( "more points", left, 
                     19,
-                    mGridDemo[3][0]->mY + 20 + 91,
+                    mGridDemo[3][0]->mY + 20 + 111,
                     &tutorialTextColor, mFadeProgress );        
         
 
