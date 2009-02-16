@@ -445,9 +445,9 @@ void setSoundPlaying( char inPlaying ) {
         
         NSTimeInterval newStartTime = [now timeIntervalSinceReferenceDate]; 
         
-        NSTimeInterval elapsedTime = newStartTime - countStartTime;
+        //NSTimeInterval elapsedTime = newStartTime - countStartTime;
         
-        printf( "FPS: %f\n", appFrameCount / elapsedTime );
+        //printf( "FPS: %f\n", appFrameCount / elapsedTime );
         
         countStartTime = newStartTime;
         appFrameCount = 0;
