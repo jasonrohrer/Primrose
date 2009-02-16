@@ -19,6 +19,9 @@ Version 2    ???
 
 --Turned off FPS print-out.
 
+--Made undo button disappear immediately after second piece placed.
+
+
 
 
 Version 1    2009-February-11
