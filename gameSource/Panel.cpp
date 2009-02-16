@@ -72,7 +72,10 @@ char Panel::pointerUp( int inX, int inY ) {
     
     char somePanelVisible = false;
     
-    for( i=0; i<mSubPanels.size(); i++ ) {
+    // process in reverse order
+    // since higher index panels are drawn on top,
+    // we should look for button presses on them first
+    for( i=mSubPanels.size() - 1; i>=0; i-- ) {
         Panel *p = *( mSubPanels.getElement( i ) );
         if( p->isVisible() ) {
             somePanelVisible = true;

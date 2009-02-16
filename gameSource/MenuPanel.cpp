@@ -49,8 +49,11 @@ MenuPanel::MenuPanel( int inW, int inH )
     mHighScoreLoadingPanel.setVisible( false );
     mEditNamePanel.setVisible( false );
     
-    addSubPanel( &mHighScoreLoadingPanel );
+    
     addSubPanel( &mEditNamePanel );
+    // high score loading panel may need pop up on top of name editing panel
+    addSubPanel( &mHighScoreLoadingPanel );
+
     addSubPanel( &mTutorialPanel );
     
     // display panel created by loading panel, but sits under us
@@ -70,8 +73,14 @@ MenuPanel::~MenuPanel() {
 
 
 void MenuPanel::postScore( ScoreBundle *inScore ) {
-    mHighScoreLoadingPanel.setScoreToPost( inScore );
-    mHighScoreLoadingPanel.setVisible( true );
+    if( getNameSet() ) {
+        mHighScoreLoadingPanel.setScoreToPost( inScore );
+        mHighScoreLoadingPanel.setVisible( true );
+        }
+    else {
+        mEditNamePanel.setScoreToPost( inScore, this );
+        mEditNamePanel.setVisible( true );
+        }
     }
 
 
@@ -223,10 +232,20 @@ void MenuPanel::step() {
     // (to pass button presses through to loading and display panel, and be
     //  there to catch it when either of their BACK buttons are pressed)
     if( !mVisible &&
-        ( mHighScoreLoadingPanel.isFullyVisible() || 
-          mDisplayPanel->isFullyVisible() ) ) {
+        ( mHighScoreLoadingPanel.isFullyVisible() 
+          || 
+          mDisplayPanel->isFullyVisible()
+          ||
+          mEditNamePanel.isFullyVisible() ) ) {
         
-        setVisible( true );
+        forceVisible();
+        }
+    if( mHighScoreLoadingPanel.isFullyVisible()
+        &&
+        mEditNamePanel.isVisible() ) {
+        
+        // loading panel has popped up fully over edit panel
+        mEditNamePanel.forceInvisible();
         }
     }
 

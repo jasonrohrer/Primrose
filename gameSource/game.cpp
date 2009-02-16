@@ -117,6 +117,9 @@ char scoreWasSent = false;
 char mustRestart = false;
 
 char playerName[9];
+// has the player ever set a name?
+char nameSet = false;
+
 
 char colorblindMode = false;
 
@@ -529,6 +532,13 @@ void initFrameDrawer( int inWidth, int inHeight ) {
     
     char found;
     
+    nameSet = SettingsManager::getIntSetting( "nameSet", &found );
+    
+    if( !found ) {
+        nameSet = false;
+        }
+    
+
     colorblindMode = SettingsManager::getIntSetting( "colorblindMode",
                                                      &found );
 
@@ -1790,6 +1800,12 @@ void addToScore( int inPointsToAdd ) {
 
 
 
+char getNameSet() {
+    return nameSet;
+    }
+
+
+
 char *getName() {
     return playerName;
     }
@@ -1805,6 +1821,9 @@ void saveName() {
     
 
     SettingsManager::setSetting( "name", playerName );
+    SettingsManager::setSetting( "nameSet", 1 );
+
+    nameSet = true;
     }
 
 
