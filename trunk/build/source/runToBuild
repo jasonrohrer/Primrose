@@ -8,36 +8,28 @@
 #
 
 
-cd game7
+cd tilePlacementGames/game1
 chmod u+x ./configure
 ./configure
 
 cd gameSource
 
 
-echo "Building Between..."
+echo "Building Primrose..."
 
 make
 
 
 
-cd ../..
+cd ../../..
 
 mkdir graphics
-mkdir music
 mkdir settings
-mkdir languages
 
-cp game7/gameSource/Between ./Between
-cp game7/documentation/Readme.txt .
-cp game7/gameSource/graphics/* ./graphics
-cp game7/gameSource/music/* ./music
-cp game7/gameSource/settings/* ./settings
-cp game7/gameSource/languages/* ./languages
-cp game7/gameSource/language.txt ./
+cp tilePlacementGames/game1/gameSource/Primrose ./Primrose
+cp tilePlacementGames/game1/documentation/Readme.txt .
+cp tilePlacementGames/game1/gameSource/graphics/* ./graphics
+#no default settings files
+#cp tilePlacementGames/game1/gameSource/settings/* ./settings
 
-echo "Run Between to play."
-
-
-
-
+echo "Run Primrose to play."
