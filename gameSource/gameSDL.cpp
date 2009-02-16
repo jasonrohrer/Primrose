@@ -25,6 +25,8 @@ int main( int inArgCount, char **inArgs ) {
 #include <GL/gl.h>
 
 
+#include "minorGems/util/stringUtils.h"
+
 
 // callbacks, originally for GLUT, called by our SDL main loop below
 void callbackMotion( int inX, int inY );
