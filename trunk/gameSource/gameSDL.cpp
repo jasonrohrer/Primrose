@@ -298,9 +298,9 @@ int mainFunction( int inNumArgs, char **inArgs ) {
             Uint32 doneTime = SDL_GetTicks();
             Uint32 totalTime =  doneTime - frameBatchStartTime;
             
-            float fps = (float)frameBatchCount / (totalTime / 1000.0f);
+            //float fps = (float)frameBatchCount / (totalTime / 1000.0f);
             
-            printf( "FPS = %f\n", fps );
+            //printf( "FPS = %f\n", fps );
             
 
 
