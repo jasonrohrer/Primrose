@@ -19,6 +19,10 @@ char isGameOver();
 void scoreSent();
 
 
+// true if name set, false if default has never been edited
+char getNameSet();
+
+
 
 // returns actual 8-character array (9 chars, including \0 terminator)
 // edit name by changing characters in the array

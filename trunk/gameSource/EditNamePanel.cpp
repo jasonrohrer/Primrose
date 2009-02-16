@@ -1,3 +1,4 @@
+#include "MenuPanel.h"
 #include "EditNamePanel.h"
 
 #include "numeral.h"
@@ -16,7 +17,10 @@
 EditNamePanel::EditNamePanel( int inW, int inH )
         : Panel( inW, inH ),
           mName( getName() ),
-          mOverrideName( NULL ) {
+          mOverrideName( NULL ),
+          mSendButton( inW - 19 - 21, 19 + 21, "send" ),
+          mScoreToPost( NULL ),
+          mScoreHandler( NULL ) {
           
     
     int i=0;
@@ -78,8 +82,11 @@ EditNamePanel::EditNamePanel( int inW, int inH )
             }
         }
     
+
+    mSendButton.setVisible( false );
     
-    
+    addButton( &mSendButton );
+        
     }
 
 
@@ -93,6 +100,22 @@ EditNamePanel::~EditNamePanel() {
         delete [] mOverrideName;
         mOverrideName = NULL;
         }
+
+    if( mScoreToPost != NULL ) {
+        delete mScoreToPost;
+        }
+    
+    }
+
+
+void EditNamePanel::setScoreToPost( ScoreBundle *inScore,
+                                    Panel *inScoreHandler ) {
+    if( mScoreToPost != NULL ) {
+        delete mScoreToPost;
+        }
+    mScoreToPost = inScore;
+    
+    mScoreHandler = inScoreHandler;
     }
 
 
@@ -106,6 +129,16 @@ void EditNamePanel::setVisible( char inIsVisible ) {
             delete [] mOverrideName;
             mOverrideName = NULL;
             }
+
+
+        if( mScoreToPost == NULL ) {
+            mSendButton.setVisible( false );
+            }
+        else {
+            mSendButton.setVisible( true );
+            }
+        
+        
         }
     }
 
@@ -121,6 +154,41 @@ char EditNamePanel::pointerUp( int inX, int inY ) {
     
 
     if( ! isSubPanelVisible() ) {
+
+        if( mSendButton.isVisible()
+            && mSendButton.isInside( inX, inY ) ) {
+           
+             // treat as if close pressed
+            // (save name, etc)
+            closePressed();
+
+            if( strlen( mName ) > 0 ) {
+                // replace the name in the bundle with the name 
+                // actually entered
+                
+                // blindly copy all 9 characters, which will include
+                // a \0 somewhere in the middle
+                memcpy( mScoreToPost->mName, mName, 9 );
+                }
+            // else leave default name in place (instead of sending blank
+            // name to server)
+            
+ 
+            MenuPanel *menuPanel = (MenuPanel *)mScoreHandler;
+
+            // this will pop up the high score loading panel
+            menuPanel->postScore( mScoreToPost );
+            mScoreToPost = NULL;
+            mScoreHandler = NULL;
+            
+            // prevent double-sends
+            // since we're not
+            // actually popping up a sub panel here to block button presses
+            mSendButton.setVisible( false );
+            
+            return true;
+            }
+        
 
 
         for( int i=0; i<28; i++ ) {
