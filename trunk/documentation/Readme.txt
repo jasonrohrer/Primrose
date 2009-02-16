@@ -1,1 +1,1 @@
-Instructions are included in the game.  Press P to access the menu.
+Instructions are included in the game.  Press [P] button to access the menu.
