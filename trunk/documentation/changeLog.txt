@@ -1,0 +1,21 @@
+Version 2    ???
+
+--Added secure hashing of saved game settings files to make saved game hacking
+  more difficult.
+
+--Improved tutorial text.
+
+--Improved server logging.
+
+--Added pop-up of name editing screen on first score submission.  In v1, the 
+  default name would silently be sent.
+
+--Fixed a memory issue in DNS lookup that could cause a crash if high
+  score screen loaded and canceled repeatedly in quick sucession.
+
+
+
+
+Version 1    2009-February-11
+
+--iPhone version submitted to Apple.
