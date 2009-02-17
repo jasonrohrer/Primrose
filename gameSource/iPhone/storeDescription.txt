@@ -1,4 +1,4 @@
-A captivating tile-clearing puzzle game by world-renowned independent designer Jason Rohrer.
+A captivating tile-clearing puzzle game by award-winning independent designer Jason Rohrer.
 
 If you find the crowd of copycat match-3 games to be mindless and boring...
 
@@ -6,7 +6,7 @@ If you're looking for an elegant, deep puzzle game that's completely fresh...
 
 Then you should take a look at Primrose, which you can test for free (full version) on Mac, Windows, and GNU/Linux here:  http://primrose.sf.net
 
-Primrose's gameplay is deceptively simple:  You're given randomly chosen pairs of colored tiles that you must place on a 7x7 grid.  Surround a group of tiles with another color to remove the group.  The surrounding tiles flip to the color of the group that was removed.  When tiles flip color, chain reactions are possible.  Larger groups cleared and longer chain reactions are awarded more points.
+Primrose's gameplay is deceptively simple:  You're given random pairs of colored tiles that you must place on a 7x7 grid.  When you surround a group of one color with another color, the surrounded group clears, scoring points.  The surrounding tiles flip to the color of the tiles that were cleared.  When tiles flip color, chain reactions are possible.  Larger groups and longer chain reactions are awarded more points.
 
 As the game progresses, more colors are added to the pool, making the grid more and more constrained.  Pressure builds until the grid finally fills up, and the game ends.
 
@@ -23,7 +23,7 @@ Primrose includes the following features:
 
 --Comprehensive instruction pages with realtime, animated examples.
 
---Glowing, pulsating, retro graphics and analog synth inspired sound effects.
+--Glowing, pulsating, retro graphics and analog synth-inspired sound effects.
 
 --Behaves like a proper iPhone app by auto-saving game progress during calls and other interruptions.  Take the call, then resume right where you left off after the call ends.  
 
