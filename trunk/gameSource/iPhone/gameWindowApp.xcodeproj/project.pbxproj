@@ -659,7 +659,7 @@
 					"-DIPHONE",
 				);
 				PRODUCT_NAME = Primrose;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5B60B20B-1465-447B-A37B-A8DB5DBC1BD8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0631DE58-4088-4D02-A3C3-41FECB0261EA";
 			};
 			name = "Distribution Ad Hoc";
 		};
