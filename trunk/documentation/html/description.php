@@ -10,7 +10,7 @@ If you find the crowd of copycat match-3 games to be mindless and boring...<br>
 <br>
 If you're looking for an elegant, deep puzzle game that's completely fresh...<br>
 <br>
-Then you should take a look at Primrose, which you can test for free (full version) on Mac, Windows, and GNU/Linux <a href="http://primrose.sf.net/downloads.php">here</a>.<br>
+Then you should take a look at Primrose, which you can test for free (full version) on Mac, Windows, and GNU/Linux <a href="download.php">here</a>.<br>
 <br>
 Primrose's gameplay is deceptively simple:  You're given random pairs of colored tiles that you must place on a 7x7 grid.  When you surround a group of one color with another color, the surrounded group clears, scoring points.  The surrounding tiles flip to the color of the tiles that were cleared.  When tiles flip color, chain reactions are possible.  Larger groups and longer chain reactions are awarded more points.<br>
 <br>
