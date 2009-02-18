@@ -11,7 +11,7 @@ Version 2    ???
   default name would silently be sent.
 
 --Fixed a memory issue in DNS lookup that could cause a crash if high
-  score screen loaded and canceled repeatedly in quick sucession.
+  score screen loaded and canceled repeatedly in quick succession.
 
 --Added more verbose error messages for failed network operations.
 
