@@ -15,5 +15,4 @@ Mac/Win/Linux Downloads
 
 Coming soon to iPhone, Mac, Windows, and GNU/Linux.
 
-
-<?php  include_once( "foot.html" ); ?>
+<!--#include virtual="/foot.html" -->
