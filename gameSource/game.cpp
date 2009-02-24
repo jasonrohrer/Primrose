@@ -35,6 +35,11 @@ unsigned int gameSeed = time( NULL );
 CustomRandomSource randSource( gameSeed );
 
 
+// global used to track how many sprite draws occur per frame
+int spriteDrawCount = 0;
+
+
+
 int screenW, screenH;
 
 
@@ -1485,6 +1490,10 @@ void drawFrame() {
         }
     
 
+    spriteDrawCount = 0;
+    
+
+
     if( !somePanelFullyVisible ) {
         
         for( i=0; i<numGridSpaces; i++ ) {
@@ -1552,7 +1561,9 @@ void drawFrame() {
     for( i=0; i<numPanels; i++ ) {
         allPanels[i]->draw();
         }
-    
+
+
+    printf( "%d sprites drawn this frame\n", spriteDrawCount );
 
     }
 
