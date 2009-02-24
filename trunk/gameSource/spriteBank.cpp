@@ -72,6 +72,10 @@ void freeSpriteBank() {
 
 
 
+// global
+extern int spriteDrawCount;
+
+
 
 void drawSprite( SpriteHandle inSpriteHandle,
                  float inCenterX, float inCenterY, 
@@ -163,6 +167,8 @@ void drawSprite( SpriteHandle inSpriteHandle,
     glEnd();
     */
     texture->disable();
+
+    spriteDrawCount ++;
 
     }
 
