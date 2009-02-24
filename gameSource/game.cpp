@@ -1565,7 +1565,7 @@ void drawFrame() {
         }
 
 
-    printf( "%d sprites drawn this frame\n", spriteDrawCount );
+    //printf( "%d sprites drawn this frame\n", spriteDrawCount );
 
     }
 
