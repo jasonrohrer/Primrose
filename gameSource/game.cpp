@@ -1463,9 +1463,9 @@ void drawFrame() {
                     unsigned int spaceNumber = base49Decode( 
                         gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
                     
-                    gamePlaybackStep ++;
-                    
                     placeNextPieceAt( spaceNumber );
+
+                    gamePlaybackStep ++;
                     }
 
 

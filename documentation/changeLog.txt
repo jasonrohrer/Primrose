@@ -1,4 +1,10 @@
-Version 2    ???
+Version 3    ??
+
+--Fixed a bug in game replay after app resumes.
+
+
+
+Version 2    2009-February-19
 
 --Added secure hashing of saved game settings files to make saved game hacking
   more difficult.
