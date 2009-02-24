@@ -516,14 +516,18 @@ void ColorPool::draw( float inAlpha ) {
             
 
 
-            // fade out 1 on last space as color fades in
+            if( alpha > 0 ) {
+                
+                // fade out 1 on last space as color fades in
             
-            (*counterDrawingFunction)( 
-                1,
-                mSpaces[lastSpaceIndex]->mX + counterXOffset,  
-                mSpaces[lastSpaceIndex]->mY + counterYOffset,
-                thisNumberColor,
-                alpha * inAlpha );
+                (*counterDrawingFunction)( 
+                    1,
+                    mSpaces[lastSpaceIndex]->mX + counterXOffset,  
+                    mSpaces[lastSpaceIndex]->mY + counterYOffset,
+                    thisNumberColor,
+                    alpha * inAlpha );
+                }
+            
             }
 
 
@@ -542,19 +546,23 @@ void ColorPool::draw( float inAlpha ) {
                 alpha = 1 - mSpaces[lastSpaceIndex]->mDrawColor->a;
                 }
             
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE );
-            thisNumberColor = &colorAddCountColor;
+            if( alpha > 0 ) {
             
-            counterDrawingFunction = addCounterDrawingFunction;
-            counterXOffset = 0;
-            counterYOffset = 0;
-
-            (*counterDrawingFunction)( 
-                1,
-                mSpaces[lastSpaceIndex]->mX + counterXOffset,  
-                mSpaces[lastSpaceIndex]->mY + counterYOffset,
-                thisNumberColor,
-                alpha * inAlpha );
+                glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+                thisNumberColor = &colorAddCountColor;
+            
+                counterDrawingFunction = addCounterDrawingFunction;
+                counterXOffset = 0;
+                counterYOffset = 0;            
+                
+                (*counterDrawingFunction)( 
+                    1,
+                    mSpaces[lastSpaceIndex]->mX + counterXOffset,  
+                    mSpaces[lastSpaceIndex]->mY + counterYOffset,
+                    thisNumberColor,
+                    alpha * inAlpha );
+                }
+            
             }
         
             

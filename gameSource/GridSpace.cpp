@@ -245,9 +245,11 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
         }
 
     if( mPieceColor == NULL && mScore > 0 ) {
+        float pipAlpha = mColorShiftProgress * mScoreFade * inAlpha;
         
-        drawScorePip( mScore, mX, mY, &scorePipColor, 
-                      mColorShiftProgress * mScoreFade * inAlpha );
+        if( pipAlpha > 0 ) {    
+            drawScorePip( mScore, mX, mY, &scorePipColor, pipAlpha );
+            }
         
         }
     
@@ -272,7 +274,7 @@ void GridSpace::drawPieceHalo( float inAlpha ) {
         drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, 
                     mDrawColor->a * inAlpha );
     
-        if( mBrightHalo ) {
+        if( mBrightHalo && mBrightHaloProgress > 0 ) {
             //for( int i=0; i<4; i++ ) {
                 
                 drawSprite( pieceBrightHalo, mX, mY, 32, 32, mDrawColor, 
