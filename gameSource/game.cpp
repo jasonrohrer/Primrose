@@ -1067,63 +1067,71 @@ char checkAndClear() {
             Color *c = space->checkSurrounded();
         
             if( c != NULL ) {
-                delete c;
                 
-                // all visited spaces part of group
+                // space returns its own color if its group is
+                // surrounded by nothing but edges
+                // must be surrounded by another color (not just edges)
+                // to clear
+                if( ! space->colorMatches( c ) ) {
                 
-                // tally score
-                int groupSize = 0;
+                    // all visited spaces part of group
                 
-                int groupColorIndex = -1;
+                    // tally score
+                    int groupSize = 0;
                 
-                // accumulate average volume
-                float leftEarWeight = 0;
-                float rightEarWeight = 0;
+                    int groupColorIndex = -1;
+                
+                    // accumulate average volume
+                    float leftEarWeight = 0;
+                    float rightEarWeight = 0;
                 
 
-                for( i=0; i<numGridSpaces; i++ ) {
-                    if( allSpaces[i]->mVisited ) {
-                        allSpaces[i]->mMarkedForClearing = true;
+                    for( i=0; i<numGridSpaces; i++ ) {
+                        if( allSpaces[i]->mVisited ) {
+                            allSpaces[i]->mMarkedForClearing = true;
                         
-                        groupColorIndex = allSpaces[i]->getColorIndex();
+                            groupColorIndex = allSpaces[i]->getColorIndex();
                         
-                        groupSize ++;
+                            groupSize ++;
 
-                        float lV, rV;
-                        int x = i % gridW;
+                            float lV, rV;
+                            int x = i % gridW;
                         
-                        computeEarLoudness( x, &lV, &rV );
-                        leftEarWeight += lV;
-                        rightEarWeight += rV;
+                            computeEarLoudness( x, &lV, &rV );
+                            leftEarWeight += lV;
+                            rightEarWeight += rV;
+                            }
                         }
-                    }
 
                 
                 
-                // play at most one per round
-                if( !playingClearingSound && soundOn ) {
+                    // play at most one per round
+                    if( !playingClearingSound && soundOn ) {
                     
-                    // start sounds
-                    playClearingSound( groupColorIndex, groupSize,
-                                       chainLength,
-                                       leftEarWeight / groupSize,
-                                       rightEarWeight / groupSize );
-                    playingClearingSound = true;
-                    }
+                        // start sounds
+                        playClearingSound( groupColorIndex, groupSize,
+                                           chainLength,
+                                           leftEarWeight / groupSize,
+                                           rightEarWeight / groupSize );
+                        playingClearingSound = true;
+                        }
                 
                 
-                // set score for them all
-                for( i=0; i<numGridSpaces; i++ ) {
-                    if( allSpaces[i]->mVisited ) {
-                        allSpaces[i]->mScore = 
-                            (int)( pow( groupSize, 2 ) )
-                            *
-                            (int)( pow( chainLength, 4 ) )
-                            * 
-                            (int)( pow( levelOfPlacement, 2 ) );
+                    // set score for them all
+                    for( i=0; i<numGridSpaces; i++ ) {
+                        if( allSpaces[i]->mVisited ) {
+                            allSpaces[i]->mScore = 
+                                (int)( pow( groupSize, 2 ) )
+                                *
+                                (int)( pow( chainLength, 4 ) )
+                                * 
+                                (int)( pow( levelOfPlacement, 2 ) );
+                            }
                         }
                     }
                 
+
+                delete c;
                 
                 }            
             }
@@ -1367,6 +1375,7 @@ void drawFrame() {
                     playStopButton->setVisible( false );
                     stepButton->setVisible( false );
                     fastSlowButton->setVisible( false );
+                    playbackFast = false;
                     gamePlaybackDone = true;
                     }
                 }
