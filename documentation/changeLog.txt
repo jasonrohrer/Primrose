@@ -1,6 +1,6 @@
 Version 3    ??
 
---Fixed a bug in game replay after app resumes.
+--Fixed a bug in game replay after app resumes.  Found by Peter Marquardt.
 
 
 
