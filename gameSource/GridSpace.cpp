@@ -213,7 +213,7 @@ void GridSpace::drawPieceCenter( float inAlpha ) {
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     //glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
-    if( mDrawColor != NULL ) {
+    if( mDrawColor != NULL  && mDrawColor->a > 0 ) {
         drawSprite( pieceCenter, mX, mY, 32, 32, mDrawColor, 
                     mDrawColor->a * inAlpha );
 
@@ -268,7 +268,7 @@ void GridSpace::drawPieceHalo( float inAlpha ) {
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     //glBlendFunc( GL_SRC_ALPHA, GL_ONE );
 
-    if( mDrawColor != NULL ) {
+    if( mDrawColor != NULL && mDrawColor->a > 0 ) {
         drawSprite( pieceHalo, mX, mY, 32, 32, mDrawColor, 
                     mDrawColor->a * inAlpha );
     
@@ -402,6 +402,8 @@ void GridSpace::step() {
         
         if( mScoreFade < 0 ) {
             mScoreFade = 0;
+            // done drawing score
+            mScore = 0;
             }
         }
     
