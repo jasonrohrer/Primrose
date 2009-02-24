@@ -61,7 +61,7 @@ GridSpace *spaces[gridW][gridH];
 GridSpace *allSpaces[ numGridSpaces ];
 
 
-#define numButtons 5
+#define numButtons 6
 
 Button *allButtons[ numButtons ];
 
@@ -70,6 +70,7 @@ Button *menuButton;
 Button *doneButton;
 Button *playStopButton;
 Button *stepButton;
+Button *fastSlowButton;
 
 
 #define numPanels 1
@@ -142,6 +143,8 @@ int stepsBetweenAutoMoves = 25;
 char manualStep = false;
 // for save/restore
 int savedPlaybackStep = 0;
+
+char playbackFast = false;
 
 
 
@@ -274,6 +277,8 @@ void newGame() {
     gameOver = false;
     scoreWasSent = false;
     
+    playbackFast = false;
+
 
     pointerX = -100;
     pointerY = -100;
@@ -341,6 +346,11 @@ void newGame() {
     stepButton = 
         new Button( undoButton->mX, undoButton->mY - 10, "step" );
 
+    // above menu button
+    fastSlowButton = 
+        new Button( menuButton->mX, stepButton->mY, "fast" );
+
+
     // same spot as done button
     playStopButton = 
         new Button( doneButton->mX, doneButton->mY, "run" );
@@ -350,13 +360,16 @@ void newGame() {
     allButtons[2] = doneButton;
     allButtons[3] = playStopButton;
     allButtons[4] = stepButton;
-
+    allButtons[5] = fastSlowButton;
+    
     undoButton->setVisible( false );
     menuButton->forceVisible();
     doneButton->setVisible( false );
     
     playStopButton->setVisible( false );
     stepButton->setVisible( false );
+    
+    fastSlowButton->setVisible( false );
     
     
     if( gameToPlayback != NULL ) {
@@ -455,7 +468,6 @@ void playbackGame( ScoreBundle *inBundle ) {
     stepsSinceLastAutoMove = 0;
     manualStep = false;
     
-
     //printf( "Playing back game with moves:\n%s\n", inBundle->mMoveHistory );
     
 
@@ -1274,7 +1286,11 @@ void drawFrame() {
     
     for( i=0; i<numGridSpaces; i++ ) {
         allSpaces[i]->step();
-
+        if( playbackFast ) {
+            // double-step
+            allSpaces[i]->step();
+            }
+        
         animDone &= allSpaces[i]->isAnimationDone();
         }
 
@@ -1289,7 +1305,14 @@ void drawFrame() {
     nextPiece->step();
     
     colorPool->step();
-    
+
+    if( playbackFast ) {
+        // double-step
+        nextPiece->step();
+        
+        colorPool->step();
+        }
+        
 
 
 
@@ -1343,6 +1366,7 @@ void drawFrame() {
                     // done with playback
                     playStopButton->setVisible( false );
                     stepButton->setVisible( false );
+                    fastSlowButton->setVisible( false );
                     gamePlaybackDone = true;
                     }
                 }
@@ -1458,7 +1482,9 @@ void drawFrame() {
         
         if( gameToPlayback != NULL && !gamePlaybackDone ) {
             
-            if( autoPlay && stepsSinceLastAutoMove > stepsBetweenAutoMoves
+            if( autoPlay && 
+                ( playbackFast || 
+                  stepsSinceLastAutoMove > stepsBetweenAutoMoves )
                 ||
                 manualStep ) {
                 
@@ -1680,18 +1706,33 @@ void pointerUp( float inX, float inY ) {
             else if( allButtons[i] == playStopButton ) {
                 if( autoPlay ) {
                     playStopButton->setString( "run" );
+                    
+                    playbackFast = false;
                     }
                 else {
                     playStopButton->setString( "stop" );
+                    
+                    playbackFast = false;
+                    fastSlowButton->setString( "fast" );
                     }
-                autoPlay = !autoPlay;
-                
-                stepButton->setVisible( !autoPlay );                    
+                autoPlay = !autoPlay;    
+
+                stepButton->setVisible( !autoPlay );
+                fastSlowButton->setVisible( autoPlay );
                 }
             else if( allButtons[i] == stepButton ) {
                 manualStep = true;
                 // disable during step animations
                 stepButton->setVisible( false );
+                }
+            else if( allButtons[i] == fastSlowButton ) {
+                if( playbackFast ) {
+                    fastSlowButton->setString( "fast" );
+                    }
+                else {
+                    fastSlowButton->setString( "slow" );
+                    }
+                playbackFast = !playbackFast;
                 }
             }
         }
