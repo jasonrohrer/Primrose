@@ -168,9 +168,6 @@ void NextPieceDisplay::draw( float inAlpha ) {
 
     if( mSpaces[0]->mDrawColor != NULL ) {
         
-
-        glEnable( GL_BLEND );
-    
         float glowVal = sin( mBlinkTime - M_PI / 2 ) * 0.5 + 0.5;
         
         //printf( "glow val = %f\n", glowVal );
@@ -179,23 +176,30 @@ void NextPieceDisplay::draw( float inAlpha ) {
         
         glowVal *= 0.5;
         
-        
-        drawSprite( pieceBrightHalo, 
-                    mSpaces[0]->mX, mSpaces[0]->mY, 
-                    32, 32, mSpaces[0]->mDrawColor, 
-                    glowVal * inAlpha );
+
+        if( glowVal > 0 ) {
+
+            glEnable( GL_BLEND );
+            
+            
+            
+            drawSprite( pieceBrightHalo, 
+                        mSpaces[0]->mX, mSpaces[0]->mY, 
+                        32, 32, mSpaces[0]->mDrawColor, 
+                        glowVal * inAlpha );
     
 
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE );
-        Color white( 1, 1, 1, 1 );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+            Color white( 1, 1, 1, 1 );
         
-        drawSprite( pieceBrightCenter, 
-                    mSpaces[0]->mX, mSpaces[0]->mY, 
-                    32, 32, &white, 
-                    glowVal * inAlpha );
+            drawSprite( pieceBrightCenter, 
+                        mSpaces[0]->mX, mSpaces[0]->mY, 
+                        32, 32, &white, 
+                        glowVal * inAlpha );
     
-        glDisable( GL_BLEND );
-
+            glDisable( GL_BLEND );
+            }
+        
         if( mSpaces[0]->mDrawColor->a == 0 ) {
             // start blinking over again
             mBlinkTime = 0;

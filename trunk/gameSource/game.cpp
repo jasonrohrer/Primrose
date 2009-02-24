@@ -1529,9 +1529,11 @@ void drawFrame() {
                           1 - scoreTransitionProgress );
             }
         
-        drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
-                      scoreTransitionProgress );
-
+        if( scoreTransitionProgress > 0 ) {  
+            drawScoreBig( score, 320 - 19, nextPiece->mY + 41, &scoreColor,
+                          scoreTransitionProgress );
+            }
+        
 
         
         if( titleFade > 0 && !titleBlocked ) {
