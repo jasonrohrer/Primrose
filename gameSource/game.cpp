@@ -1035,6 +1035,16 @@ void computeEarLoudness( int inPieceX,
 
 
 
+int computeGroupScoreFactor( int inGroupSize ) {
+    if( inGroupSize < 11 ) {
+        return (int)( 10 * sqrt( inGroupSize ) );
+        }
+    else {
+        return inGroupSize + 21;
+        }
+    }
+
+
 
 // one round of non-chained clearing
 // returns true if some pieces cleared
@@ -1132,12 +1142,12 @@ char checkAndClear() {
                             // new scoring
                             allSpaces[i]->mScore = 
                                 (int) (
-                                    sqrt( groupSize )
+                                    // level bonus added in instead of 
+                                    // multiplied
+                                    ( computeGroupScoreFactor( groupSize )
+                                      + 5 * (levelOfPlacement - 1) )
                                     *
-                                    pow( chainLength, 4 )
-                                    * 
-                                    // level multiplier hits 2.0 by level 11
-                                    ( 1.0 + 0.1 * (levelOfPlacement - 1) ) );
+                                    pow( chainLength, 4 ) );
                             }
                         }
                     }
