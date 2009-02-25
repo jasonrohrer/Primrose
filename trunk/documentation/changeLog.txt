@@ -1,6 +1,6 @@
 Version 3    ??
 
---Rebalanced and toned down scoring system.
+--Rebalanced scoring formula.
 
 --Added a more robust mechanism for ending the game.
 
