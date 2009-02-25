@@ -231,7 +231,7 @@ void TutorialPanelB::step() {
             int oldColorIndex = mInnerSpaces[0]->getColorIndex();
 
             for( i=0; i<4; i++ ) {
-                mInnerSpaces[i]->mScore = 16;
+                mInnerSpaces[i]->mScore = 2;
                 mInnerSpaces[i]->flipToClear();
                 
                 float lV, rV;

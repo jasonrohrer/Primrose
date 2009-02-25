@@ -1120,12 +1120,24 @@ char checkAndClear() {
                     // set score for them all
                     for( i=0; i<numGridSpaces; i++ ) {
                         if( allSpaces[i]->mVisited ) {
+                            /*
+                              // old scoring
                             allSpaces[i]->mScore = 
                                 (int)( pow( groupSize, 2 ) )
                                 *
                                 (int)( pow( chainLength, 4 ) )
                                 * 
                                 (int)( pow( levelOfPlacement, 2 ) );
+                            */
+                            // new scoring
+                            allSpaces[i]->mScore = 
+                                (int) (
+                                    sqrt( groupSize )
+                                    *
+                                    pow( chainLength, 4 )
+                                    * 
+                                    // level multiplier hits 2.0 by level 11
+                                    ( 1.0 + 0.1 * (levelOfPlacement - 1) ) );
                             }
                         }
                     }
