@@ -1,7 +1,19 @@
 Version 3    ??
 
+--Rebalanced and toned down scoring system.
+
+--Added a more robust mechanism for ending the game.
+
+--Migrated to a fresh online leaderboard.
+
 --Fixed a bug in game replay after app resumes.  Found by Peter Marquardt.
 
+--Improved efficiency of drawing routines.
+
+--Added a fast button for game replays.
+
+
+ 
 
 
 Version 2    2009-February-19
