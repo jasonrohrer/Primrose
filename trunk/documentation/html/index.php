@@ -25,4 +25,11 @@
 <font size=5><a href="download.php">Downloads</a></font><br>
 Mac, Windows, and GNU/Linux
 
- <?php  include_once( "foot.html" ); ?>
+<br>
+<br>
+<br>
+Version 3 rebalances the score formula, improving the game, and moves everyone to a new high score server.<br>
+<br>
+Version 3 is available for Mac/Win/Linux now.  The iPhone update is pending Apple approval.
+
+<?php  include_once( "foot.html" ); ?>
