@@ -7,13 +7,13 @@
 <br>
 
 <ul>
-<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v2_Windows.exe">Primrose_v2_Windows.exe</a>
+<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v3_Windows.exe">Primrose_v3_Windows.exe</a>
 <br><br>
 
-<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v2_MacOSX.dmg">Primrose_v2_MacOSX.dmg</a>
+<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v3_MacOSX.dmg">Primrose_v3_MacOSX.dmg</a>
 <br><br>
 
-<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v2_UnixSource.tar.gz">Primrose_v2_UnixSource.tar.gz</a>
+<li><a href="http://downloads.sourceforge.net/primrose/Primrose_v3_UnixSource.tar.gz">Primrose_v3_UnixSource.tar.gz</a>
 </ul>
 <br>
 <br>

@@ -1,4 +1,4 @@
-Version 3    ??
+Version 3    2009-February-25
 
 --Rebalanced scoring formula.
 
