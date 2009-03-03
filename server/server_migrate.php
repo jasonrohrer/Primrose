@@ -307,6 +307,22 @@ function ps_clearLog() {
 
 
 function ps_fetchScores() {
+
+    echo "4\n";
+
+    echo "please#0#0#IMdhlnmY\n";
+    echo "download#0#0#IMdhlnmY\n";
+    echo "new#0#0#IMdhlnmY\n";
+    echo "version#0#0#IMdhlnmY\n";
+    
+        
+    echo "0\n";
+
+
+    return;
+    
+
+    
     global $tableNamePrefix, $listSize;
     
     $query = "SELECT * FROM $tableNamePrefix"."all_time_scores ".
