@@ -28,8 +28,7 @@ Mac, Windows, and GNU/Linux
 <br>
 <br>
 <br>
-Version 3 rebalances the score formula, improving the game, and moves everyone to a new high score server.<br>
-<br>
-Version 3 is available for Mac/Win/Linux now.  The iPhone update is pending Apple approval.
+Version 3 rebalances the score formula, improving the game, and moves everyone to a new high score server. It also adds a FAST button for game replays.
+
 
 <?php  include_once( "foot.html" ); ?>
