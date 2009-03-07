@@ -375,6 +375,9 @@ int WebRequest::step() {
                         &( contentStart[ strlen( contentStartString ) ] );
 
 
+                    // pointer arithmetic:
+                    // ugly, but we don't know that result does not contain
+                    // \0, so we can't use streln to find result length
                     int resultLength =
                         responseLength
                         - strlen( contentStartString )
