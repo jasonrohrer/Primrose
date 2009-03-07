@@ -378,7 +378,7 @@ int WebRequest::step() {
                     int resultLength =
                         responseLength
                         - strlen( contentStartString )
-                        - ( (int)contentStart - (int)responseString );
+                        - (int)( contentStart - responseString );
 
                     mResult = new char[ resultLength + 1 ];
                     memcpy( mResult,
