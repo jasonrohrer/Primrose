@@ -4,9 +4,13 @@
 <font size=5>From the App Store description:</font><br>
 <br>
 
-A captivating tile-clearing puzzle game by award-winning independent designer <a href="http://hcsoftware.sf.net/jason-rohrer">Jason Rohrer</a>.<br>
+"A surprisingly deep and varied puzzle game that's well-worth your time." --<a href="http://jayisgames.com/archives/2009/03/mobile_monday_8.php">JayIsGames</a><br>
 <br>
-If you find the crowd of copycat match-3 games to be mindless and boring...<br>
+
+
+Primrose is a captivating tile-clearing puzzle game by award-winning independent designer <a href="http://hcsoftware.sf.net/jason-rohrer">Jason Rohrer</a>.<br>
+<br>
+If you're bored by the crowd of copycat match-3 games...<br>
 <br>
 If you're looking for an elegant, deep puzzle game that's completely fresh...<br>
 <br>
@@ -18,7 +22,7 @@ As the game progresses, more colors are added to the pool, making the grid more 
 <br>
 Despite this mounting pressure, the game doesn't have a frantic feel, because you have as much time as you want to make each move.  Whereas games like Tetris depend on getting faster and faster to be challenging, Primrose derives deep challenge from inherent properties of its mechanics.<br>
 <br>
-But comparisons with Tetris aren't very helpful, because Primrose does not have you dropping tiles down a well.  Primrose also doesn't have you swapping adjacent tiles like so many match-3 games.  So what comparison is useful?  Primrose is a small bit like Go and Othello (if either of those were one-player games), a small bit like Lights Out, and a big bit like nothing you've every played before---and that big bit is a good thing.<br>
+But comparisons with Tetris aren't very helpful, because Primrose does not have you dropping tiles down a well.  Primrose also doesn't have you swapping adjacent tiles like so many match-3 games.  So what comparison is useful?  Primrose is a small bit like Go and Othello (if either of those were one-player games), a small bit like Lights Out, and a big bit like nothing you've every played before.<br>
 <br>
 <br>
 Primrose includes the following features:
