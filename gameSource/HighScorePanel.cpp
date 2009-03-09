@@ -212,6 +212,8 @@ char HighScorePanel::pointerUp( int inX, int inY ) {
                 setVisible( false );
                 
                 playbackGame( mAllScores[i]->copy() );
+                
+                return true;
                 }
             }
         }

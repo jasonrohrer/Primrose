@@ -2,6 +2,10 @@ Version 4   ???
 
 --Fixed to compile on 64-bit platforms.
 
+--Fixed bug where button presses on high score panel were being passed through
+  to the underlying menu panel (toggling color blind mode accidentally, for
+  example).
+
 
 
 Version 3    2009-February-25
