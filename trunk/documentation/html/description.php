@@ -4,7 +4,11 @@
 <font size=5>From the App Store description:</font><br>
 <br>
 
+"A stand-out puzzler... it definitely has the stuff to become a new puzzle classic." --<a href="http://www.iphonegamenetwork.com/primrose-review">iPhone Games Network</a><br>
+<br>
+
 "A surprisingly deep and varied puzzle game that's well-worth your time." --<a href="http://jayisgames.com/archives/2009/03/mobile_monday_8.php">JayIsGames</a><br>
+<br>
 <br>
 
 
