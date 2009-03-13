@@ -20,7 +20,10 @@ extern char colorblindMode;
 
 
 GridSpace::GridSpace( int inX, int inY )
-        :mX( inX ), mY( inY ), mActive( false ), mVisited( false ),
+        :mX( inX ), mY( inY ), 
+         mActive( false ),
+         mActiveMarkerVisible( true ),
+         mVisited( false ),
          mChecked( false ),
          mMarkedForClearing( false ),
          mScore( 0 ),
@@ -410,8 +413,8 @@ void GridSpace::step() {
         }
     
     
-
-    if( mActive && mActiveProgress < 1 ) {
+    // only allow marker to grow in visibiltiy if visible flag set
+    if( mActive && mActiveMarkerVisible &&mActiveProgress < 1 ) {
         mActiveProgress += 0.2;
         
         if( mActiveProgress > 1 ) {
