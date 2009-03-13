@@ -96,6 +96,10 @@ class GridSpace {
         int mX, mY;
         
         char mActive;
+        // can be used to turn off active marker even when mActive is true
+        // (for fast playback mode)
+        // defaults to true (visible)
+        char mActiveMarkerVisible;
         
         char mVisited;
         char mChecked;

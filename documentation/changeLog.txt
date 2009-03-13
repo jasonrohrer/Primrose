@@ -1,10 +1,20 @@
 Version 4   ???
 
 --Fixed to compile on 64-bit platforms.
+  Reported by Johaan Strojandogg.
 
 --Fixed bug where button presses on high score panel were being passed through
   to the underlying menu panel (toggling color blind mode accidentally, for
   example).
+
+--Fixed crash when a new game is started before current tile animation is over.
+  Reported by Terry McGill.
+
+--Fixed potential checkpoint exploit.
+  Reported by Scott Lawrence.
+
+--Hid grid space active markers (plus signs) during fast playback to deal with
+  annoying flickering effect.
 
 
 

@@ -256,6 +256,11 @@ void newGame() {
     
     randSource.reseed( gameSeed );
     
+
+    piecePlaced = false;
+    levelOfPlacement = 1;
+    
+
     
     lastGridX = -1;
     lastGridY = -1;
@@ -961,8 +966,7 @@ void freeFrameDrawer() {
 
         
         SettingsManager::setHashingOn( false );
-        }
-    
+        }    
 
 
     endGame();
@@ -1281,6 +1285,25 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
 void drawFrame() {
     if( mustRestart ) {
         endGame();
+
+
+        // we need to prevent people from using the last saved state,
+        // which lingers after a new game is started, as a checkpoint.
+        // If they play no moves in the new game before quitting, they
+        // can restart Primrose later and get back into the old saved state,
+        // EVEN IF they made some moves past the saved state before starting
+        // the new game.
+
+        // disable the last saved state:
+
+        SettingsManager::setHashingOn( true );
+
+        SettingsManager::setSetting( "saved", "0" );
+        
+        SettingsManager::setHashingOn( false );
+
+
+
         newGame();
 
         mustRestart = false;
@@ -1750,6 +1773,13 @@ void pointerUp( float inX, float inY ) {
 
                 stepButton->setVisible( !autoPlay );
                 fastSlowButton->setVisible( autoPlay );
+
+                // re-enable display of active markers if coming out of
+                // fast mode here.
+                for( i=0; i<numGridSpaces; i++ ) {
+                    allSpaces[i]->mActiveMarkerVisible = !playbackFast;
+                    }
+
                 }
             else if( allButtons[i] == stepButton ) {
                 manualStep = true;
@@ -1764,6 +1794,13 @@ void pointerUp( float inX, float inY ) {
                     fastSlowButton->setString( "slow" );
                     }
                 playbackFast = !playbackFast;
+
+                // disable display of active markers in fast mode
+                // (because they flicker in an annoying way)
+                for( i=0; i<numGridSpaces; i++ ) {
+                    allSpaces[i]->mActiveMarkerVisible = !playbackFast;
+                    }
+                
                 }
             }
         }
