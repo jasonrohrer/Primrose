@@ -184,10 +184,7 @@ int ColorPool::getColorIndex( Color *inColor ) {
 void ColorPool::registerMove() {
     mSomeMovesMade = true;
     
-    if( ! mEndPhase ) {
-        
-        mStepsUntilUpdate --;
-        }
+    mStepsUntilUpdate --;
     
     mStepCountTransitionProgress = 0;
     
@@ -220,14 +217,8 @@ void ColorPool::registerMove() {
                 }
             }
         else {
-
-            // skipping end mode now
-            
-            // instead, gray forever
-
-            /*
-
             // end mode.  One color at a time
+
             mNumActiveColors ++;
             mColorsToSkip++;
             
@@ -250,7 +241,7 @@ void ColorPool::registerMove() {
             mSpaces[i]->setColor( pieceColors[i].copy() );
             
             mLevel++;
-            */
+
             }
         
     
@@ -288,10 +279,7 @@ void ColorPool::registerMove() {
 
 
 void ColorPool::deRegisterMove() {
-    if( !mEndPhase ) {
-        mStepsUntilUpdate ++;
-        }
-    
+    mStepsUntilUpdate ++;
     mStepCountTransitionProgress = 0;
     mRewinding = true;
     }
@@ -318,42 +306,37 @@ void ColorPool::draw( float inAlpha ) {
         mSpaces[i]->drawPieceHalo( inAlpha );
         }
 
-
-    // switch counter drawing funciton and 
-    // counter position (removal counters)
-    // when in colorblind mode (so counter not on top of colorblind symbol)
-    
-    void (*addCounterDrawingFunction)( int, float, float, Color *, float );
-    void (*removeCounterDrawingFunction)( int, float, float, 
-                                          Color *, float );
-    addCounterDrawingFunction = &drawCounterBig;
-    
-    
-    float removeCounterXOffset;
-    float removeCounterYOffset;
-    
-    
-    if( !colorblindMode ) {
-        removeCounterDrawingFunction = &drawCounterBig;
-        removeCounterXOffset = 0;
-        removeCounterYOffset = 0;            
-        }
-    else {
-        removeCounterDrawingFunction = &drawCounter;
-        removeCounterXOffset = -20 + 8;
-        removeCounterYOffset = -20 + 5;            
-        }
-
-
-
-    // back to no counters drawn during end phase
-    if( !mEndPhase
+    if( true 
         // used to stop drawing counters in last phase
         // no longer is a last phase
         // || mNumActiveColors < numColors || mColorsToSkip < (numColors-1) 
         ) {
 
         
+        // switch counter drawing funciton and 
+        // counter position (removal counters)
+        // when in colorblind mode (so counter not on top of colorblind symbol)
+
+        void (*addCounterDrawingFunction)( int, float, float, Color *, float );
+        void (*removeCounterDrawingFunction)( int, float, float, 
+                                              Color *, float );
+        addCounterDrawingFunction = &drawCounterBig;
+        
+
+        float removeCounterXOffset;
+        float removeCounterYOffset;
+        
+
+        if( !colorblindMode ) {
+            removeCounterDrawingFunction = &drawCounterBig;
+            removeCounterXOffset = 0;
+            removeCounterYOffset = 0;            
+            }
+        else {
+            removeCounterDrawingFunction = &drawCounter;
+            removeCounterXOffset = -20 + 8;
+            removeCounterYOffset = -20 + 5;            
+            }
         
                 
         void (*counterDrawingFunction)( int, float, float, Color *, float );
@@ -586,35 +569,7 @@ void ColorPool::draw( float inAlpha ) {
         glDisable( GL_BLEND );
         }
     
-
-    if( mEndPhase ) {
-        
-        // ensure smooth "1" fade out on last color
-        
-        int lastSpaceIndex = numColors - 2;
-
-
-        if( mSpaces[lastSpaceIndex]->mDrawColor != NULL
-            &&
-            mSpaces[lastSpaceIndex]->mDrawColor->a > 0 ) {
-            
-            glEnable( GL_BLEND );
-            
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            
-
-            (*removeCounterDrawingFunction)( 
-                1,
-                mSpaces[lastSpaceIndex]->mX + removeCounterXOffset,  
-                mSpaces[lastSpaceIndex]->mY + removeCounterYOffset,
-                &colorRemoveCountColor,
-                mSpaces[lastSpaceIndex]->mDrawColor->a * inAlpha );
-            
-            glDisable( GL_BLEND );
-            }
-        }
     
-
     }
 
 
