@@ -259,10 +259,10 @@ void ColorPool::registerMove() {
         else {
             // random steps between updates
             
-            // between minSteps and 48 (just enough to not fill grid)
-
-            mStepsBetweenUpdates = randSource.getRandomBoundedInt( minSteps,
-                                                                   48 );
+            // between 48 (just enough to not fill grid)
+            // and 96 (just enough to not fill grid twice)
+            mStepsBetweenUpdates = randSource.getRandomBoundedInt( 48,
+                                                                   96 );
 
 
             if( mStepsBetweenUpdates % 2 != 0 ) {
