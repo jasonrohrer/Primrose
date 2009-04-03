@@ -1149,7 +1149,7 @@ char checkAndClear() {
                                     // level bonus added in instead of 
                                     // multiplied
                                     ( computeGroupScoreFactor( groupSize )
-                                      + 5 * (levelOfPlacement - 1) )
+                                      + 12 * (levelOfPlacement - 1) )
                                     *
                                     pow( chainLength, 4 ) );
                             }
