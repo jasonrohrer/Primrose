@@ -25,10 +25,6 @@
 <font size=5><a href="download.php">Downloads</a></font><br>
 Mac, Windows, and GNU/Linux
 
-<br>
-<br>
-<br>
-Version 3 rebalances the score formula, improving the game, and moves everyone to a new high score server. It also adds a FAST button for game replays.
 
 
 <?php  include_once( "foot.html" ); ?>

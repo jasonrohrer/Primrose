@@ -1,4 +1,4 @@
-Version 5   ????
+Version 5   2009-April-3
 
 --Further improved end game mechanism.
 
