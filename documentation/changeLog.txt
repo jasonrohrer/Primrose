@@ -1,6 +1,8 @@
 Version 5   ????
 
---Improved end game mechanism again.
+--Further improved end game mechanism.
+
+--Tweaked scoring formula to make end game worth more.
 
 --Migrated to a fresh online leaderboard.
 
