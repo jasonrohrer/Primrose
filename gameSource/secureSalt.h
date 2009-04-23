@@ -1,1 +1,1 @@
-#define secureSalt "secret_path_five"
+#define secureSalt "secret_path_six"

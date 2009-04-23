@@ -1,6 +1,16 @@
+Version 6   2009-April-3
+
+--Further improved end game mechanism.
+  (Count-downs for color transitions at end now hidden to thwart planning.)
+
+--Migrated to a fresh online leaderboard.
+
+
+
 Version 5   2009-April-3
 
 --Further improved end game mechanism.
+  (Back to cycling long runs of a single color at the end.)
 
 --Tweaked scoring formula to make end game worth more.
 
@@ -35,6 +45,8 @@ Version 3    2009-February-25
 --Rebalanced scoring formula.
 
 --Added a more robust mechanism for ending the game.
+  (Ends on an infinite run of a single color, filling board with a single
+   color ends the game.)
 
 --Migrated to a fresh online leaderboard.
 
