@@ -48,6 +48,10 @@ class ColorPool {
         // an even number of moves, and we only allow undo of the odd moves
         void deRegisterMove();
         
+
+        // tell the pool that a new seed has been set mid-game
+        void newSeed();
+        
         
         int getLevel() {
             return mLevel;

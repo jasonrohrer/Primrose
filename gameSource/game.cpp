@@ -830,6 +830,9 @@ void initFrameDrawer( int inWidth, int inHeight ) {
                 
                 randSource.reseed( newSeed );
                 
+                colorPool->newSeed();
+                
+
                 int numMoves = moveHistory.size();
 
                 char *delimiter = "__";
