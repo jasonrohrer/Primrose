@@ -2,6 +2,10 @@
 #define SCORE_BUNDLE_INCLUDED
 
 
+#include "minorGems/util/SimpleVector.h"
+
+
+
 
 class ScoreBundle {
         
@@ -9,9 +13,9 @@ class ScoreBundle {
         
         ScoreBundle( char *inName, 
                      unsigned int inScore, unsigned int inSeed,
-                     char *inMoveHistory );
+                     char *inSeedHistory, char *inMoveHistory );
         
-        // encoded as  name#score#seed#move_history
+        // encoded as  name#score#seed#seed_history#move_history
         // (#-delimited)
         ScoreBundle( char *inEncoded );
         
@@ -30,10 +34,27 @@ class ScoreBundle {
 
         unsigned int mSeed;
         
-
+        
+        char *mSeedHistory;
+        
         char *mMoveHistory;
 
         int mNumMoves;
+
+        
+        char isSeedResetAfterMove( unsigned int inMoveNumber );
+        
+        unsigned int getNewSeedAfterMove( int inMoveNumber );
+        
+
+    private:
+        
+        void fillSeedHistoryVectors();
+        
+
+        SimpleVector<unsigned int> mSeedHistoryMoveNumbers;
+        SimpleVector<unsigned int> mSeedHistorySeeds;
+
 
     };
 
