@@ -230,8 +230,13 @@ unsigned int base49Decode( char inLetter ) {
 
 
 SimpleVector<char> moveHistory;
+SimpleVector<char> seedHistory;
+
+
 // for saving game
 char *savedMoveHistory = NULL;
+
+char *savedSeedHistory = NULL;
 
 
 
@@ -239,10 +244,15 @@ char *savedMoveHistory = NULL;
 
 void newGame() {
     moveHistory.deleteAll();
-
+    seedHistory.deleteAll();
+    
     if( savedMoveHistory != NULL ) {
         delete [] savedMoveHistory;
         savedMoveHistory = NULL;
+        }
+    if( savedSeedHistory != NULL ) {
+        delete [] savedSeedHistory;
+        savedSeedHistory = NULL;
         }
     
 
@@ -617,7 +627,25 @@ void initFrameDrawer( int inWidth, int inHeight ) {
         else {
             anyFailed = true;
             }
+
+
+        state = SettingsManager::getStringSetting( "seedHistorySaved" );
+
+        if( state != NULL ) {
+            
+            if( strlen( state ) > 1 ) {
+                seedHistory.setElementString( state );
+                }
+            else {
+                seedHistory.setElementString( "" );
+                }
+            delete [] state;
+            }
+        else {
+            anyFailed = true;
+            }
         
+
         state = 
             SettingsManager::getStringSetting( "nextPieceDisplaySaved" );
         
@@ -793,6 +821,37 @@ void initFrameDrawer( int inWidth, int inHeight ) {
                     gamePlaybackStep = 0;
                     }
                 }
+            else {
+                // not playing back game
+            
+                // insert a new random seed to prevent save/restore exploit
+
+                unsigned int newSeed = time( NULL );
+                
+                randSource.reseed( newSeed );
+                
+                int numMoves = moveHistory.size();
+
+                char *delimiter = "__";
+                if( seedHistory.size() == 0 ) {
+                    // first new seed, no delimeter
+                    delimiter = "";
+                    }
+                
+
+                char *newSeedString = autoSprintf( "%s%d_%u", delimiter,
+                                                   numMoves, newSeed );
+                
+                int length = strlen( newSeedString );
+                
+                for( int i=0; i<length; i++ ) {
+                    
+                    seedHistory.push_back( newSeedString[i] );
+                    }
+                delete [] newSeedString;
+                }
+            
+
             }
         else {
             anyFailed = true;
@@ -872,6 +931,15 @@ void freeFrameDrawer() {
         // save the last saved (known good) state out to disk
 
         SettingsManager::setSetting( "moveHistorySaved", savedMoveHistory );
+
+        if( strlen( savedSeedHistory ) > 0 ) {
+            SettingsManager::setSetting( "seedHistorySaved", 
+                                         savedSeedHistory );
+            }
+        else{
+            SettingsManager::setSetting( "seedHistorySaved", 
+                                         "_" );
+            }
         
         
         
@@ -943,10 +1011,11 @@ void freeFrameDrawer() {
 
         if( gameToPlayback != NULL ) {
         
-            state = autoSprintf( "%s#%u#%u#%s",
+            state = autoSprintf( "%s#%u#%u#%s#%s",
                                  gameToPlayback->mName,
                                  gameToPlayback->mScore,
                                  gameToPlayback->mSeed,
+                                 gameToPlayback->mSeedHistory,
                                  gameToPlayback->mMoveHistory );
             
             SettingsManager::setSetting( "gameToPlaybackSaved", state );
@@ -994,6 +1063,11 @@ void freeFrameDrawer() {
         delete [] savedMoveHistory;
         }
     savedMoveHistory = NULL;
+
+    if( savedSeedHistory != NULL ) {
+        delete [] savedSeedHistory;
+        }
+    savedSeedHistory = NULL;
     
     
     clearSavedScores();
@@ -1198,6 +1272,11 @@ void saveStateForUndo() {
         delete [] savedMoveHistory;
         }
     savedMoveHistory = moveHistory.getElementString();
+
+    if( savedSeedHistory != NULL ) {
+        delete [] savedSeedHistory;
+        }
+    savedSeedHistory = seedHistory.getElementString();
     
 
     savedPlaybackStep = gamePlaybackStep;
@@ -1542,9 +1621,24 @@ void drawFrame() {
                 ||
                 manualStep ) {
                 
+                
             
                 if( gamePlaybackStep < gameToPlayback->mNumMoves ) {
                     
+                    int lastMoveNumber = gamePlaybackStep - 1;
+                    
+
+                    if( gameToPlayback->isSeedResetAfterMove( 
+                            lastMoveNumber ) ) {
+                        
+                        // new seed here
+
+                        randSource.reseed( 
+                            gameToPlayback->getNewSeedAfterMove( 
+                                lastMoveNumber ) );
+                        }
+                        
+
                     unsigned int spaceNumber = base49Decode( 
                         gameToPlayback->mMoveHistory[ gamePlaybackStep ] );
                     
@@ -1748,10 +1842,13 @@ void pointerUp( float inX, float inY ) {
                 }
             else if( allButtons[i] == doneButton ) {
                 char *moveString = moveHistory.getElementString();
+                char *seedString = seedHistory.getElementString();
                 
+
                 ScoreBundle *b = new ScoreBundle( playerName, score, gameSeed,
-                                                  moveString );
+                                                  seedString, moveString );
                 delete [] moveString;
+                delete [] seedString;
 
                 //printf( "posting score\n" );
                 

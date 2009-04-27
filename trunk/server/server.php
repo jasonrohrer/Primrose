@@ -3,7 +3,7 @@
 
 
 global $ps_version;
-$ps_version = "0.1";
+$ps_version = "6b";
 
 
 
@@ -209,6 +209,7 @@ function ps_setupDatabase() {
             "name VARCHAR(8) NOT NULL," .
             "score INT NOT NULL," .
             "seed INT NOT NULL," .
+            "seed_history TEXT NOT NULL," .
             "move_history TEXT NOT NULL," .
             "post_date DATETIME NOT NULL );";
 
@@ -231,6 +232,7 @@ function ps_setupDatabase() {
             "name VARCHAR(8) NOT NULL," .
             "score INT NOT NULL," .
             "seed INT NOT NULL," .
+            "seed_history TEXT NOT NULL," .
             "move_history TEXT NOT NULL," .
             "post_date DATETIME NOT NULL );";
 
@@ -324,6 +326,8 @@ function ps_fetchScores() {
         echo "#";
         echo mysql_result( $result, $i, "seed" );
         echo "#";
+        echo mysql_result( $result, $i, "seed_history" );
+        echo "#";
         echo mysql_result( $result, $i, "move_history" );
         echo "\n";
         }
@@ -358,6 +362,8 @@ function ps_fetchScores() {
         echo "#";
         echo mysql_result( $result, $i, "seed" );
         echo "#";
+        echo mysql_result( $result, $i, "seed_history" );
+        echo "#";
         echo mysql_result( $result, $i, "move_history" );
         echo "\n";
         }
@@ -374,6 +380,7 @@ function ps_postScore() {
     $name = "";
     $score = "";
     $seed = "";
+    $seed_history = "";
     $move_history = "";
     $hash = "";
     
@@ -386,6 +393,9 @@ function ps_postScore() {
         }
     if( isset( $_REQUEST[ "seed" ] ) ) {
         $seed = $_REQUEST[ "seed" ];
+        }
+    if( isset( $_REQUEST[ "seed_history" ] ) ) {
+        $seed_history = $_REQUEST[ "seed_history" ];
         }
     if( isset( $_REQUEST[ "move_history" ] ) ) {
         $move_history = $_REQUEST[ "move_history" ];
@@ -414,7 +424,8 @@ function ps_postScore() {
                 global $secureSalt;
                 
                 $ourHash = strtoupper( sha1( $name . $score . $seed .
-                                             $move_history . $secureSalt ) );
+                                             $seed_history . $move_history .
+                                             $secureSalt ) );
                 
                 if( $ourHash == $hash ) {
                     $postValid = true;
@@ -429,7 +440,8 @@ function ps_postScore() {
 
     
     if( ! $postValid ) {
-        ps_log( "Bad score post: $name, $score, $seed, $move_history, $hash" );
+        ps_log( "Bad score post: $name, $score, $seed, $seed_history, ".
+                "$move_history, $hash" );
         }
     else {
         ps_log( "Score of $score posted by $name" );
@@ -439,7 +451,7 @@ function ps_postScore() {
     
     if( $postValid ) {    
         $query = "INSERT INTO $tableNamePrefix"."today_scores VALUES ( " .
-            "'$name', '$score', '$seed', '$move_history', ".
+            "'$name', '$score', '$seed', '$seed_history', '$move_history', ".
             "CURRENT_TIMESTAMP );";
         
         
@@ -519,7 +531,8 @@ function ps_postScore() {
         if( $addToAllTime ) {
             $query =
                 "INSERT INTO $tableNamePrefix". "all_time_scores VALUES ( " .
-                "'$name', '$score', '$seed', '$move_history', ".
+                "'$name', '$score', '$seed', ".
+                "'$seed_history', '$move_history', ".
                 "CURRENT_TIMESTAMP );";
 
             ps_log( "New score on all-time list by $name: $score." );
