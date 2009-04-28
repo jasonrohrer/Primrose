@@ -1235,6 +1235,11 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
     moveHistory.push_back( encodedMove );
 
 
+    // modulate random source by player's move
+    // same starting state + different move sequence => different piece queue
+    randSource.mixIn( inSpaceNumber );
+    
+
     
     moveCount ++;
     
