@@ -1236,12 +1236,20 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
 
 
     // modulate random source by player's move
-    // skip inSpaceNumber draws from the random source
+
+    // draw some random numbers and discard them
+
+    // the number of draws depends in inSpaceNumber AND the current
+    // state of the generator (so that reordering a sequence of moves
+    // DOES NOT lead to the same generator state).
+
+    int numToDraw = randSource.getRandomBoundedInt( 0, inSpaceNumber );
+    
 
     // this approach works well because it requires no extra state
     // and it doesn't compromise the statistical properties of the random
-    // generator (like mixing in inSpaceNumber can)
-    for( int d=0; d<inSpaceNumber; d++ ) {
+    // generator (like mixing inSpaceNumber into the generator seed can)
+    for( int d=0; d<numToDraw; d++ ) {
         randSource.getRandomInt();
         }
 
