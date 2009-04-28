@@ -378,11 +378,10 @@ void HighScoreLoadingPanel::step() {
     else if( mScoreToPost != NULL && mServerURL != NULL ) {
         // need to generate a request
         
-        char *stringToHash = autoSprintf( "%s%u%u%s%s%s",
+        char *stringToHash = autoSprintf( "%s%u%u%s%s",
                                           mScoreToPost->mName,
                                           mScoreToPost->mScore,
                                           mScoreToPost->mSeed,
-                                          mScoreToPost->mSeedHistory,
                                           mScoreToPost->mMoveHistory,
                                           secureSalt );
         char *hash = computeSHA1Digest( stringToHash );
@@ -394,13 +393,11 @@ void HighScoreLoadingPanel::step() {
                                   "&name=%s"
                                   "&score=%u"
                                   "&seed=%u"
-                                  "&seed_history=%s"
                                   "&move_history=%s"
                                   "&hash=%s",
                                   mScoreToPost->mName,
                                   mScoreToPost->mScore,
                                   mScoreToPost->mSeed,
-                                  mScoreToPost->mSeedHistory,
                                   mScoreToPost->mMoveHistory,
                                   hash );
         

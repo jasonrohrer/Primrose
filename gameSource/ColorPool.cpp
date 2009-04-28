@@ -290,11 +290,6 @@ void ColorPool::deRegisterMove() {
     mRewinding = true;
     }
 
-
-void ColorPool::newSeed() {
-    }
-
-        
     
 
 Color colorAddCountColor( 76/255.0, 76/255.0, 255/255.0 );

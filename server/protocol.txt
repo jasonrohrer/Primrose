@@ -22,21 +22,9 @@ scoreBundleM
 
 
 Where:
-scoreBundle = name#score#seed#seed_history#move_history
+scoreBundle = name#score#seed#move_history
 
 Note:
---seed is the starting random seed as an ASCII-encoded base-10 unsigned int.
-
---seed_history contains any new seeds that were adopted throughout the game
-  (after saved-game reloads).  Seed history is encoded as MOVE_NUMBER SEED
-  pairs, where MOVE_NUMBER is the move AFTER which the new seed was set
-  and SEED is the new seed as an unsigned int.  The components of the pairs 
-  are separated by "_", and "__" (double-underscore) occurs between pairs.
-  Example:   82_3482793489__143_789498739__190_234987987
-             New seeds were set in this game after move 82, 143, and 190.
-
---seed_history can be empty.
-
 --move_history is a sequence of base-49 digits (digits 0-48 of base-64 
   encoding, each representing one of the 49 possible move locations).
 
@@ -50,8 +38,7 @@ Same as fetch_scores above
 
 
 Where:
-hash_string = sha1( concat( name, score, seed, seed_history, 
-                            move_history, secureSalt ) )
+hash_string = sha1( concat( name, score, seed, move_history, secureSalt ) )
 
 secureSalt is a secret string shared by both client and server
 
