@@ -1236,9 +1236,15 @@ void placeNextPieceAt( unsigned int inSpaceNumber ) {
 
 
     // modulate random source by player's move
-    // same starting state + different move sequence => different piece queue
-    randSource.mixIn( inSpaceNumber );
-    
+    // skip inSpaceNumber draws from the random source
+
+    // this approach works well because it requires no extra state
+    // and it doesn't compromise the statistical properties of the random
+    // generator (like mixing in inSpaceNumber can)
+    for( int d=0; d<inSpaceNumber; d++ ) {
+        randSource.getRandomInt();
+        }
+
 
     
     moveCount ++;

@@ -66,10 +66,10 @@ char colorblindSymbols[ numColors ] = { 'z', 'b', 'j', 'm', 'i', 'u', 'p' };
 
 
 
-#define startingSteps 96
-//#define startingSteps 2
-#define minSteps 6
-//#define minSteps 2
+//#define startingSteps 96
+#define startingSteps 2
+//#define minSteps 6
+#define minSteps 2
 
 ColorPool::ColorPool( int inX, int inY )
         : mX( inX ), mY( inY ),
@@ -184,12 +184,50 @@ int ColorPool::getColorIndex( Color *inColor ) {
 
 void ColorPool::registerMove() {
     mSomeMovesMade = true;
-    
+
+    char updateNow = false;
+
     mStepsUntilUpdate --;
+
+    if( ! mEndPhase ) {
+        if( mStepsUntilUpdate == 0 ) {
+            updateNow = true;
+            }        
+        }
+    else {
+        
+        // only do this every 2 moves
+        if( mStepsUntilUpdate == 0 ) {
+            
+
+            // flip weighted coin to decide whether to move on to next level
+            
+            // P(H) = 1/72, where flipping H moves us on to next level
+            // This is a geometric random variable with expected value of 72
+            // On average, each level lasts for 72 moves 
+            //   (halfway between 48 and 96)
+            
+            
+            if( randSource.getRandomFloat() <= 1.0f / 72.0f ) {
+                updateNow = true;
+                }
+
+            // try again after 2 more moves
+            mStepsUntilUpdate = 2;
+            }
+        
+        }
+    
+        
     
     mStepCountTransitionProgress = 0;
     
-    if( mStepsUntilUpdate == 0 ) {
+
+    
+        
+    
+
+    if( updateNow ) {
         
 
         if( ! mEndPhase ) {
@@ -261,6 +299,11 @@ void ColorPool::registerMove() {
                 }
             }
         else {
+            // don't adjust steps between updates, since we're
+            // flipping a coin after each pair moves above
+
+            /*
+
             // random steps between updates
             
             // between 48 (just enough to not fill grid)
@@ -274,6 +317,7 @@ void ColorPool::registerMove() {
             if( mStepsBetweenUpdates % 2 != 0 ) {
                 mStepsBetweenUpdates ++;
                 }
+            */
             }
         
         
