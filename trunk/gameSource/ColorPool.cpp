@@ -202,13 +202,13 @@ void ColorPool::registerMove() {
 
             // flip weighted coin to decide whether to move on to next level
             
-            // P(H) = 1/72, where flipping H moves us on to next level
-            // This is a geometric random variable with expected value of 72
-            // On average, each level lasts for 72 moves 
+            // P(H) = 1/36, where flipping H moves us on to next level
+            // This is a geometric random variable with expected value of 36
+            // On average, each level lasts for 72 moves (36 pairs) 
             //   (halfway between 48 and 96)
             
             
-            if( randSource.getRandomFloat() <= 1.0f / 72.0f ) {
+            if( randSource.getRandomFloat() <= 1.0f / 36.0f ) {
                 updateNow = true;
                 }
 
