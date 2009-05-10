@@ -1,14 +1,15 @@
-Version 6   2009-April-3
+Version 6   2009-May-?
 
 --Further improved end game mechanism.
   (Count-downs for color transitions at end now hidden to thwart planning.)
 
---Migrated to a fresh online leaderboard.
-
 --Factored player's moves into random generator to thwart save/restore exploit
   that allowed players to peek ahead at future pieces.
   Playing a different sequence of moves from the same starting state 
-  now results in a differnt sequence of pieces.
+  now results in a different sequence of pieces.
+
+--Migrated to a fresh online leaderboard.
+
 
 
 
