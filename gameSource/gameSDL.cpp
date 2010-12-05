@@ -27,6 +27,8 @@ int main( int inArgCount, char **inArgs ) {
 
 
 #include "minorGems/util/stringUtils.h"
+#include "minorGems/util/SettingsManager.h"
+
 
 
 // callbacks, originally for GLUT, called by our SDL main loop below
@@ -75,9 +77,13 @@ void audioCallback( void *inUserData, Uint8 *inStream, int inLengthToFill ) {
 
 
 
-
+// virtual resolution of game space (stretched to fit on screen)
 int w = 320;
 int h = 480;
+
+// actual screen size
+static int screenW, screenH;
+
 
 
 // 25 fps
@@ -102,26 +108,6 @@ int mainFunction( int inNumArgs, char **inArgs ) {
     int flags = SDL_OPENGL;
     
 
-    //flags = flags | SDL_FULLSCREEN;
-    
-    // current color depth
-    SDL_Surface *screen = SDL_SetVideoMode( w, h, 0, flags);
-
-
-    if ( screen == NULL ) {
-        printf( "Couldn't set %dx%d GL video mode: %s\n", 
-                w, 
-                h,
-                SDL_GetError() );
-        return 0;
-        }
-    
-
-    SDL_WM_SetCaption( "Primrose", NULL );
-    
-
-    // turn off repeat
-    SDL_EnableKeyRepeat( 0, 0 );
 
 
 
@@ -151,6 +137,32 @@ int mainFunction( int inNumArgs, char **inArgs ) {
 
 
 
+    screenW = SettingsManager::getIntSetting( "screenWidth", w );
+    screenH = SettingsManager::getIntSetting( "screenHeight", h );
+        
+
+
+    //flags = flags | SDL_FULLSCREEN;
+    
+    // current color depth
+    SDL_Surface *screen = SDL_SetVideoMode( screenW, screenH, 0, flags);
+
+
+    if ( screen == NULL ) {
+        printf( "Couldn't set %dx%d GL video mode: %s\n", 
+                screenW, 
+                screenH,
+                SDL_GetError() );
+        return 0;
+        }
+    
+
+    SDL_WM_SetCaption( "Primrose", NULL );
+    
+
+    // turn off repeat
+    SDL_EnableKeyRepeat( 0, 0 );
+
     
 
 
@@ -176,7 +188,9 @@ int mainFunction( int inNumArgs, char **inArgs ) {
     //SDL_PauseAudio(0);
 
 
+    // use virtual size here
     initFrameDrawer( w, h );
+    
     
     // to free frame drawer, stop audio, etc
     atexit( cleanUpAtExit );
@@ -321,6 +335,11 @@ int mainFunction( int inNumArgs, char **inArgs ) {
     }
 
 
+char shouldFilterTextures() {
+    return ( w != screenW ) || ( h != screenH );
+    }
+
+
 
 void setSoundPlaying( char inPlaying ) {
     printf( "Setting audio playing to %d\n", inPlaying );
@@ -337,7 +356,8 @@ void callbackDisplay() {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( 0, 320, 480, 0, -1.0f, 1.0f);
+    // virtual size
+    glOrtho( 0, w, h, 0, -1.0f, 1.0f);
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -345,6 +365,9 @@ void callbackDisplay() {
     glDisable( GL_TEXTURE_2D );
 	glDisable( GL_CULL_FACE );
     glDisable( GL_DEPTH_TEST );
+    
+    // true screen size
+    glViewport( 0, 0, screenW, screenH );
     
     drawFrame();
     
@@ -354,19 +377,30 @@ void callbackDisplay() {
 
 
 
+// map to virtual screen coordinates
+static int mapMouseX( int inX ) {
+    return (int)( (double)inX / screenW * w );
+    }
+
+// map to virtual screen coordinates
+static int mapMouseY( int inY ) {
+    return (int)( (double)inY / screenH * h );
+    }
+
+
 
 void callbackMotion( int inX, int inY ) {
-    pointerMove( inX, inY );
+    pointerMove( mapMouseX( inX ), mapMouseY( inY ) );
 	}
 		
 	
 	
 void callbackMouse( int inButton, int inState, int inX, int inY ) {
 	if( inState == SDL_PRESSED ) {
-        pointerDown( inX, inY );
+        pointerDown( mapMouseX( inX ), mapMouseY( inY ) );
         }
     else if( inState == SDL_RELEASED ) {
-        pointerUp( inX, inY );
+        pointerUp( mapMouseX( inX ), mapMouseY( inY ) );
         }
     else {
         printf( "Error:  Unknown mouse state received from SDL\n" );

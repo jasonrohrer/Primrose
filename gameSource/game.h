@@ -52,6 +52,9 @@ void getSoundSamples( Uint8 *inBuffer, int inLengthToFillInBytes );
 void setSoundPlaying( char inPlaying );
 
 
+// true if linear texture filtering should be used
+char shouldFilterTextures();
+
 
 
 

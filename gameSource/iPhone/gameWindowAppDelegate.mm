@@ -378,6 +378,14 @@ void setSoundPlaying( char inPlaying ) {
     isPlaying = inPlaying;
 }
 
+
+
+char shouldFilterTextures() {
+	// screen size always equals virtual size on iPhone
+	return false;
+}
+
+
     
 - (void)stopAnimation {
 	printf( "Stop anim called\n" );
