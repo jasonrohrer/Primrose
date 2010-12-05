@@ -1,4 +1,12 @@
-Version 6   2009-May-?
+Version 7   ????
+
+--Added support for a resizeable screen.
+
+
+
+
+
+Version 6   2009-May-11
 
 --Further improved end game mechanism.
   (Count-downs for color transitions at end now hidden to thwart planning.)

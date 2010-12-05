@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#include "game.h"
+
 
 #include "minorGems/util/SimpleVector.h"
 #include "minorGems/util/stringUtils.h"
@@ -109,10 +111,16 @@ void drawSprite( SpriteHandle inSpriteHandle,
     texture->enable(); 
 
 
-    // NOTE:  this won't look good if we do the zoom-to-clear effect
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ); 
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
+    if( shouldFilterTextures() ) {
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); 
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        }
+    else {
+        // NOTE:  this won't look good if we do the zoom-to-clear effect
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ); 
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+        }
+    
 
     const GLfloat squareVertices[] = {
         inCenterX - inXRadius, inCenterY - inYRadius,
