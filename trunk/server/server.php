@@ -49,10 +49,10 @@ $setup_footer = "
 // so that user-submitted data can be safely submitted in DB queries)
 if( !get_magic_quotes_gpc() ) {
     // force magic quotes to be added
-    $_GET     = array_map( 'gs_addslashes_deep', $_GET );
-    $_POST    = array_map( 'gs_addslashes_deep', $_POST );
-    $_REQUEST = array_map( 'gs_addslashes_deep', $_REQUEST );
-    $_COOKIE  = array_map( 'gs_addslashes_deep', $_COOKIE );
+    $_GET     = array_map( 'ps_addslashes_deep', $_GET );
+    $_POST    = array_map( 'ps_addslashes_deep', $_POST );
+    $_REQUEST = array_map( 'ps_addslashes_deep', $_REQUEST );
+    $_COOKIE  = array_map( 'ps_addslashes_deep', $_COOKIE );
     }
     
 
