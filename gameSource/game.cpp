@@ -1478,8 +1478,51 @@ void drawFrame() {
                 int y;
             
             
+                
+                // v7 placement constraint:
+                // Set of closest cells to first piece
+                
                 char anyActive = false;
-            
+                double minDistance = 99999;
+                SimpleVector<GridSpace *> closestSpaces;
+                
+                for( y=0; y<gridH; y++ ) {
+                    for( x=0; x<gridW; x++ ) {
+                        GridSpace *space = spaces[y][x];
+                        
+                        if( space->isEmpty() ) {
+                            double dist = 
+                                sqrt( 
+                                    abs( lastGridY - y ) * 
+                                    abs( lastGridY - y )
+                                    +
+                                    abs( lastGridX - x ) * 
+                                    abs( lastGridX - x ) );
+                            if( dist == minDistance ) {
+                                closestSpaces.push_back( space );
+                                }
+                            else if( dist < minDistance && dist > 0 ) {
+                                // new min
+                                closestSpaces.deleteAll();
+                                minDistance = dist;
+                                closestSpaces.push_back( space );
+                                }
+                            }
+                        }
+                    }
+
+                if( closestSpaces.size() > 0 ) {
+                    anyActive = true;
+                    for( int i=0; i<closestSpaces.size(); i++ ) {
+                        ( *(closestSpaces.getElement( i ) ) )->mActive = true;
+                        }
+                    }
+                
+                
+                /*
+                // v6 placement constraint:
+                // same row or column
+                
                 for( y=0; y<gridH; y++ ) {
                     GridSpace *space = spaces[y][lastGridX];
                 
@@ -1497,7 +1540,7 @@ void drawFrame() {
                         anyActive = true;
                         }
                     }
-
+                */
             
                 if( !anyActive ) {
                     // all empty active
