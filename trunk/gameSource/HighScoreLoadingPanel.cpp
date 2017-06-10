@@ -70,7 +70,7 @@ HighScoreLoadingPanel::HighScoreLoadingPanel( int inW, int inH )
           mScoreToPost( NULL ),
           mWebRequest( NULL ),
           mServerFinderURL(
-            "http://hcsoftware.sourceforge.net/primrose/serverLocation6.txt" ),
+            "http://hcsoftware.sourceforge.net/primrose/serverLocation7.txt" ),
           mServerURL( NULL ), 
           mServerURLFetchRequest( NULL ),
           mFailed( false ),
