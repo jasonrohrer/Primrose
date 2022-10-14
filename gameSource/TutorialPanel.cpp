@@ -196,24 +196,15 @@ void TutorialPanel::step() {
                 GridSpace *other = mAllDemoSpaces[i];
                 
                 if( other != s ) {
-                    if( ( other->mY == s->mY + 40 &&
-                          other->mX == s->mX )
-                        ||
-                        ( other->mY == s->mY - 40 &&
-                          other->mX == s->mX )
-                        ||
-                        ( other->mX == s->mX + 40 &&
-                          other->mY == s->mY ) 
-                        ||
-                        ( other->mX == s->mX - 40 &&
-                          other->mY == s->mY ) ) {
+                    if( other->mY == s->mY ||
+                        other->mX == s->mX ) {
                         other->mActive = true;
                         }
                     }
                 }
             }
         else if( mDemoStage == 2 ) {
-            GridSpace *s = mGridDemo[2][1];
+            GridSpace *s = mGridDemo[0][2];
             
             s->setColor( nextPieceDemoColors[1].copy() );
         
@@ -274,7 +265,7 @@ void TutorialPanel::drawBase() {
                     mGridDemo[3][0]->mY + 20 + 20,
                     &tutorialTextColor, mFadeProgress );        
 
-        drawString( "a nearby grid space", left, 
+        drawString( "the same row or column", left, 
                     19,
                     mGridDemo[3][0]->mY + 20 + 40,
                     &tutorialTextColor, mFadeProgress );        
