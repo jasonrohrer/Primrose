@@ -47,7 +47,7 @@ $setup_footer = "
 
 // ensure that magic quotes are on (adding slashes before quotes
 // so that user-submitted data can be safely submitted in DB queries)
-if( !get_magic_quotes_gpc() ) {
+if( ! function_exists( "get_magic_quotes_gpc" ) || !get_magic_quotes_gpc() ) {
     // force magic quotes to be added
     $_GET     = array_map( 'ps_addslashes_deep', $_GET );
     $_POST    = array_map( 'ps_addslashes_deep', $_POST );
@@ -262,14 +262,14 @@ function ps_showLog() {
         $query = "SELECT * FROM $tableNamePrefix"."log;";
         $result = ps_queryDatabase( $query );
 
-        $numRows = mysql_numrows( $result );
+        $numRows = mysqli_num_rows( $result );
 
         echo "$numRows log entries:<br><br><br>\n";
         
 
         for( $i=0; $i<$numRows; $i++ ) {
-            $time = mysql_result( $result, $i, "entry_time" );
-            $entry = mysql_result( $result, $i, "entry" );
+            $time = ps_mysqli_result( $result, $i, "entry_time" );
+            $entry = ps_mysqli_result( $result, $i, "entry" );
 
             echo "<b>$time</b>:<br>$entry<hr>\n";
             }
@@ -313,18 +313,18 @@ function ps_fetchScores() {
         "ORDER BY score DESC LIMIT $listSize;";
     $result = ps_queryDatabase( $query );
 
-    $numRows = mysql_numrows( $result );
+    $numRows = mysqli_num_rows( $result );
 
     echo "$numRows\n";
 
     for( $i=0; $i<$numRows; $i++ ) {
-        echo mysql_result( $result, $i, "name" );
+        echo ps_mysqli_result( $result, $i, "name" );
         echo "#";
-        echo mysql_result( $result, $i, "score" );
+        echo ps_mysqli_result( $result, $i, "score" );
         echo "#";
-        echo mysql_result( $result, $i, "seed" );
+        echo ps_mysqli_result( $result, $i, "seed" );
         echo "#";
-        echo mysql_result( $result, $i, "move_history" );
+        echo ps_mysqli_result( $result, $i, "move_history" );
         echo "\n";
         }
 
@@ -335,7 +335,7 @@ function ps_fetchScores() {
         "    SUBTIME( CURRENT_TIMESTAMP, '1 0:00:00.00' );";
 
     $result = ps_queryDatabase( $query );
-    $numRowsRemoved = mysql_affected_rows();
+    $numRowsRemoved = mysqli_affected_rows();
     
     if( $numRowsRemoved ) {
         ps_log( "Removed $numRowsRemoved stale scores from daily list." );
@@ -347,18 +347,18 @@ function ps_fetchScores() {
         "ORDER BY score DESC LIMIT $listSize;";
     $result = ps_queryDatabase( $query );
 
-    $numRows = mysql_numrows( $result );
+    $numRows = mysqli_num_rows( $result );
 
     echo "$numRows\n";
 
     for( $i=0; $i<$numRows; $i++ ) {
-        echo mysql_result( $result, $i, "name" );
+        echo ps_mysqli_result( $result, $i, "name" );
         echo "#";
-        echo mysql_result( $result, $i, "score" );
+        echo ps_mysqli_result( $result, $i, "score" );
         echo "#";
-        echo mysql_result( $result, $i, "seed" );
+        echo ps_mysqli_result( $result, $i, "seed" );
         echo "#";
-        echo mysql_result( $result, $i, "move_history" );
+        echo ps_mysqli_result( $result, $i, "move_history" );
         echo "\n";
         }
         
@@ -450,7 +450,7 @@ function ps_postScore() {
         
         $result = ps_queryDatabase( $query );
         
-        $count = mysql_result( $result, 0, 0 );
+        $count = ps_mysqli_result( $result, 0, 0 );
         
         
         if( $count > 50 ) {
@@ -460,12 +460,12 @@ function ps_postScore() {
                 "ORDER BY score ASC LIMIT 1;";
             $result = ps_queryDatabase( $query );
         
-            $numRows = mysql_numrows( $result );
+            $numRows = mysqli_num_rows( $result );
         
             if( $numRows > 0 ) {
             
-                $dropName = mysql_result( $result, 0, "name" );
-                $dropScore = mysql_result( $result, 0, "score" );
+                $dropName = ps_mysqli_result( $result, 0, "name" );
+                $dropScore = ps_mysqli_result( $result, 0, "score" );
 
                 $query = "DELETE FROM $tableNamePrefix"."today_scores ".
                     "WHERE name = '$dropName' ".
@@ -483,7 +483,7 @@ function ps_postScore() {
             "ORDER BY score ASC;";
         $result = ps_queryDatabase( $query );
 
-        $numRows = mysql_numrows( $result );
+        $numRows = mysqli_num_rows( $result );
 
         $addToAllTime = false;
     
@@ -492,11 +492,11 @@ function ps_postScore() {
         if( $numRows > $listSize - 1 ) {
 
             // lowest one in table
-            $otherScore = mysql_result( $result, 0, "score" );
+            $otherScore = ps_mysqli_result( $result, 0, "score" );
         
             if( $score > $otherScore ) {
 
-                $otherName = mysql_result( $result, 0, "name" );
+                $otherName = ps_mysqli_result( $result, 0, "name" );
 
                 $query = "DELETE FROM $tableNamePrefix"."all_time_scores ".
                     "WHERE name = '$otherName' ".
@@ -536,6 +536,10 @@ function ps_postScore() {
 
 
 
+
+$ps_mysqlLink;
+
+
 // general-purpose functions down here, many copied from seedBlogs
 
 /**
@@ -543,16 +547,17 @@ function ps_postScore() {
  */  
 function ps_connectToDatabase() {
     global $databaseServer,
-        $databaseUsername, $databasePassword, $databaseName;
+        $databaseUsername, $databasePassword, $databaseName,
+        $ps_mysqlLink;
     
-    
-    mysql_connect( $databaseServer, $databaseUsername, $databasePassword )
+    $ps_mysqlLink = 
+        mysqli_connect( $databaseServer, $databaseUsername, $databasePassword )
         or ps_fatalError( "Could not connect to database server: " .
-                       mysql_error() );
+                       mysqli_error( $ps_mysqlLink ) );
     
-	mysql_select_db( $databaseName )
+	mysqli_select_db( $ps_mysqlLink, $databaseName )
         or ps_fatalError( "Could not select $databaseName database: " .
-                       mysql_error() );
+                       mysqli_error( $ps_mysqlLink ) );
     }
 
 
@@ -561,7 +566,9 @@ function ps_connectToDatabase() {
  * Closes the database connection.
  */
 function ps_closeDatabase() {
-    mysql_close();
+    global $ps_mysqlLink;
+    
+    mysqli_close( $ps_mysqlLink );
     }
 
 
@@ -574,14 +581,30 @@ function ps_closeDatabase() {
  * @return a result handle that can be passed to other mysql functions.
  */
 function ps_queryDatabase( $inQueryString ) {
-
-    $result = mysql_query( $inQueryString )
+    global $ps_mysqlLink;
+    
+    if( gettype( $ps_mysqlLink ) != "resource" ) {
+        // not a valid mysql link?
+        ps_connectToDatabase();
+        }
+    
+    $result = mysqli_query( $ps_mysqlLink, $inQueryString )
         or ps_fatalError( "Database query failed:<BR>$inQueryString<BR><BR>" .
-                       mysql_error() );
+                       mysqli_error( $ps_mysqlLink ) );
 
     return $result;
     }
 
+
+
+/**
+ * Replacement for the old mysql_result function.
+ */
+function ps_mysqli_result( $result, $number, $field=0 ) {
+    mysqli_data_seek( $result, $number );
+    $row = mysqli_fetch_array( $result );
+    return $row[ $field ];
+    }
 
 
 /**
@@ -598,12 +621,12 @@ function ps_doesTableExist( $inTableName ) {
     $query = "SHOW TABLES";
     $result = ps_queryDatabase( $query );
 
-    $numRows = mysql_numrows( $result );
+    $numRows = mysqli_num_rows( $result );
 
 
     for( $i=0; $i<$numRows && ! $tableExists; $i++ ) {
 
-        $tableName = mysql_result( $result, $i, 0 );
+        $tableName = ps_mysqli_result( $result, $i, 0 );
         
         if( $tableName == $inTableName ) {
             $tableExists = 1;
