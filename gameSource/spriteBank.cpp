@@ -174,7 +174,9 @@ void drawSprite( SpriteHandle inSpriteHandle,
         }
     glEnd();
     */
-    texture->disable();
+    
+    SingleTextureGL::disableTexturing();
+    
 
     spriteDrawCount ++;
 
