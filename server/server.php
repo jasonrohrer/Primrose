@@ -335,7 +335,9 @@ function ps_fetchScores() {
         "    SUBTIME( CURRENT_TIMESTAMP, '1 0:00:00.00' );";
 
     $result = ps_queryDatabase( $query );
-    $numRowsRemoved = mysqli_affected_rows();
+
+    global $ps_mysqlLink;
+    $numRowsRemoved = mysqli_affected_rows( $ps_mysqlLink );
     
     if( $numRowsRemoved ) {
         ps_log( "Removed $numRowsRemoved stale scores from daily list." );
