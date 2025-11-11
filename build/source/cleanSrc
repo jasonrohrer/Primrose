@@ -4,9 +4,10 @@ rm -r minorGems/doc
 rm -r minorGems/examples
 rm -r minorGems/protocol
 rm -r minorGems/sound
-rm -r minorGems/temp
 rm -r minorGems/ui
 
 
 
-rm -r tilePlacementGames/game1/documentation/html
+rm -r PrimroseSource/documentation/html
+rm -r PrimroseSource/documentation/artwork
+rm -r PrimroseSource/documentation/press

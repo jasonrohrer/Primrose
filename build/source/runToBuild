@@ -8,7 +8,7 @@
 #
 
 
-cd tilePlacementGames/game1
+cd PrimroseSource
 chmod u+x ./configure
 ./configure
 
@@ -21,15 +21,15 @@ make
 
 
 
-cd ../../..
+cd ../..
 
 mkdir graphics
 mkdir settings
 
-cp tilePlacementGames/game1/gameSource/Primrose ./Primrose
-cp tilePlacementGames/game1/documentation/Readme.txt .
-cp tilePlacementGames/game1/gameSource/graphics/* ./graphics
-#no default settings files
-#cp tilePlacementGames/game1/gameSource/settings/* ./settings
+cp PrimroseSource/gameSource/Primrose ./Primrose
+cp PrimroseSource/documentation/Readme.txt .
+cp PrimroseSource/gameSource/graphics/* ./graphics
+
+cp PrimroseSource/gameSource/settings/* ./settings
 
 echo "Run Primrose to play."
