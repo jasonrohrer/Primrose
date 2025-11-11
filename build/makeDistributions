@@ -28,8 +28,7 @@ mkdir unix/Primrose/settings
 
 
 cp ../gameSource/graphics/*.tga unix/Primrose/graphics
-#no default settings
-#cp ../gameSource/settings/*.ini unix/Primrose/settings
+cp ../gameSource/settings/*.ini unix/Primrose/settings
 cp ../documentation/Readme.txt unix/Primrose
 
 
