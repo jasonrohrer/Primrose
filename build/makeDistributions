@@ -28,7 +28,7 @@ mkdir unix/Primrose/settings
 
 
 cp ../gameSource/graphics/*.tga unix/Primrose/graphics
-cp ../gameSource/settings/*.ini unix/Primrose/settings
+cp ../gameSource/settings/screenWidth.ini ../gameSource/settings/screenHeight.ini unix/Primrose/settings
 cp ../documentation/Readme.txt unix/Primrose
 
 
